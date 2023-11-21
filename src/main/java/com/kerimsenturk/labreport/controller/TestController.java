@@ -15,12 +15,11 @@ import com.kerimsenturk.labreport.repository.ReportRepository;
 import com.kerimsenturk.labreport.repository.UserRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.sql.DataSource;
 import java.util.List;
 
-@RestController
+//@RestController
 @RequestMapping("v1/api/test")
 public class TestController {
     private final JdbcTemplate jdbcTemplate;

@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 public class User {
     @Id
     @Column(name = "user_id")
+    //userId has 7 digit for hospital personals, 11 digit for patients.
     String userId;
     @Column(name = "name")
     String name;

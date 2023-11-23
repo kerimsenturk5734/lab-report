@@ -41,4 +41,9 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, new ErrorResult(ex.getMessage()), new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
+
+    @ExceptionHandler(value = UserNotFoundException.class)
+    protected ResponseEntity<Object> handleNotFound(RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, new ErrorResult(ex.getMessage()), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
 }

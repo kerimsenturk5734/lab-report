@@ -32,7 +32,7 @@ public class UserService {
     public String register(CreateUserRequest createUserRequest){
         //Firstly check the userId is exists
         if(userRepository.existsById(createUserRequest.userId()))
-            throw new UserAlreadyExistException();
+            throw new UserAlreadyExistException(String.format("A user already exists with this id : %s", createUserRequest.userId()));
 
         //Create new user
         User newUser = new User(

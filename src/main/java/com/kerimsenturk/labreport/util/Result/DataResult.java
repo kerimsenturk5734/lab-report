@@ -1,4 +1,4 @@
-package com.kerimsenturk.labreport.util.ObjectConverter.Result;
+package com.kerimsenturk.labreport.util.Result;
 
 public class DataResult<T> extends Result{
 

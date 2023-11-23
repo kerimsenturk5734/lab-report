@@ -1,6 +1,7 @@
-package com.kerimsenturk.labreport.util.ObjectConverter.Result;
+package com.kerimsenturk.labreport.util.Result;
 
 public class ErrorResult extends Result{
+	
 	public ErrorResult() {
 		super(false);
 	}

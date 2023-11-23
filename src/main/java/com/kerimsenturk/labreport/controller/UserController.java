@@ -4,7 +4,7 @@ import com.kerimsenturk.labreport.dto.UserDto;
 import com.kerimsenturk.labreport.dto.request.CreateUserRequest;
 import com.kerimsenturk.labreport.dto.request.PatientCreateRequest;
 import com.kerimsenturk.labreport.service.UserService;
-import com.kerimsenturk.labreport.util.ObjectConverter.Result.SuccessDataResult;
+import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;

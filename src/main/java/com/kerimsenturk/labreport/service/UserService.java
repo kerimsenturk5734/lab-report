@@ -11,6 +11,7 @@ import com.kerimsenturk.labreport.exception.UserNotFoundException;
 import com.kerimsenturk.labreport.model.User;
 import com.kerimsenturk.labreport.model.enums.UserRole;
 import com.kerimsenturk.labreport.repository.UserRepository;
+import com.kerimsenturk.labreport.util.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final UserAndUserDtoConverter userAndUserDtoConverter;
-
+    private final MessageBuilder messageBuilder = new MessageBuilder();
     public UserService(UserRepository userRepository, UserAndUserDtoConverter userAndUserDtoConverter) {
         this.userRepository = userRepository;
         this.userAndUserDtoConverter = userAndUserDtoConverter;
@@ -40,8 +41,16 @@ public class UserService {
 
     public String register(CreateUserRequest createUserRequest){
         //Firstly check the userId is exists
-        if(userRepository.existsById(createUserRequest.userId()))
-            throw new UserAlreadyExistException(String.format("A user already exists with this id : %s", createUserRequest.userId()));
+        if(userRepository.existsById(createUserRequest.userId())){
+            //Get error message
+            String message =
+                    messageBuilder
+                            .code("formatted.userAlreadyExist")
+                            .params(createUserRequest.userId())
+                            .build();
+
+            throw new UserAlreadyExistException(message);
+        }
 
         //Create new user
         User newUser = new User(
@@ -69,11 +78,16 @@ public class UserService {
     public UserDto getUserById(String id){
         Optional<User> userOptional = userRepository.findById(id);
 
+        //Get error message
+        String message =
+                messageBuilder
+                        .code("formatted.userNotFoundById")
+                        .params(id)
+                        .build();
+
         //If it is present convert to dto object and assign to userDto else throw exception
         UserDto userDto = userAndUserDtoConverter
-                .convert(userOptional
-                        .orElseThrow(() ->
-                                new UserNotFoundException(String.format("Indicated user not found by id: %s", id))));
+                .convert(userOptional.orElseThrow(() -> new UserNotFoundException(message)));
 
         //return converted UserDto
         return userDto;

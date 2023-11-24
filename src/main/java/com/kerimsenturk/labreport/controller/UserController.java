@@ -4,6 +4,7 @@ import com.kerimsenturk.labreport.dto.UserDto;
 import com.kerimsenturk.labreport.dto.request.CreateUserRequest;
 import com.kerimsenturk.labreport.dto.request.PatientCreateRequest;
 import com.kerimsenturk.labreport.service.UserService;
+import com.kerimsenturk.labreport.util.MessageBuilder;
 import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +17,10 @@ import java.util.List;
 @RequestMapping("/v1/api/users")
 public class UserController {
     private final UserService userService;
-
+    private final MessageBuilder messageBuilder;
     public UserController(UserService userService) {
         this.userService = userService;
+        this.messageBuilder = new MessageBuilder();
     }
 
     //This endpoint asks some authorizes to access
@@ -41,11 +43,15 @@ public class UserController {
         //Get the user by id
         UserDto userDto = userService.getUserById(id);
 
+        //Create successful message
+        String message =
+                messageBuilder
+                        .code("formatted.userFoundedById")
+                        .params(id)
+                        .build();
+
         //Place the userDto into Result wrapper object
-        return ResponseEntity.ok(
-                new SuccessDataResult<UserDto>(
-                        userDto,
-                        String.format("User founded by id : %s", id)));
+        return ResponseEntity.ok(new SuccessDataResult<UserDto>(userDto, message));
     }
 
     @GetMapping("/getAllUsers")
@@ -53,10 +59,14 @@ public class UserController {
         //Get the all users
         List<UserDto> userDtoList = userService.getAllUsers();
 
+        //Create successful message
+        String message =
+                messageBuilder
+                        .code("formatted.usersFounded")
+                        .params(userDtoList.size())
+                        .build();
+
         //Place the userDto into Result wrapper object
-        return ResponseEntity.ok(
-                new SuccessDataResult<List<UserDto>>(
-                        userDtoList,
-                        String.format("%d users founded", userDtoList.size())));
+        return ResponseEntity.ok(new SuccessDataResult<List<UserDto>>(userDtoList, message));
     }
 }

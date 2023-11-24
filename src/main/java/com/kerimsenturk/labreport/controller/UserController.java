@@ -3,9 +3,11 @@ package com.kerimsenturk.labreport.controller;
 import com.kerimsenturk.labreport.dto.UserDto;
 import com.kerimsenturk.labreport.dto.request.CreateUserRequest;
 import com.kerimsenturk.labreport.dto.request.PatientCreateRequest;
+import com.kerimsenturk.labreport.dto.request.UpdateUserRequest;
 import com.kerimsenturk.labreport.service.UserService;
 import com.kerimsenturk.labreport.util.MessageBuilder;
 import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
+import com.kerimsenturk.labreport.util.Result.SuccessResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -68,5 +70,19 @@ public class UserController {
 
         //Place the userDto into Result wrapper object
         return ResponseEntity.ok(new SuccessDataResult<List<UserDto>>(userDtoList, message));
+    }
+
+    @PutMapping("/updateUser")
+    public ResponseEntity<?> updateUser(UpdateUserRequest updateUserRequest){
+        String updatedUserId = userService.updateUser(updateUserRequest);
+
+        //Create successful message
+        String message =
+                messageBuilder
+                        .code("formatted.userUpdated")
+                        .params(updatedUserId)
+                        .build();
+
+        return ResponseEntity.ok(new SuccessResult(message));
     }
 }

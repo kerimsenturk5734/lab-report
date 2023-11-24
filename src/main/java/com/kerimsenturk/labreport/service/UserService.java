@@ -71,8 +71,24 @@ public class UserService {
 
     }
 
-    public void updateUser(UpdateUserRequest updateUserRequest){
+    public String updateUser(UpdateUserRequest updateUserRequest){
+        //Call getUserById to handle UserNotFoundException
+        //If there is not an error at this line now we can get the real user
+        String userId = updateUserRequest.username().orElse("");
+        getUserById(userId);
 
+        //Get the real user object
+        //No need to check is it present or not because getUserById() did it above line
+        User user = userRepository.findById(userId).get();
+
+        //Update the object
+        //If fields not present in updateRequest, don't change the fields
+        user.setName(updateUserRequest.name().orElse(user.getName()));
+        user.setSurname(updateUserRequest.surname().orElse(user.getSurname()));
+        user.setPassword(updateUserRequest.password().orElse(user.getPassword()));
+
+        //return updated userId
+        return userRepository.save(user).getUserId();
     }
 
     public UserDto getUserById(String id){

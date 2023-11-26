@@ -8,6 +8,7 @@ import com.kerimsenturk.labreport.service.UserService;
 import com.kerimsenturk.labreport.util.MessageBuilder;
 import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
 import com.kerimsenturk.labreport.util.Result.SuccessResult;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -23,18 +24,20 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
         this.messageBuilder = new MessageBuilder();
+
     }
 
     //This endpoint asks some authorizes to access
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody CreateUserRequest createUserRequest){
+    public ResponseEntity<?> register(@Valid @RequestBody CreateUserRequest createUserRequest){
         String id = userService.register(createUserRequest);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
+
         return ResponseEntity.created(uri).build();
     }
 
     @PostMapping("/registerPatient")
-    public ResponseEntity<?> registerPatient(@RequestBody PatientCreateRequest patientCreateRequest){
+    public ResponseEntity<?> registerPatient(@Valid @RequestBody PatientCreateRequest patientCreateRequest){
         String id = userService.registerPatient(patientCreateRequest);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
         return ResponseEntity.created(uri).build();

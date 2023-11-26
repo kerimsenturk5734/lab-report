@@ -87,7 +87,7 @@ public class UserController {
     }
 
     @PutMapping("/updateUser")
-    public ResponseEntity<?> updateUser(UpdateUserRequest updateUserRequest){
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest){
         String updatedUserId = userService.updateUser(updateUserRequest);
 
         //Create successful message

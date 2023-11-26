@@ -4,12 +4,18 @@ import com.kerimsenturk.labreport.dto.UserDto;
 import com.kerimsenturk.labreport.dto.request.CreateUserRequest;
 import com.kerimsenturk.labreport.dto.request.PatientCreateRequest;
 import com.kerimsenturk.labreport.dto.request.UpdateUserRequest;
+
 import com.kerimsenturk.labreport.service.UserService;
+
 import com.kerimsenturk.labreport.util.MessageBuilder;
 import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
 import com.kerimsenturk.labreport.util.Result.SuccessResult;
+
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -18,6 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/api/users")
+@Validated
 public class UserController {
     private final UserService userService;
     private final MessageBuilder messageBuilder;
@@ -44,7 +51,11 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> getUserByID(@RequestParam String id){
+    public ResponseEntity<?> getUserByID(
+            @RequestParam
+            @Pattern(regexp = "^([0-9]+){7,11}$", message = "{pattern.unmatched.userId }")
+            String id){
+
         //Get the user by id
         UserDto userDto = userService.getUserById(id);
 

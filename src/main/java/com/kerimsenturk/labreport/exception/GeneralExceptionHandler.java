@@ -52,8 +52,10 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     public String constraintViolationHandler(ConstraintViolationException ex) {
-        //Get indicated message from message source
-        //Create new message object
+        /**
+         * TODO:    Get indicated message from message source
+         *          Create new message object
+         */
         return ex.getConstraintViolations().iterator().next()
                 .getMessage();
     }

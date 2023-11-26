@@ -24,7 +24,7 @@ public record CreateUserRequest(
         @NotBlank
         @NotEmpty
         @Length(min = 7, max = 20)
-        //Pattern working but it can not accept any string. I think it is about UTF format
+        //TODO: Pattern working but it can not accept any string. I think it is about UTF format. Fix it
         //@Pattern(regexp = "(?=.*?[a-z]+)(?=.*?[A-Z]+)(?=.*?[0-9]+)")
         String password,
 

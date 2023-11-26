@@ -64,9 +64,11 @@ public class UserService {
         return userRepository.save(newUser).getUserId();
     }
 
-    //It might return some login credentials to access API (Bearer Token)
-    //Some authentications necessary inside this function
-    //That function will implement when developing the API Authentication package
+    /**
+     * TODO:It might return some login credentials to access API (Bearer Token)
+        Some authentications necessary inside this function
+        That function will implement when developing the API Authentication package
+     */
     public void login(UserLoginRequest userLoginRequest){
 
     }

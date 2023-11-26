@@ -1,5 +1,5 @@
 /~$eview-design.docx
-/~WRL0005.tmp
+/docs/~WRL0005.tmp
 
 # Default ignored files
 /shelf/
@@ -34,5 +34,4 @@ target/
 ### VS Code ###
 .vscode/
 
-src/main/resources/application.properties
 src/main/resources/secrets.properties

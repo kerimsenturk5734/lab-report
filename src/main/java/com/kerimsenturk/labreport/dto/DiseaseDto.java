@@ -1,5 +1,6 @@
 package com.kerimsenturk.labreport.dto;
 
+import com.kerimsenturk.labreport.model.enums.DiseaseState;
 import com.kerimsenturk.labreport.model.enums.LabRequestType;
 
 public class DiseaseDto {
@@ -10,11 +11,11 @@ public class DiseaseDto {
     LabRequestType labRequestType;
     ReportDto pathologicReport;
     ReportDto diagnosticReport;
-
+    DiseaseState diseaseState;
     public DiseaseDto() {
     }
 
-    public DiseaseDto(int id, UserDto patient, UserDto labTechnician, UserDto doctor, LabRequestType labRequestType, ReportDto pathologicReport, ReportDto diagnosticReport) {
+    public DiseaseDto(int id, UserDto patient, UserDto labTechnician, UserDto doctor, LabRequestType labRequestType, ReportDto pathologicReport, ReportDto diagnosticReport,  DiseaseState diseaseState) {
         this.id = id;
         this.patient = patient;
         this.labTechnician = labTechnician;
@@ -22,6 +23,7 @@ public class DiseaseDto {
         this.labRequestType = labRequestType;
         this.pathologicReport = pathologicReport;
         this.diagnosticReport = diagnosticReport;
+        this.diseaseState = diseaseState;
     }
 
     public int getId() {
@@ -78,5 +80,13 @@ public class DiseaseDto {
 
     public void setDiagnosticReport(ReportDto diagnosticReport) {
         this.diagnosticReport = diagnosticReport;
+    }
+
+    public DiseaseState getDiseaseState() {
+        return diseaseState;
+    }
+
+    public void setDiseaseState(DiseaseState diseaseState) {
+        this.diseaseState = diseaseState;
     }
 }

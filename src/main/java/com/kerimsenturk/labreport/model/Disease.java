@@ -1,5 +1,6 @@
 package com.kerimsenturk.labreport.model;
 
+import com.kerimsenturk.labreport.model.enums.DiseaseState;
 import com.kerimsenturk.labreport.model.enums.LabRequestType;
 import jakarta.persistence.*;
 
@@ -29,11 +30,14 @@ public class Disease {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "diagnostic_report_id")
     Report diagnosticReport;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "disease_state")
+    DiseaseState diseaseState;
 
     public Disease() {
     }
 
-    public Disease(int id, User patient, User labTechnician, User doctor, LabRequestType labRequestType, Report pathologicReport, Report diagnosticReport) {
+    public Disease(int id, User patient, User labTechnician, User doctor, LabRequestType labRequestType, Report pathologicReport, Report diagnosticReport, DiseaseState diseaseState) {
         this.id = id;
         this.patient = patient;
         this.labTechnician = labTechnician;
@@ -41,6 +45,7 @@ public class Disease {
         this.labRequestType = labRequestType;
         this.pathologicReport = pathologicReport;
         this.diagnosticReport = diagnosticReport;
+        this.diseaseState = diseaseState;
     }
 
     public int getId() {
@@ -97,5 +102,12 @@ public class Disease {
 
     public void setDiagnosticReport(Report diagnosticReport) {
         this.diagnosticReport = diagnosticReport;
+    }
+    public DiseaseState getDiseaseState() {
+        return diseaseState;
+    }
+
+    public void setDiseaseState(DiseaseState diseaseState) {
+        this.diseaseState = diseaseState;
     }
 }

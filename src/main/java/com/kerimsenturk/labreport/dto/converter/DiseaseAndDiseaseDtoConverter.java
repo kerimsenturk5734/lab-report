@@ -27,7 +27,8 @@ public class DiseaseAndDiseaseDtoConverter implements Convertable<Disease, Disea
                 userAndUserDtoConverter.convert(disease.getDoctor()),
                 disease.getLabRequestType(),
                 reportAndReportDtoConverter.convert(disease.getPathologicReport()),
-                reportAndReportDtoConverter.convert(disease.getDiagnosticReport()));
+                reportAndReportDtoConverter.convert(disease.getDiagnosticReport()),
+                disease.getDiseaseState());
     }
 
     @Override
@@ -42,6 +43,7 @@ public class DiseaseAndDiseaseDtoConverter implements Convertable<Disease, Disea
                 userAndUserDtoConverter.deConvert(diseaseDto.getDoctor()),
                 diseaseDto.getLabRequestType(),
                 reportAndReportDtoConverter.deConvert(diseaseDto.getPathologicReport()),
-                reportAndReportDtoConverter.deConvert(diseaseDto.getDiagnosticReport()));
+                reportAndReportDtoConverter.deConvert(diseaseDto.getDiagnosticReport()),
+                diseaseDto.getDiseaseState());
     }
 }

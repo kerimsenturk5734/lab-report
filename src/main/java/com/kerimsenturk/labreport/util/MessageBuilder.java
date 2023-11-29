@@ -3,10 +3,12 @@ package com.kerimsenturk.labreport.util;
 import com.kerimsenturk.labreport.config.MessageSourceConfig;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Component;
 
 
 import java.util.Locale;
 
+@Component
 public class MessageBuilder {
     private String code;
     private Object[] params;

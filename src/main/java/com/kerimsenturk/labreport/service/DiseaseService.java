@@ -5,7 +5,7 @@ import com.kerimsenturk.labreport.dto.converter.DiseaseAndDiseaseDtoConverter;
 import com.kerimsenturk.labreport.dto.converter.UserAndUserDtoConverter;
 import com.kerimsenturk.labreport.dto.request.CreateDiseaseRequest;
 
-import com.kerimsenturk.labreport.exception.DiseaseNotFoundException;
+import com.kerimsenturk.labreport.exception.NotFound.DiseaseNotFoundException;
 import com.kerimsenturk.labreport.exception.InvalidUserRoleException;
 
 import com.kerimsenturk.labreport.model.Disease;
@@ -61,7 +61,9 @@ public class DiseaseService {
         return diseaseRepository.save(disease).getId();
     }
 
-
+    public Disease saveDisease(Disease disease){
+        return diseaseRepository.save(disease);
+    }
     public DiseaseDto getDiseaseById(int id){
         //Get the optional disease
         Optional<Disease> diseaseOptional = diseaseRepository.findById(id);

@@ -7,7 +7,7 @@ import com.kerimsenturk.labreport.dto.request.CreateUserRequest;
 import com.kerimsenturk.labreport.dto.request.PatientCreateRequest;
 import com.kerimsenturk.labreport.dto.request.UpdateUserRequest;
 import com.kerimsenturk.labreport.dto.request.UserLoginRequest;
-import com.kerimsenturk.labreport.exception.UserNotFoundException;
+import com.kerimsenturk.labreport.exception.NotFound.UserNotFoundException;
 import com.kerimsenturk.labreport.model.User;
 import com.kerimsenturk.labreport.model.enums.UserRole;
 import com.kerimsenturk.labreport.repository.UserRepository;

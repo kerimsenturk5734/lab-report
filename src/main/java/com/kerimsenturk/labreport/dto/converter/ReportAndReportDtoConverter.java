@@ -10,7 +10,7 @@ public class ReportAndReportDtoConverter implements Convertable<Report, ReportDt
     @Override
     public ReportDto convert(Report report) {
         if(report == null)
-            return new ReportDto();
+            return null;
 
         return new ReportDto(
                 report.getReportId(),
@@ -24,7 +24,7 @@ public class ReportAndReportDtoConverter implements Convertable<Report, ReportDt
     @Override
     public Report deConvert(ReportDto reportDto) {
         if(reportDto == null)
-            return new Report();
+            return null;
 
         return new Report(
                 reportDto.getReportId(),

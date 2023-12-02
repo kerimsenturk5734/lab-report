@@ -1,50 +1,58 @@
 package com.kerimsenturk.labreport.service;
 
+import com.kerimsenturk.labreport.dto.converter.ReportAndOutputStreamConverter;
+import com.kerimsenturk.labreport.exception.ReportFileCreationException;
+import com.kerimsenturk.labreport.exception.ReportFileWritingException;
 import com.kerimsenturk.labreport.model.Report;
 import com.kerimsenturk.labreport.model.enums.ReportType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
+import java.io.*;
+import java.text.DateFormat;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Component
 public class ReportFileManager {
 
     @Value("${directory.report.root}")
-    private static String REPORT_FILES_ROOT_PATH;
-    @Value("${directory.report.root.diagnostic}")
-    private static String DIAGNOSTIC_REPORT_PATH;
-    @Value("${directory.report.root.pathological}")
-    private static String PATHOLOGICAL_REPORT_PATH;
-    @Value("${directory.report.root.deleted}")
-    private static String DELETED_REPORT_PATH;
+    private String REPORT_FILES_ROOT_PATH;
+    @Value("${directory.report.diagnostic}")
+    private String DIAGNOSTIC_REPORT_PATH;
+    @Value("${directory.report.pathological}")
+    private String PATHOLOGICAL_REPORT_PATH;
+    @Value("${directory.report.deleted}")
+    private String DELETED_REPORT_PATH;
+    private final ReportAndOutputStreamConverter reportAndOutputStreamConverter;
 
-    public void saveReportObject(Report report){
-        //Convert to file the report object
-
-        //Save the file
-
+    public ReportFileManager(ReportAndOutputStreamConverter reportAndOutputStreamConverter) {
+        this.reportAndOutputStreamConverter = reportAndOutputStreamConverter;
     }
 
-    public void deleteReportFile(String directory){
-        //Delete the file
+    public void saveReportObjectAsFile(Report report){
+        //Create and write the file
+        try(OutputStream outputStream = new FileOutputStream(report.getFilePath())) {
+            //Convert to file the report object
+            ByteArrayOutputStream os = (ByteArrayOutputStream) reportAndOutputStreamConverter.convert(report);
+            os.writeTo(outputStream);
+        } catch (FileNotFoundException e) {
+            throw new ReportFileCreationException(e.getMessage());
+        }catch (IOException e){
+            throw new ReportFileWritingException(e.getMessage());
+        }
     }
-
-    public void moveTheFileTo(String fileDirectory, String movingDirectory){
-
-    }
-
     public String buildReportFilePath(String patientId, ReportType reportType, boolean isDeletedFile){
         /*---------------------------------------------------------------
-            File Name Pattern --> "${patientId}_${reportType}_${System.timeStamp()}"
+            File Name Pattern --> "${patientId}_${reportType}_${yyyy-MM-dd HH:mm:ss.SSS}"
          --------------------------------------------------------------------*/
-
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH.mm.ss.SSS");
         String fileName = MessageFormat.format(
-                "{0}_{1}_{2}",
+                "{0}_{1}_{2}.pdf",
                 patientId,
                 reportType.toString().substring(0, 3),
-                System.currentTimeMillis()); // Result --> "patientId_reportType_System.timeStamp()"
+                dateFormat.format(new Date())); // Result --> "patientId_reportType_System.timeStamp()"
 
         StringBuilder filePathBuilder =
                 new StringBuilder()
@@ -68,9 +76,4 @@ public class ReportFileManager {
 
         return filePathBuilder.toString();
     }
-    private void saveFile(File file){
-        //Save the file
-
-    }
-
 }

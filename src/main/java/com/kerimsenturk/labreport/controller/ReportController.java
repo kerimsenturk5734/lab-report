@@ -4,10 +4,13 @@ import com.kerimsenturk.labreport.dto.ReportDto;
 import com.kerimsenturk.labreport.dto.request.CreateDiagnosticReportRequestFor;
 import com.kerimsenturk.labreport.dto.request.CreatePathologicReportRequestFor;
 import com.kerimsenturk.labreport.dto.request.UpdateReportRequest;
+import com.kerimsenturk.labreport.dto.response.DownloadReportResponse;
 import com.kerimsenturk.labreport.service.ReportService;
 import com.kerimsenturk.labreport.util.MessageBuilder;
 import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
 import com.kerimsenturk.labreport.util.Result.SuccessResult;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -81,5 +84,17 @@ public class ReportController {
                         .build();
 
         return ResponseEntity.ok(new SuccessResult(message));
+    }
+    @GetMapping("/downloadReport")
+    @ResponseBody
+    public ResponseEntity<?> downloadReport(@RequestParam String reportId) {
+        DownloadReportResponse res = reportService.downloadReport(reportId);
+
+        String fileNameHeader = new StringBuilder("attachment; filename=").append(res.fileName()).toString();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, fileNameHeader)
+                .contentType(res.mediaType())
+                .body(new InputStreamResource(res.in()));
     }
 }

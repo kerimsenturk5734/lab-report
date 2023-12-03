@@ -1,6 +1,7 @@
 package com.kerimsenturk.labreport.exception;
 
 import com.kerimsenturk.labreport.exception.NotFound.DiseaseNotFoundException;
+import com.kerimsenturk.labreport.exception.NotFound.ReportFileNotFoundException;
 import com.kerimsenturk.labreport.exception.NotFound.ReportNotFoundException;
 import com.kerimsenturk.labreport.exception.NotFound.UserNotFoundException;
 import com.kerimsenturk.labreport.util.Result.ErrorResult;
@@ -48,7 +49,12 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, new ErrorResult(ex.getMessage()), new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
-    @ExceptionHandler(value = {UserNotFoundException.class, DiseaseNotFoundException.class, ReportNotFoundException.class})
+    @ExceptionHandler(
+            value = {
+                    UserNotFoundException.class,
+                    DiseaseNotFoundException.class,
+                    ReportNotFoundException.class,
+                    ReportFileNotFoundException.class})
     protected ResponseEntity<Object> handleNotFound(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, new ErrorResult(ex.getMessage()), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }

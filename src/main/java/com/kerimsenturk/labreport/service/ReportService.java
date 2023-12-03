@@ -8,6 +8,8 @@ import com.kerimsenturk.labreport.dto.request.CreateDiagnosticReportRequestFor;
 import com.kerimsenturk.labreport.dto.request.CreatePathologicReportRequestFor;
 import com.kerimsenturk.labreport.dto.request.CreateReportRequest;
 import com.kerimsenturk.labreport.dto.request.UpdateReportRequest;
+import com.kerimsenturk.labreport.dto.response.DownloadReportResponse;
+import com.kerimsenturk.labreport.exception.NotFound.ReportFileNotFoundException;
 import com.kerimsenturk.labreport.exception.NotFound.ReportNotFoundException;
 
 import com.kerimsenturk.labreport.model.Disease;
@@ -18,8 +20,13 @@ import com.kerimsenturk.labreport.model.enums.ReportType;
 
 import com.kerimsenturk.labreport.repository.ReportRepository;
 import com.kerimsenturk.labreport.util.MessageBuilder;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -82,8 +89,22 @@ public class ReportService {
         //Convert them to dto object and return
         return convertToDtoList(reportList);
     }
-    public void downloadReport(){
+    public DownloadReportResponse downloadReport(String reportId){
+        //Get related report
+        ReportDto reportDto = getReportById(reportId);
 
+        try{
+            //Get the report as file by file path
+            File file = ResourceUtils.getFile(reportDto.getFilePath());
+
+            return new DownloadReportResponse(
+                    new FileInputStream(file),
+                    file.getName(),
+                    MediaType.APPLICATION_PDF);
+        }
+        catch (IOException e){
+            throw new ReportFileNotFoundException(e.getMessage());
+        }
     }
     public String updateReport(UpdateReportRequest updateReportRequest){
         //Call getReportById to handle ReportNotFoundException

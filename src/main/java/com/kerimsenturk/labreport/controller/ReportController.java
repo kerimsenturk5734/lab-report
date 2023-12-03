@@ -1,18 +1,19 @@
 package com.kerimsenturk.labreport.controller;
 
+import com.kerimsenturk.labreport.dto.ReportDto;
 import com.kerimsenturk.labreport.dto.request.CreateDiagnosticReportRequestFor;
 import com.kerimsenturk.labreport.dto.request.CreatePathologicReportRequestFor;
-import com.kerimsenturk.labreport.model.Disease;
+import com.kerimsenturk.labreport.dto.request.UpdateReportRequest;
 import com.kerimsenturk.labreport.service.ReportService;
 import com.kerimsenturk.labreport.util.MessageBuilder;
+import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
 import com.kerimsenturk.labreport.util.Result.SuccessResult;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("v1/api/reports")
@@ -50,5 +51,35 @@ public class ReportController {
                 .build();
 
         return ResponseEntity.created(uri).body(new SuccessResult(message));
+    }
+
+    @GetMapping("/getAllReports")
+    public ResponseEntity<?> getAllReports(){
+        //Get all reports
+        List<ReportDto> reportDtoList = reportService.getAllReports();
+
+        //Create successful message
+        String message =
+                messageBuilder
+                        .code("formatted.reportsFounded")
+                        .params(reportDtoList.size())
+                        .build();
+
+        //Place the reports into Result wrapper object
+        return ResponseEntity.ok(new SuccessDataResult<List<ReportDto>>(reportDtoList, message));
+    }
+
+    @PutMapping("/updateReport")
+    public ResponseEntity<?> updateReport(UpdateReportRequest updateReportRequest){
+        String updatedReportId = reportService.updateReport(updateReportRequest);
+
+        //Create successful message
+        String message =
+                messageBuilder
+                        .code("formatted.reportUpdated")
+                        .params(updatedReportId)
+                        .build();
+
+        return ResponseEntity.ok(new SuccessResult(message));
     }
 }

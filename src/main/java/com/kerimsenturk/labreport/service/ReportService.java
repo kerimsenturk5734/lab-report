@@ -7,6 +7,7 @@ import com.kerimsenturk.labreport.dto.converter.UserAndUserDtoConverter;
 import com.kerimsenturk.labreport.dto.request.CreateDiagnosticReportRequestFor;
 import com.kerimsenturk.labreport.dto.request.CreatePathologicReportRequestFor;
 import com.kerimsenturk.labreport.dto.request.CreateReportRequest;
+import com.kerimsenturk.labreport.dto.request.UpdateReportRequest;
 import com.kerimsenturk.labreport.exception.NotFound.ReportNotFoundException;
 
 import com.kerimsenturk.labreport.model.Disease;
@@ -20,8 +21,10 @@ import com.kerimsenturk.labreport.util.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ReportService {
@@ -72,6 +75,36 @@ public class ReportService {
         //Convert the disease to diseaseDto and return the diseaseDto
         return reportAndReportDtoConverter.convert(report);
     }
+    public List<ReportDto> getAllReports(){
+        //Get all diseases
+        List<Report> reportList = reportRepository.findAll();
+
+        //Convert them to dto object and return
+        return convertToDtoList(reportList);
+    }
+    public void downloadReport(){
+
+    }
+    public String updateReport(UpdateReportRequest updateReportRequest){
+        //Call getReportById to handle ReportNotFoundException
+        //If there is not an error at this line now we can get the real report
+        String reportId = updateReportRequest.reportId().orElse("");
+
+        //Get the report object
+        Report report = reportAndReportDtoConverter.deConvert(getReportById(reportId));
+
+        //Update the object
+        //If fields not present in updateRequest, don't change the fields
+        report.setTitle(updateReportRequest.title().orElse(report.getTitle()));
+        report.setDetails(updateReportRequest.details().orElse(report.getDetails()));
+        report.setIssueDate(new Date());
+
+        //Update the file
+        reportFileManager.saveReportObjectAsFile(report);
+
+        //return updated userId
+        return reportRepository.save(report).getReportId();
+    }
     private String createReport(CreateReportRequest createReportRequest){
         //Check the patientId is valid
         //getUserById will throw exception if encounter a problem when getting the patient
@@ -120,15 +153,15 @@ public class ReportService {
                 createPathologicReportRequestFor.details(),
                 ReportType.PATHOLOGICAL);
 
+        //Get lab technician from user service
+        String labTechnicianId = createPathologicReportRequestFor.labTechnicianId();
+        User labTechnician = userAndUserDtoConverter.deConvert(userService.getUserById(labTechnicianId));
+
         //Create and get created report id
         String createdReportId = createReport(createReportRequest);
 
         //Get report by report id
         Report report = reportAndReportDtoConverter.deConvert(getReportById(createdReportId));
-
-        //Get lab technician from user service
-        String labTechnicianId = createPathologicReportRequestFor.labTechnicianId();
-        User labTechnician = userAndUserDtoConverter.deConvert(userService.getUserById(labTechnicianId));
 
         //Set related fields inside disease object.
         disease.setPathologicReport(report);
@@ -172,5 +205,11 @@ public class ReportService {
          */
 
         return String.format("%s_%s", patientId, UUID.randomUUID());
+    }
+    private List<ReportDto> convertToDtoList(List<Report> reportList){
+        return reportList
+                .stream()
+                .map(reportAndReportDtoConverter::convert)
+                .collect(Collectors.toList());
     }
 }

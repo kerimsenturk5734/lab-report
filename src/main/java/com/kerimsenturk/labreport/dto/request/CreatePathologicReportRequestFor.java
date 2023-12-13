@@ -15,7 +15,7 @@ public record CreatePathologicReportRequestFor(
         @Pattern(regexp = "[0-9]+")
         String labTechnicianId,
         @NotBlank
-        @Length(min = 5, max = 30)
+        @Length(min = 5, max = 50)
         String title,
         @NotBlank
         @Length(min = 20, max = 200)

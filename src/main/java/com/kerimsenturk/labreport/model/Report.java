@@ -2,6 +2,7 @@ package com.kerimsenturk.labreport.model;
 
 import com.kerimsenturk.labreport.model.enums.ReportType;
 import jakarta.persistence.*;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.Date;
 
@@ -13,7 +14,7 @@ public class Report {
     String reportId;
     @Column(name = "title")
     String title;
-    @Column(name = "details")
+    @Column(name = "details", length = 511)
     String details;
     @Column(name = "issue_date")
     Date issueDate;

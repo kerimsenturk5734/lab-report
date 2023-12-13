@@ -9,6 +9,7 @@ import com.kerimsenturk.labreport.service.ReportService;
 import com.kerimsenturk.labreport.util.MessageBuilder;
 import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
 import com.kerimsenturk.labreport.util.Result.SuccessResult;
+import jakarta.validation.Valid;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class ReportController {
     }
 
     @PostMapping("/createPathologicalReportFor")
-    public ResponseEntity<?> createPathologicalReportFor(CreatePathologicReportRequestFor createPathologicReportRequestFor){
+    public ResponseEntity<?> createPathologicalReportFor(@Valid @RequestBody CreatePathologicReportRequestFor createPathologicReportRequestFor){
         String id = reportService.createPathologicReportFor(createPathologicReportRequestFor);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
 
@@ -43,7 +44,7 @@ public class ReportController {
     }
 
     @PostMapping("/createDiagnosticReportFor")
-    public ResponseEntity<?> createDiagnosticReportFor(CreateDiagnosticReportRequestFor createDiagnosticReportRequestFor){
+    public ResponseEntity<?> createDiagnosticReportFor(@Valid @RequestBody CreateDiagnosticReportRequestFor createDiagnosticReportRequestFor){
         String id = reportService.createDiagnosticReportFor(createDiagnosticReportRequestFor);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
 
@@ -73,7 +74,7 @@ public class ReportController {
     }
 
     @PutMapping("/updateReport")
-    public ResponseEntity<?> updateReport(UpdateReportRequest updateReportRequest){
+    public ResponseEntity<?> updateReport(@Valid @RequestBody UpdateReportRequest updateReportRequest){
         String updatedReportId = reportService.updateReport(updateReportRequest);
 
         //Create successful message

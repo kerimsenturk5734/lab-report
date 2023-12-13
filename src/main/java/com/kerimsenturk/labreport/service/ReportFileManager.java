@@ -1,9 +1,10 @@
 package com.kerimsenturk.labreport.service;
 
-import com.kerimsenturk.labreport.dto.converter.ReportAndOutputStreamConverter;
+import com.kerimsenturk.labreport.dto.converter.ReportFileAndOutputStreamConverter;
+import com.kerimsenturk.labreport.dto.request.ReportFile;
 import com.kerimsenturk.labreport.exception.ReportFileCreationException;
 import com.kerimsenturk.labreport.exception.ReportFileWritingException;
-import com.kerimsenturk.labreport.model.Report;
+
 import com.kerimsenturk.labreport.model.enums.ReportType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -25,17 +26,17 @@ public class ReportFileManager {
     private String PATHOLOGICAL_REPORT_PATH;
     @Value("${directory.report.deleted}")
     private String DELETED_REPORT_PATH;
-    private final ReportAndOutputStreamConverter reportAndOutputStreamConverter;
+    private final ReportFileAndOutputStreamConverter reportFileAndOutputStreamConverter;
 
-    public ReportFileManager(ReportAndOutputStreamConverter reportAndOutputStreamConverter) {
-        this.reportAndOutputStreamConverter = reportAndOutputStreamConverter;
+    public ReportFileManager(ReportFileAndOutputStreamConverter reportFileAndOutputStreamConverter) {
+        this.reportFileAndOutputStreamConverter = reportFileAndOutputStreamConverter;
     }
 
-    public void saveReportObjectAsFile(Report report){
+    public void saveReportFileObjectAsFile(ReportFile reportFile){
         //Create and write the file
-        try(OutputStream outputStream = new FileOutputStream(report.getFilePath())) {
+        try(OutputStream outputStream = new FileOutputStream(reportFile.report().getFilePath())) {
             //Convert to file the report object
-            ByteArrayOutputStream os = (ByteArrayOutputStream) reportAndOutputStreamConverter.convert(report);
+            ByteArrayOutputStream os = (ByteArrayOutputStream) reportFileAndOutputStreamConverter.convert(reportFile);
             os.writeTo(outputStream);
         } catch (FileNotFoundException e) {
             throw new ReportFileCreationException(e.getMessage());

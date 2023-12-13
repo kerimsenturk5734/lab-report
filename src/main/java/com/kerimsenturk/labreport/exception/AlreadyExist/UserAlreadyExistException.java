@@ -1,4 +1,4 @@
-package com.kerimsenturk.labreport.exception;
+package com.kerimsenturk.labreport.exception.AlreadyExist;
 
 public class UserAlreadyExistException extends RuntimeException{
     public UserAlreadyExistException() {

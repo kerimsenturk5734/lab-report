@@ -1,5 +1,7 @@
 package com.kerimsenturk.labreport.exception;
 
+import com.kerimsenturk.labreport.exception.AlreadyExist.ReportAlreadyExistForException;
+import com.kerimsenturk.labreport.exception.AlreadyExist.UserAlreadyExistException;
 import com.kerimsenturk.labreport.exception.NotFound.DiseaseNotFoundException;
 import com.kerimsenturk.labreport.exception.NotFound.ReportFileNotFoundException;
 import com.kerimsenturk.labreport.exception.NotFound.ReportNotFoundException;
@@ -44,7 +46,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = UserAlreadyExistException.class)
+    @ExceptionHandler(value = {UserAlreadyExistException.class, ReportAlreadyExistForException.class})
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, new ErrorResult(ex.getMessage()), new HttpHeaders(), HttpStatus.CONFLICT, request);
     }

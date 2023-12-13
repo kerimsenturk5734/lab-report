@@ -2,7 +2,7 @@ package com.kerimsenturk.labreport.service;
 
 import com.kerimsenturk.labreport.dto.UserDto;
 import com.kerimsenturk.labreport.dto.converter.UserAndUserDtoConverter;
-import com.kerimsenturk.labreport.exception.UserAlreadyExistException;
+import com.kerimsenturk.labreport.exception.AlreadyExist.UserAlreadyExistException;
 import com.kerimsenturk.labreport.dto.request.CreateUserRequest;
 import com.kerimsenturk.labreport.dto.request.PatientCreateRequest;
 import com.kerimsenturk.labreport.dto.request.UpdateUserRequest;

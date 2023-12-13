@@ -131,7 +131,40 @@ public class DiseaseService {
 
         return Collections.emptyList();
     }
+    public DiseaseDto getDiseasesByDiagnosticReportId(String reportId){
+        //Get the optional disease
+        Optional<Disease> diseaseOptional = diseaseRepository.getDiseasesByDiagnosticReport_ReportId(reportId);
 
+        //Get error message
+        String message =
+                messageBuilder
+                        .code("formatted.diseaseNotFoundById")
+                        .params(reportId)
+                        .build();
+
+        //Check the is it present or not, else throw exception
+        Disease disease = diseaseOptional.orElseThrow(() -> new DiseaseNotFoundException(message));
+
+        //Convert the disease to diseaseDto and return the diseaseDto
+        return diseaseAndDiseaseDtoConverter.convert(disease);
+    }
+    public DiseaseDto getDiseasesByPathologicReportId(String reportId){
+        //Get the optional disease
+        Optional<Disease> diseaseOptional = diseaseRepository.getDiseasesByPathologicReport_ReportId(reportId);
+
+        //Get error message
+        String message =
+                messageBuilder
+                        .code("formatted.diseaseNotFoundById")
+                        .params(reportId)
+                        .build();
+
+        //Check the is it present or not, else throw exception
+        Disease disease = diseaseOptional.orElseThrow(() -> new DiseaseNotFoundException(message));
+
+        //Convert the disease to diseaseDto and return the diseaseDto
+        return diseaseAndDiseaseDtoConverter.convert(disease);
+    }
     private List<DiseaseDto> convertToDtoList(List<Disease> diseaseList){
         return diseaseList
                 .stream()

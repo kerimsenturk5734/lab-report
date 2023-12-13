@@ -1,17 +1,16 @@
 package com.kerimsenturk.labreport.service;
 
+import com.kerimsenturk.labreport.dto.DiseaseDto;
 import com.kerimsenturk.labreport.dto.ReportDto;
 import com.kerimsenturk.labreport.dto.converter.DiseaseAndDiseaseDtoConverter;
 import com.kerimsenturk.labreport.dto.converter.ReportAndReportDtoConverter;
 import com.kerimsenturk.labreport.dto.converter.UserAndUserDtoConverter;
-import com.kerimsenturk.labreport.dto.request.CreateDiagnosticReportRequestFor;
-import com.kerimsenturk.labreport.dto.request.CreatePathologicReportRequestFor;
-import com.kerimsenturk.labreport.dto.request.CreateReportRequest;
-import com.kerimsenturk.labreport.dto.request.UpdateReportRequest;
+import com.kerimsenturk.labreport.dto.request.*;
 import com.kerimsenturk.labreport.dto.response.DownloadReportResponse;
 import com.kerimsenturk.labreport.exception.NotFound.ReportFileNotFoundException;
 import com.kerimsenturk.labreport.exception.NotFound.ReportNotFoundException;
 
+import com.kerimsenturk.labreport.exception.AlreadyExist.ReportAlreadyExistForException;
 import com.kerimsenturk.labreport.model.Disease;
 import com.kerimsenturk.labreport.model.Report;
 import com.kerimsenturk.labreport.model.User;
@@ -120,8 +119,16 @@ public class ReportService {
         report.setDetails(updateReportRequest.details().orElse(report.getDetails()));
         report.setIssueDate(new Date());
 
-        //Update the file
-        reportFileManager.saveReportObjectAsFile(report);
+        DiseaseDto diseaseDto = (report.getReportType() == ReportType.DIAGNOSTIC) ?
+                diseaseService.getDiseasesByDiagnosticReportId(reportId):
+                diseaseService.getDiseasesByPathologicReportId(reportId);
+
+        diseaseDto.setDiseaseState(DiseaseState.UPDATED);
+        //Update disease as updated
+        diseaseService.saveDisease(diseaseAndDiseaseDtoConverter.deConvert(diseaseDto));
+
+        //Save report object as updated file
+        reportFileManager.saveReportFileObjectAsFile(new ReportFile(report, diseaseAndDiseaseDtoConverter.deConvert(diseaseDto)));
 
         //return updated userId
         return reportRepository.save(report).getReportId();
@@ -151,8 +158,6 @@ public class ReportService {
                 filePath,
                 createReportRequest.reportType());
 
-        //Save the report object as file
-        reportFileManager.saveReportObjectAsFile(report);
         return reportRepository.save(report).getReportId();
 
         /*  Transactional process might be necessary at this point.
@@ -163,6 +168,9 @@ public class ReportService {
          */
     }
     public String createPathologicReportFor(CreatePathologicReportRequestFor createPathologicReportRequestFor){
+
+        handleIsReportAlreadyExistFor(createPathologicReportRequestFor.diseaseId(), ReportType.PATHOLOGICAL);
+
         //Get the related disease
         Disease disease = diseaseAndDiseaseDtoConverter
                 .deConvert(diseaseService.getDiseaseById(createPathologicReportRequestFor.diseaseId()));
@@ -192,9 +200,18 @@ public class ReportService {
         //Update the disease
         diseaseService.saveDisease(disease);
 
+        //Create report file
+        createReportFile(new ReportFile(report, disease));
+
         return createdReportId;
     }
+    private void createReportFile(ReportFile reportFile){
+        reportFileManager.saveReportFileObjectAsFile(reportFile);
+    }
     public String createDiagnosticReportFor(CreateDiagnosticReportRequestFor createDiagnosticReportRequestFor){
+
+        handleIsReportAlreadyExistFor(createDiagnosticReportRequestFor.diseaseId(), ReportType.DIAGNOSTIC);
+
         //Get the related disease
         Disease disease = diseaseAndDiseaseDtoConverter
                 .deConvert(diseaseService.getDiseaseById(createDiagnosticReportRequestFor.diseaseId()));
@@ -212,13 +229,38 @@ public class ReportService {
         //Get report by report id
         Report report = reportAndReportDtoConverter.deConvert(getReportById(createdReportId));
 
-        disease.setPathologicReport(report);
+        disease.setDiagnosticReport(report);
         disease.setDiseaseState(DiseaseState.DIAGNOSTIC_RESULTED);
 
         //Update the disease
         diseaseService.saveDisease(disease);
 
+        //Create report file
+        createReportFile(new ReportFile(report, disease));
+
         return createdReportId;
+    }
+    private boolean isReportExistFor(int diseaseId, ReportType reportType){
+        DiseaseDto diseaseDto = diseaseService.getDiseaseById(diseaseId);
+
+        if(reportType == ReportType.DIAGNOSTIC)
+            return (diseaseDto.getDiagnosticReport() != null);
+
+        else
+            return (diseaseDto.getPathologicReport() != null);
+
+    }
+    private void handleIsReportAlreadyExistFor(int diseaseId, ReportType reportType) throws ReportAlreadyExistForException{
+        //Handle is an indicated type report exist for this disease
+        if(isReportExistFor(diseaseId, reportType)){
+            String message =
+                    messageBuilder
+                            .code("formatted.reportAlreadyExistFor")
+                            .params(diseaseId, reportType)
+                            .build();
+
+            throw new ReportAlreadyExistForException(message);
+        }
     }
     private String buildReportId(String patientId){
         /*

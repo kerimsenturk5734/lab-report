@@ -1,4 +1,4 @@
-package com.kerimsenturk.labreport.exception;
+package com.kerimsenturk.labreport.exception.NotFound;
 
 
 public class UserNotFoundException extends RuntimeException{

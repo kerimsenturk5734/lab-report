@@ -1,5 +1,11 @@
 package com.kerimsenturk.labreport.exception;
 
+import com.kerimsenturk.labreport.exception.AlreadyExist.ReportAlreadyExistForException;
+import com.kerimsenturk.labreport.exception.AlreadyExist.UserAlreadyExistException;
+import com.kerimsenturk.labreport.exception.NotFound.DiseaseNotFoundException;
+import com.kerimsenturk.labreport.exception.NotFound.ReportFileNotFoundException;
+import com.kerimsenturk.labreport.exception.NotFound.ReportNotFoundException;
+import com.kerimsenturk.labreport.exception.NotFound.UserNotFoundException;
 import com.kerimsenturk.labreport.util.Result.ErrorResult;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.context.annotation.Bean;
@@ -40,14 +46,24 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = UserAlreadyExistException.class)
+    @ExceptionHandler(value = {UserAlreadyExistException.class, ReportAlreadyExistForException.class})
     protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, new ErrorResult(ex.getMessage()), new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
-    @ExceptionHandler(value = {UserNotFoundException.class, DiseaseNotFoundException.class})
+    @ExceptionHandler(
+            value = {
+                    UserNotFoundException.class,
+                    DiseaseNotFoundException.class,
+                    ReportNotFoundException.class,
+                    ReportFileNotFoundException.class})
     protected ResponseEntity<Object> handleNotFound(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, new ErrorResult(ex.getMessage()), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(value = {ReportFileCreationException.class, ReportFileWritingException.class, ReportToOutputStreamConversionException.class})
+    protected ResponseEntity<Object> handleExceptionInternal(RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, new ErrorResult(ex.getMessage()), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
     @ExceptionHandler

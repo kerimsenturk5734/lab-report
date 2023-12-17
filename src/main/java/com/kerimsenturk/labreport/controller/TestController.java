@@ -13,13 +13,13 @@ import com.kerimsenturk.labreport.model.enums.UserRole;
 import com.kerimsenturk.labreport.repository.DiseaseRepository;
 import com.kerimsenturk.labreport.repository.ReportRepository;
 import com.kerimsenturk.labreport.repository.UserRepository;
+import com.kerimsenturk.labreport.service.ReportFileManager;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.sql.DataSource;
 import java.util.List;
 
-//@RestController
 @RequestMapping("v1/api/test")
 public class TestController {
     private final JdbcTemplate jdbcTemplate;
@@ -29,8 +29,8 @@ public class TestController {
     private final DiseaseRepository diseaseRepository;
     private final ReportRepository reportRepository;
     private final ReportAndReportDtoConverter reportAndReportDtoConverter;
-
-    public TestController(DataSource dataSource, UserRepository userRepository, UserAndUserDtoConverter userAndUserDtoConverter, DiseaseAndDiseaseDtoConverter diseaseAndDiseaseDtoConverter, DiseaseRepository diseaseRepository, ReportRepository reportRepository, ReportAndReportDtoConverter reportAndReportDtoConverter) {
+    private final ReportFileManager reportFileManager;
+    public TestController(DataSource dataSource, UserRepository userRepository, UserAndUserDtoConverter userAndUserDtoConverter, DiseaseAndDiseaseDtoConverter diseaseAndDiseaseDtoConverter, DiseaseRepository diseaseRepository, ReportRepository reportRepository, ReportAndReportDtoConverter reportAndReportDtoConverter, ReportFileManager reportFileManager) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.userRepository = userRepository;
         this.userAndUserDtoConverter = userAndUserDtoConverter;
@@ -38,6 +38,7 @@ public class TestController {
         this.diseaseRepository = diseaseRepository;
         this.reportRepository = reportRepository;
         this.reportAndReportDtoConverter = reportAndReportDtoConverter;
+        this.reportFileManager = reportFileManager;
     }
 
     @RequestMapping("/")
@@ -92,6 +93,5 @@ public class TestController {
         DiseaseDto diseaseDto = diseaseAndDiseaseDtoConverter.convert(disease);
         return diseaseAndDiseaseDtoConverter.deConvert(diseaseDto);
     }
-
 
 }

@@ -11,7 +11,7 @@ public class UserAndUserDtoConverter implements Convertable<User, UserDto> {
     @Override
     public UserDto convert(User user) {
         if(user == null)
-            return new UserDto();
+            return null;
 
         return new UserDto(
                 user.getUserId(),
@@ -23,7 +23,7 @@ public class UserAndUserDtoConverter implements Convertable<User, UserDto> {
     @Override
     public User deConvert(UserDto userDto) {
         if(userDto == null)
-            return new User();
+            return null;
 
         return new User(
                 userDto.getUserId(),

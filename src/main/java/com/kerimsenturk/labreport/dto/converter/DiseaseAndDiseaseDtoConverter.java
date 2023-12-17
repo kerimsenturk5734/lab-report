@@ -18,7 +18,7 @@ public class DiseaseAndDiseaseDtoConverter implements Convertable<Disease, Disea
     @Override
     public DiseaseDto convert(Disease disease) {
         if(disease == null)
-            return new DiseaseDto();
+            return null;
 
         return new DiseaseDto(
                 disease.getId(),
@@ -34,7 +34,7 @@ public class DiseaseAndDiseaseDtoConverter implements Convertable<Disease, Disea
     @Override
     public Disease deConvert(DiseaseDto diseaseDto) {
         if(diseaseDto == null)
-            return new Disease();
+            return null;
 
         return new Disease(
                 diseaseDto.getId(),

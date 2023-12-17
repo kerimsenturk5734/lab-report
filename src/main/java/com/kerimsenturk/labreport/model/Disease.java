@@ -15,7 +15,7 @@ public class Disease {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")
     User patient;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "lab_technician_id")
     User labTechnician;
     @ManyToOne(fetch = FetchType.LAZY)

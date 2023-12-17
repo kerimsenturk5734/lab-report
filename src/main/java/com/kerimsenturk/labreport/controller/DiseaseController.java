@@ -5,6 +5,7 @@ import com.kerimsenturk.labreport.dto.request.CreateDiseaseRequest;
 import com.kerimsenturk.labreport.service.DiseaseService;
 import com.kerimsenturk.labreport.util.MessageBuilder;
 import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -24,7 +25,7 @@ public class DiseaseController {
     }
 
     @PostMapping("/createDisease")
-    public ResponseEntity<?> createDisease(@RequestBody CreateDiseaseRequest createDiseaseRequest){
+    public ResponseEntity<?> createDisease(@Valid @RequestBody CreateDiseaseRequest createDiseaseRequest){
         int id = diseaseService.create(createDiseaseRequest);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
         return ResponseEntity.created(uri).build();

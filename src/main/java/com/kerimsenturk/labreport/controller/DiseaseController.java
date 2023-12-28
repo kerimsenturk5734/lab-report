@@ -2,10 +2,14 @@ package com.kerimsenturk.labreport.controller;
 
 import com.kerimsenturk.labreport.dto.DiseaseDto;
 import com.kerimsenturk.labreport.dto.request.CreateDiseaseRequest;
+import com.kerimsenturk.labreport.dto.validator.HospitalPersonalIdValid;
+import com.kerimsenturk.labreport.dto.validator.PatientIdValid;
 import com.kerimsenturk.labreport.service.DiseaseService;
 import com.kerimsenturk.labreport.util.MessageBuilder;
 import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -14,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/api/diseases")
+@Validated
 public class DiseaseController {
     private final DiseaseService diseaseService;
     private final MessageBuilder messageBuilder;
@@ -24,7 +29,7 @@ public class DiseaseController {
     }
 
     @PostMapping("/createDisease")
-    public ResponseEntity<?> createDisease(@RequestBody CreateDiseaseRequest createDiseaseRequest){
+    public ResponseEntity<?> createDisease(@Valid @RequestBody CreateDiseaseRequest createDiseaseRequest){
         int id = diseaseService.create(createDiseaseRequest);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
         return ResponseEntity.created(uri).build();
@@ -63,7 +68,7 @@ public class DiseaseController {
     }
 
     @GetMapping("/getDiseasesByPatientId")
-    public ResponseEntity<?> getDiseasesByPatientId(@RequestParam String patientId){
+    public ResponseEntity<?> getDiseasesByPatientId(@PatientIdValid @RequestParam String patientId){
         //Get related diseases
         List<DiseaseDto> diseaseDtoList = diseaseService.getDiseasesByPatientId(patientId);
 
@@ -77,7 +82,7 @@ public class DiseaseController {
         return ResponseEntity.ok(new SuccessDataResult<List<DiseaseDto>>(diseaseDtoList,message));
     }
     @GetMapping("/getDiseasesByDoctorId")
-    public ResponseEntity<?> getDiseasesByDoctorId(@RequestParam String doctorId){
+    public ResponseEntity<?> getDiseasesByDoctorId(@HospitalPersonalIdValid @RequestParam String doctorId){
         //Get related diseases
         List<DiseaseDto> diseaseDtoList = diseaseService.getDiseasesByDoctorId(doctorId);
 
@@ -98,7 +103,7 @@ public class DiseaseController {
         return ResponseEntity.ok(new SuccessDataResult<List<DiseaseDto>>(diseaseDtoList,message));
     }
     @GetMapping("/getDiseasesByLabTechnicianId")
-    public ResponseEntity<?> getDiseasesByLabTechnicianId(@RequestParam String labTechnicianId){
+    public ResponseEntity<?> getDiseasesByLabTechnicianId(@HospitalPersonalIdValid @RequestParam String labTechnicianId){
         //Get related diseases
         List<DiseaseDto> diseaseDtoList = diseaseService.getDiseasesByLabTechnicianId(labTechnicianId);
 

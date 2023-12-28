@@ -1,8 +1,8 @@
 package com.kerimsenturk.labreport.dto.request;
 
+import com.kerimsenturk.labreport.dto.validator.HospitalPersonalIdValid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.NumberFormat;
 
@@ -10,9 +10,7 @@ public record CreatePathologicReportRequestFor(
         @NotNull
         @NumberFormat
         int diseaseId,
-        @NotBlank
-        @Length(min = 7, max = 7, message = "length must be 7 digit")
-        @Pattern(regexp = "[0-9]+")
+        @HospitalPersonalIdValid
         String labTechnicianId,
         @NotBlank
         @Length(min = 5, max = 50)

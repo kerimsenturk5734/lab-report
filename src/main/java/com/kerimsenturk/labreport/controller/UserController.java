@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Token> login(@RequestBody UserLoginRequest userLoginRequest){
+    public ResponseEntity<Token> login(@Valid @RequestBody UserLoginRequest userLoginRequest){
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
         return ResponseEntity.created(uri).body(userService.login(userLoginRequest));
     }

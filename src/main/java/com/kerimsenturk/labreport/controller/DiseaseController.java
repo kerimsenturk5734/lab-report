@@ -7,8 +7,10 @@ import com.kerimsenturk.labreport.dto.validator.PatientIdValid;
 import com.kerimsenturk.labreport.service.DiseaseService;
 import com.kerimsenturk.labreport.util.MessageBuilder;
 import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@SecurityRequirement(name = "Bearer Authentication")
 @RestController
 @RequestMapping("/v1/api/diseases")
 @Validated
@@ -28,6 +31,7 @@ public class DiseaseController {
         this.messageBuilder = messageBuilder;
     }
 
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.DOCTOR)")
     @PostMapping("/createDisease")
     public ResponseEntity<?> createDisease(@Valid @RequestBody CreateDiseaseRequest createDiseaseRequest){
         int id = diseaseService.create(createDiseaseRequest);
@@ -35,6 +39,7 @@ public class DiseaseController {
         return ResponseEntity.created(uri).build();
     }
 
+    @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
     @GetMapping("/")
     public ResponseEntity<?> getDiseaseById(@RequestParam int id){
         //Get the disease by id
@@ -51,6 +56,7 @@ public class DiseaseController {
         return ResponseEntity.ok(new SuccessDataResult<DiseaseDto>(diseaseDto, message));
     }
 
+    @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
     @GetMapping("/getAllDiseases")
     public ResponseEntity<?> getAllDiseases(){
         //Get all diseases
@@ -67,6 +73,7 @@ public class DiseaseController {
         return ResponseEntity.ok(new SuccessDataResult<List<DiseaseDto>>(diseaseDtoList, message));
     }
 
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.PATIENT)")
     @GetMapping("/getDiseasesByPatientId")
     public ResponseEntity<?> getDiseasesByPatientId(@PatientIdValid @RequestParam String patientId){
         //Get related diseases
@@ -81,6 +88,8 @@ public class DiseaseController {
 
         return ResponseEntity.ok(new SuccessDataResult<List<DiseaseDto>>(diseaseDtoList,message));
     }
+
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.DOCTOR)")
     @GetMapping("/getDiseasesByDoctorId")
     public ResponseEntity<?> getDiseasesByDoctorId(@HospitalPersonalIdValid @RequestParam String doctorId){
         //Get related diseases
@@ -102,6 +111,7 @@ public class DiseaseController {
 
         return ResponseEntity.ok(new SuccessDataResult<List<DiseaseDto>>(diseaseDtoList,message));
     }
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.LAB_TECHNICIAN)")
     @GetMapping("/getDiseasesByLabTechnicianId")
     public ResponseEntity<?> getDiseasesByLabTechnicianId(@HospitalPersonalIdValid @RequestParam String labTechnicianId){
         //Get related diseases

@@ -17,6 +17,7 @@ import java.util.Map;
 @Service
 public class JwtTokenManager {
 
+    /** TODO: This class throwing many exceptions about claim, signature ... handle them**/
     private final int VALIDITY = 5*60*100000;
     private final String ISSUER = "com.kerimsenturk.labreport";
     private final Key KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
@@ -47,6 +48,7 @@ public class JwtTokenManager {
     public String extractUser(String token){
         Claims claims = extractClaims(token);
 
+        assert claims != null;
         return claims.getSubject();
     }
 

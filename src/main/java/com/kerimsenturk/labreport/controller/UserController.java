@@ -7,7 +7,6 @@ import com.kerimsenturk.labreport.dto.request.UpdateUserRequest;
 
 import com.kerimsenturk.labreport.dto.request.UserLoginRequest;
 import com.kerimsenturk.labreport.service.UserService;
-
 import com.kerimsenturk.labreport.util.MessageBuilder;
 import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
 import com.kerimsenturk.labreport.util.Result.SuccessResult;
@@ -16,8 +15,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.token.Token;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -40,10 +39,11 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Token> login(@RequestBody UserLoginRequest userLoginRequest){
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(userService.login(userLoginRequest));
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+        return ResponseEntity.created(uri).body(userService.login(userLoginRequest));
     }
 
-    //This endpoint asks some authorizes to access
+    @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody CreateUserRequest createUserRequest){
         String id = userService.register(createUserRequest);
@@ -59,10 +59,11 @@ public class UserController {
         return ResponseEntity.created(uri).build();
     }
 
+    @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
     @GetMapping("/")
     public ResponseEntity<?> getUserByID(
             @RequestParam
-            @Pattern(regexp = "^([0-9]+){7,11}$", message = "{pattern.unmatched.userId }")
+            @Pattern(regexp = "^([0-9]+){7,11}$", message = "{pattern.unmatched.userId}")
             String id){
 
         //Get the user by id
@@ -79,6 +80,7 @@ public class UserController {
         return ResponseEntity.ok(new SuccessDataResult<UserDto>(userDto, message));
     }
 
+    @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
     @GetMapping("/getAllUsers")
     public ResponseEntity<?> getAllUsers(){
         //Get the all users

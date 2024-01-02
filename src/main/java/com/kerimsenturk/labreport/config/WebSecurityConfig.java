@@ -52,14 +52,14 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(x -> x
 
                         //Allow every user to want to access login and register endpoints
-                        .requestMatchers("**/users/login","**/users/register").permitAll()
+                        .requestMatchers("**/users/login","**/users/registerPatient").permitAll()
 
                         //Allow swagger docs
                         .requestMatchers("**/api-docs/**", "**/swagger-ui/**").permitAll()
 
                         //Authenticate the all other requests coming to API except the endpoints indicated above
                         .requestMatchers("/v1/api/**").authenticated())
-                /** TODO: Role based authorization needed **/
+
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider())
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)

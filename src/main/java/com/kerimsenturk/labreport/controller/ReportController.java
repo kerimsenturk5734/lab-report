@@ -9,16 +9,19 @@ import com.kerimsenturk.labreport.service.ReportService;
 import com.kerimsenturk.labreport.util.MessageBuilder;
 import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
 import com.kerimsenturk.labreport.util.Result.SuccessResult;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
 
+@SecurityRequirement(name = "Bearer Authentication")
 @RestController
 @RequestMapping("v1/api/reports")
 public class ReportController {
@@ -29,6 +32,7 @@ public class ReportController {
         this.messageBuilder = messageBuilder;
     }
 
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.LAB_TECHNICIAN)")
     @PostMapping("/createPathologicalReportFor")
     public ResponseEntity<?> createPathologicalReportFor(@Valid @RequestBody CreatePathologicReportRequestFor createPathologicReportRequestFor){
         String id = reportService.createPathologicReportFor(createPathologicReportRequestFor);
@@ -43,6 +47,7 @@ public class ReportController {
         return ResponseEntity.created(uri).body(new SuccessResult(message));
     }
 
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.DOCTOR)")
     @PostMapping("/createDiagnosticReportFor")
     public ResponseEntity<?> createDiagnosticReportFor(@Valid @RequestBody CreateDiagnosticReportRequestFor createDiagnosticReportRequestFor){
         String id = reportService.createDiagnosticReportFor(createDiagnosticReportRequestFor);
@@ -57,6 +62,7 @@ public class ReportController {
         return ResponseEntity.created(uri).body(new SuccessResult(message));
     }
 
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN)")
     @GetMapping("/getAllReports")
     public ResponseEntity<?> getAllReports(){
         //Get all reports
@@ -73,6 +79,7 @@ public class ReportController {
         return ResponseEntity.ok(new SuccessDataResult<List<ReportDto>>(reportDtoList, message));
     }
 
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.DOCTOR, @ROLES.LAB_TECHNICIAN)")
     @PutMapping("/updateReport")
     public ResponseEntity<?> updateReport(@Valid @RequestBody UpdateReportRequest updateReportRequest){
         String updatedReportId = reportService.updateReport(updateReportRequest);

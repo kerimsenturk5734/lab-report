@@ -5,16 +5,20 @@ import com.kerimsenturk.labreport.dto.request.CreateUserRequest;
 import com.kerimsenturk.labreport.dto.request.PatientCreateRequest;
 import com.kerimsenturk.labreport.dto.request.UpdateUserRequest;
 
+import com.kerimsenturk.labreport.dto.request.UserLoginRequest;
 import com.kerimsenturk.labreport.service.UserService;
-
 import com.kerimsenturk.labreport.util.MessageBuilder;
 import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
 import com.kerimsenturk.labreport.util.Result.SuccessResult;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.token.Token;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -22,6 +26,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@SecurityRequirement(name = "Bearer Authentication")
 @RestController
 @RequestMapping("/v1/api/users")
 @Validated
@@ -34,7 +39,13 @@ public class UserController {
 
     }
 
-    //This endpoint asks some authorizes to access
+    @PostMapping("/login")
+    public ResponseEntity<Token> login(@Valid @RequestBody UserLoginRequest userLoginRequest){
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+        return ResponseEntity.created(uri).body(userService.login(userLoginRequest));
+    }
+
+    @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody CreateUserRequest createUserRequest){
         String id = userService.register(createUserRequest);
@@ -50,10 +61,11 @@ public class UserController {
         return ResponseEntity.created(uri).build();
     }
 
+    @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
     @GetMapping("/")
     public ResponseEntity<?> getUserByID(
             @RequestParam
-            @Pattern(regexp = "^([0-9]+){7,11}$", message = "{pattern.unmatched.userId }")
+            @Pattern(regexp = "^([0-9]+){7,11}$", message = "{pattern.unmatched.userId}")
             String id){
 
         //Get the user by id
@@ -70,6 +82,7 @@ public class UserController {
         return ResponseEntity.ok(new SuccessDataResult<UserDto>(userDto, message));
     }
 
+    @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
     @GetMapping("/getAllUsers")
     public ResponseEntity<?> getAllUsers(){
         //Get the all users

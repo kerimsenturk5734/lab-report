@@ -1,5 +1,6 @@
 package com.kerimsenturk.labreport.model;
 
+import com.kerimsenturk.labreport.model.enums.DiseaseState;
 import com.kerimsenturk.labreport.model.enums.LabRequestType;
 import jakarta.persistence.*;
 
@@ -14,7 +15,7 @@ public class Disease {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")
     User patient;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "lab_technician_id")
     User labTechnician;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -23,17 +24,20 @@ public class Disease {
     @Enumerated(EnumType.STRING)
     @Column(name = "lab_request_type")
     LabRequestType labRequestType;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "pathologic_report_id")
     Report pathologicReport;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "diagnostic_report_id")
     Report diagnosticReport;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "disease_state")
+    DiseaseState diseaseState;
 
     public Disease() {
     }
 
-    public Disease(int id, User patient, User labTechnician, User doctor, LabRequestType labRequestType, Report pathologicReport, Report diagnosticReport) {
+    public Disease(int id, User patient, User labTechnician, User doctor, LabRequestType labRequestType, Report pathologicReport, Report diagnosticReport, DiseaseState diseaseState) {
         this.id = id;
         this.patient = patient;
         this.labTechnician = labTechnician;
@@ -41,6 +45,7 @@ public class Disease {
         this.labRequestType = labRequestType;
         this.pathologicReport = pathologicReport;
         this.diagnosticReport = diagnosticReport;
+        this.diseaseState = diseaseState;
     }
 
     public int getId() {
@@ -97,5 +102,12 @@ public class Disease {
 
     public void setDiagnosticReport(Report diagnosticReport) {
         this.diagnosticReport = diagnosticReport;
+    }
+    public DiseaseState getDiseaseState() {
+        return diseaseState;
+    }
+
+    public void setDiseaseState(DiseaseState diseaseState) {
+        this.diseaseState = diseaseState;
     }
 }

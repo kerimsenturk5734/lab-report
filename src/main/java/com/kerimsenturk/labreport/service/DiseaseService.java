@@ -4,16 +4,16 @@ import com.kerimsenturk.labreport.dto.DiseaseDto;
 import com.kerimsenturk.labreport.dto.converter.DiseaseAndDiseaseDtoConverter;
 import com.kerimsenturk.labreport.dto.converter.UserAndUserDtoConverter;
 import com.kerimsenturk.labreport.dto.request.CreateDiseaseRequest;
-
 import com.kerimsenturk.labreport.exception.NotFound.DiseaseNotFoundException;
 import com.kerimsenturk.labreport.exception.InvalidUserRoleException;
-
 import com.kerimsenturk.labreport.model.Disease;
 import com.kerimsenturk.labreport.model.User;
 import com.kerimsenturk.labreport.model.enums.DiseaseState;
+import com.kerimsenturk.labreport.model.enums.ReportType;
 import com.kerimsenturk.labreport.model.enums.UserRole;
 import com.kerimsenturk.labreport.repository.DiseaseRepository;
 import com.kerimsenturk.labreport.util.MessageBuilder;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -27,13 +27,19 @@ public class DiseaseService {
     private final DiseaseAndDiseaseDtoConverter diseaseAndDiseaseDtoConverter;
     private final UserAndUserDtoConverter userAndUserDtoConverter;
     private final UserService userService;
+    private final ReportService reportService;
     private final MessageBuilder messageBuilder = new MessageBuilder();
 
-    public DiseaseService(DiseaseRepository diseaseRepository, DiseaseAndDiseaseDtoConverter diseaseAndDiseaseDtoConverter, UserAndUserDtoConverter userAndUserDtoConverter, UserService userService) {
+    public DiseaseService(DiseaseRepository diseaseRepository,
+                          DiseaseAndDiseaseDtoConverter diseaseAndDiseaseDtoConverter,
+                          UserAndUserDtoConverter userAndUserDtoConverter, UserService userService,
+                          @Lazy ReportService reportService) {
+
         this.diseaseRepository = diseaseRepository;
         this.diseaseAndDiseaseDtoConverter = diseaseAndDiseaseDtoConverter;
         this.userAndUserDtoConverter = userAndUserDtoConverter;
         this.userService = userService;
+        this.reportService = reportService;
     }
 
     public int create(CreateDiseaseRequest createDiseaseRequest){
@@ -164,6 +170,32 @@ public class DiseaseService {
 
         //Convert the disease to diseaseDto and return the diseaseDto
         return diseaseAndDiseaseDtoConverter.convert(disease);
+    }
+    public void deleteReportOf(int diseaseId, ReportType reportType){
+        //Get related disease
+        Disease disease = diseaseAndDiseaseDtoConverter.deConvert(getDiseaseById(diseaseId));
+
+        String reportId = null;
+        if(reportType == ReportType.DIAGNOSTIC){
+            //Get diagnostic report of this disease
+            reportId = disease.getDiagnosticReport().getReportId();
+
+            //Set null the foreign key inside disease
+            disease.setDiagnosticReport(null);
+        }
+        else{
+            //Get pathological report of this disease
+            reportId = disease.getPathologicReport().getReportId();
+
+            //Set null the foreign key inside disease
+            disease.setPathologicReport(null);
+        }
+
+        //Now delete the report from local storage
+        reportService.deleteReport(reportId);
+
+        // and update it
+        saveDisease(disease);
     }
     private List<DiseaseDto> convertToDtoList(List<Disease> diseaseList){
         return diseaseList

@@ -4,11 +4,13 @@ import com.kerimsenturk.labreport.dto.DiseaseDto;
 import com.kerimsenturk.labreport.dto.request.CreateDiseaseRequest;
 import com.kerimsenturk.labreport.dto.validator.HospitalPersonalIdValid;
 import com.kerimsenturk.labreport.dto.validator.PatientIdValid;
+import com.kerimsenturk.labreport.model.enums.ReportType;
 import com.kerimsenturk.labreport.service.DiseaseService;
 import com.kerimsenturk.labreport.util.MessageBuilder;
 import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -125,5 +127,18 @@ public class DiseaseController {
                         .build();
 
         return ResponseEntity.ok(new SuccessDataResult<List<DiseaseDto>>(diseaseDtoList,message));
+    }
+    @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
+    @DeleteMapping("/deletePathologicalReportOf")
+    public ResponseEntity<?> deletePathologicalReportOf(@RequestParam int diseaseId) {
+        diseaseService.deleteReportOf(diseaseId, ReportType.PATHOLOGICAL);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
+    @DeleteMapping("/deleteDiagnosticReportOf")
+    public ResponseEntity<?> deleteDiagnosticReportOf(@RequestParam int diseaseId) {
+        diseaseService.deleteReportOf(diseaseId, ReportType.DIAGNOSTIC);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

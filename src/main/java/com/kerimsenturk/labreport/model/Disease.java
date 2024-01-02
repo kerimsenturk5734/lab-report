@@ -24,10 +24,10 @@ public class Disease {
     @Enumerated(EnumType.STRING)
     @Column(name = "lab_request_type")
     LabRequestType labRequestType;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "pathologic_report_id")
     Report pathologicReport;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "diagnostic_report_id")
     Report diagnosticReport;
     @Enumerated(EnumType.STRING)

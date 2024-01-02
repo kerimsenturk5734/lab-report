@@ -64,7 +64,7 @@ public class ReportService {
     }
 
 
-    public ReportDto getReportById(String id){
+    public ReportDto getReportById(String id) {
         //Get the optional disease
         Optional<Report> reportOptional = reportRepository.findById(id);
 
@@ -81,18 +81,20 @@ public class ReportService {
         //Convert the disease to diseaseDto and return the diseaseDto
         return reportAndReportDtoConverter.convert(report);
     }
-    public List<ReportDto> getAllReports(){
+
+    public List<ReportDto> getAllReports() {
         //Get all diseases
         List<Report> reportList = reportRepository.findAll();
 
         //Convert them to dto object and return
         return convertToDtoList(reportList);
     }
-    public DownloadReportResponse downloadReport(String reportId){
+
+    public DownloadReportResponse downloadReport(String reportId) {
         //Get related report
         ReportDto reportDto = getReportById(reportId);
 
-        try{
+        try {
             //Get the report as file by file path
             File file = ResourceUtils.getFile(reportDto.getFilePath());
 
@@ -100,12 +102,12 @@ public class ReportService {
                     new FileInputStream(file),
                     file.getName(),
                     MediaType.APPLICATION_PDF);
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             throw new ReportFileNotFoundException(e.getMessage());
         }
     }
-    public String updateReport(UpdateReportRequest updateReportRequest){
+
+    public String updateReport(UpdateReportRequest updateReportRequest) {
         //Call getReportById to handle ReportNotFoundException
         //If there is not an error at this line now we can get the real report
         String reportId = updateReportRequest.reportId().orElse("");
@@ -120,7 +122,7 @@ public class ReportService {
         report.setIssueDate(new Date());
 
         DiseaseDto diseaseDto = (report.getReportType() == ReportType.DIAGNOSTIC) ?
-                diseaseService.getDiseasesByDiagnosticReportId(reportId):
+                diseaseService.getDiseasesByDiagnosticReportId(reportId) :
                 diseaseService.getDiseasesByPathologicReportId(reportId);
 
         diseaseDto.setDiseaseState(DiseaseState.UPDATED);
@@ -133,7 +135,8 @@ public class ReportService {
         //return updated userId
         return reportRepository.save(report).getReportId();
     }
-    private String createReport(CreateReportRequest createReportRequest){
+
+    private String createReport(CreateReportRequest createReportRequest) {
         //Check the patientId is valid
         //getUserById will throw exception if encounter a problem when getting the patient
         userService.getUserById(createReportRequest.patientId());
@@ -144,10 +147,10 @@ public class ReportService {
         //Build file path
         String filePath =
                 reportFileManager
-                    .buildReportFilePath(
-                            createReportRequest.patientId(),
-                            createReportRequest.reportType(),
-                            false);
+                        .buildReportFilePath(
+                                createReportRequest.patientId(),
+                                createReportRequest.reportType(),
+                                false);
 
         //Create the report object that will be saving
         Report report = new Report(
@@ -167,7 +170,8 @@ public class ReportService {
             If we can not create a file we have to delete the object inside database
          */
     }
-    public String createPathologicReportFor(CreatePathologicReportRequestFor createPathologicReportRequestFor){
+
+    public String createPathologicReportFor(CreatePathologicReportRequestFor createPathologicReportRequestFor) {
 
         handleIsReportAlreadyExistFor(createPathologicReportRequestFor.diseaseId(), ReportType.PATHOLOGICAL);
 
@@ -205,10 +209,12 @@ public class ReportService {
 
         return createdReportId;
     }
-    private void createReportFile(ReportFile reportFile){
+
+    private void createReportFile(ReportFile reportFile) {
         reportFileManager.saveReportFileObjectAsFile(reportFile);
     }
-    public String createDiagnosticReportFor(CreateDiagnosticReportRequestFor createDiagnosticReportRequestFor){
+
+    public String createDiagnosticReportFor(CreateDiagnosticReportRequestFor createDiagnosticReportRequestFor) {
 
         handleIsReportAlreadyExistFor(createDiagnosticReportRequestFor.diseaseId(), ReportType.DIAGNOSTIC);
 
@@ -240,19 +246,21 @@ public class ReportService {
 
         return createdReportId;
     }
-    private boolean isReportExistFor(int diseaseId, ReportType reportType){
+
+    private boolean isReportExistFor(int diseaseId, ReportType reportType) {
         DiseaseDto diseaseDto = diseaseService.getDiseaseById(diseaseId);
 
-        if(reportType == ReportType.DIAGNOSTIC)
+        if (reportType == ReportType.DIAGNOSTIC)
             return (diseaseDto.getDiagnosticReport() != null);
 
         else
             return (diseaseDto.getPathologicReport() != null);
 
     }
-    private void handleIsReportAlreadyExistFor(int diseaseId, ReportType reportType) throws ReportAlreadyExistForException{
+
+    private void handleIsReportAlreadyExistFor(int diseaseId, ReportType reportType) throws ReportAlreadyExistForException {
         //Handle is an indicated type report exist for this disease
-        if(isReportExistFor(diseaseId, reportType)){
+        if (isReportExistFor(diseaseId, reportType)) {
             String message =
                     messageBuilder
                             .code("formatted.reportAlreadyExistFor")
@@ -262,17 +270,33 @@ public class ReportService {
             throw new ReportAlreadyExistForException(message);
         }
     }
-    private String buildReportId(String patientId){
+
+    private String buildReportId(String patientId) {
         /*
             Pattern --> "${patientId}_${UUID.randomUUID().toString()}"
          */
 
         return String.format("%s_%s", patientId, UUID.randomUUID());
     }
-    private List<ReportDto> convertToDtoList(List<Report> reportList){
+
+    private List<ReportDto> convertToDtoList(List<Report> reportList) {
         return reportList
                 .stream()
                 .map(reportAndReportDtoConverter::convert)
                 .collect(Collectors.toList());
+    }
+
+    public void deleteReport(String reportId) {
+        //Get the related report
+        ReportDto reportDto = getReportById(reportId);
+
+        try {
+            //Delete from local storage
+            reportFileManager.deleteReportFile(reportDto);
+
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
+
     }
 }

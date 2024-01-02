@@ -5,6 +5,7 @@ import com.kerimsenturk.labreport.dto.request.CreateUserRequest;
 import com.kerimsenturk.labreport.dto.request.PatientCreateRequest;
 import com.kerimsenturk.labreport.dto.request.UpdateUserRequest;
 
+import com.kerimsenturk.labreport.dto.request.UserLoginRequest;
 import com.kerimsenturk.labreport.service.UserService;
 
 import com.kerimsenturk.labreport.util.MessageBuilder;
@@ -14,7 +15,10 @@ import com.kerimsenturk.labreport.util.Result.SuccessResult;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.token.Token;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -32,6 +36,11 @@ public class UserController {
         this.userService = userService;
         this.messageBuilder = new MessageBuilder();
 
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Token> login(@RequestBody UserLoginRequest userLoginRequest){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(userService.login(userLoginRequest));
     }
 
     //This endpoint asks some authorizes to access

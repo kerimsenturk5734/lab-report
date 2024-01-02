@@ -17,9 +17,9 @@ import java.io.IOException;
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
 
-    private final TokenManager tokenManager;
+    private final JwtTokenManager tokenManager;
     private final UserDetailsServiceCustom userDetailsServiceCustom;
-    public JwtTokenFilter(TokenManager tokenManager, UserDetailsServiceCustom userDetailsServiceCustom) {
+    public JwtTokenFilter(JwtTokenManager tokenManager, UserDetailsServiceCustom userDetailsServiceCustom) {
         this.tokenManager = tokenManager;
         this.userDetailsServiceCustom = userDetailsServiceCustom;
     }
@@ -30,7 +30,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         //Get authorization header
-        final String autHeader=request.getHeader("Authorization");
+        final String autHeader = request.getHeader("Authorization");
         String username = null;
         String token = null;
 
@@ -64,12 +64,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usPassAuthToken);
             }
         }
-
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
-        response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers",
-                "Authorization,Authentication, Content-Type, Accept, x-requested-with, Cache-Control");
 
         filterChain.doFilter(request, response);
     }

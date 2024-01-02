@@ -15,7 +15,7 @@ import java.util.Map;
 
 
 @Service
-public class TokenManager{
+public class JwtTokenManager {
 
     private final int VALIDITY = 5*60*100000;
     private final String ISSUER = "com.kerimsenturk.labreport";
@@ -52,17 +52,24 @@ public class TokenManager{
 
 
     private Claims extractClaims(String token) {
-        Claims claims = Jwts
-                .parserBuilder()
-                .setSigningKey(KEY)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try{
+            Claims claims = Jwts
+                    .parserBuilder()
+                    .setSigningKey(KEY)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
 
-        if(claims.isEmpty())
-            throw new ClaimNotFoundException(Jwts.header(), claims, "Claims Not Found By "+token);
+            if(claims.isEmpty())
+                throw new ClaimNotFoundException(Jwts.header(), claims, "Claims Not Found By "+token);
 
-        return claims;
+            return claims;
+        }
+        catch (Exception e){
+            /** TODO: Handle SignatureException, signature does not match computed signature**/
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

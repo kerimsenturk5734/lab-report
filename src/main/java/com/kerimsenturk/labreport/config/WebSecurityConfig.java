@@ -59,7 +59,7 @@ public class WebSecurityConfig {
 
                         //Authenticate the all other requests coming to API except the endpoints indicated above
                         .requestMatchers("/v1/api/**").authenticated())
-
+                /** TODO: Role based authorization needed **/
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider())
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
@@ -70,4 +70,6 @@ public class WebSecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+
+
 }

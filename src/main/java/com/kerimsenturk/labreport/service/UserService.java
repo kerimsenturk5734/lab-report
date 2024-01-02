@@ -1,5 +1,6 @@
 package com.kerimsenturk.labreport.service;
 
+import com.kerimsenturk.labreport.auth.JwtTokenManager;
 import com.kerimsenturk.labreport.dto.UserDto;
 import com.kerimsenturk.labreport.dto.converter.UserAndUserDtoConverter;
 import com.kerimsenturk.labreport.exception.AlreadyExist.UserAlreadyExistException;
@@ -12,6 +13,12 @@ import com.kerimsenturk.labreport.model.User;
 import com.kerimsenturk.labreport.model.enums.UserRole;
 import com.kerimsenturk.labreport.repository.UserRepository;
 import com.kerimsenturk.labreport.util.MessageBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.token.Token;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,9 +30,22 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserAndUserDtoConverter userAndUserDtoConverter;
     private final MessageBuilder messageBuilder = new MessageBuilder();
-    public UserService(UserRepository userRepository, UserAndUserDtoConverter userAndUserDtoConverter) {
+
+    //-----------Security injections Start-------
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenManager jwtTokenManager;
+    //-------------------End---------------------
+
+    public UserService(UserRepository userRepository, UserAndUserDtoConverter userAndUserDtoConverter,
+                       PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager,
+                       JwtTokenManager jwtTokenManager) {
+
         this.userRepository = userRepository;
         this.userAndUserDtoConverter = userAndUserDtoConverter;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenManager = jwtTokenManager;
     }
 
     public String registerPatient(PatientCreateRequest patientCreateRequest){
@@ -57,20 +77,22 @@ public class UserService {
                 createUserRequest.userId(),
                 createUserRequest.name(),
                 createUserRequest.surname(),
-                createUserRequest.password(),
+                passwordEncoder.encode(createUserRequest.password()),
                 createUserRequest.userRole());
 
         //Save the user inside the db
         return userRepository.save(newUser).getUserId();
     }
 
-    /**
-     * TODO:It might return some login credentials to access API (Bearer Token)
-        Some authentications necessary inside this function
-        That function will implement when developing the API Authentication package
-     */
-    public void login(UserLoginRequest userLoginRequest){
+    public Token login(UserLoginRequest userLoginRequest){
+        Authentication auth = authenticationManager
+                .authenticate(new
+                        UsernamePasswordAuthenticationToken(userLoginRequest.userId(), userLoginRequest.password()));
 
+        if(auth.isAuthenticated())
+            return jwtTokenManager.generate(userLoginRequest.userId());
+
+        throw new UsernameNotFoundException("User Id or password incorrect");
     }
 
     public String updateUser(UpdateUserRequest updateUserRequest){
@@ -109,6 +131,9 @@ public class UserService {
 
         //return converted UserDto
         return userDto;
+    }
+    public Optional<User> getRawUserById(String id){
+        return userRepository.findById(id);
     }
 
     public List<UserDto> getAllUsers(){

@@ -1,112 +1,79 @@
 import React from 'react'
+import DiseaseViewModel from "../../../viewmodel/DiseaseViewModel";
+import TableHead from "./TableHead";
+import TooledSearchBar, {DropDown} from "../TooledSearchBar";
 
 export default function ReportTableDoctor() {
-    return (
-        <table className="table table-borderless mb-0">
-            <thead>
-                <tr>
+    const vm = new DiseaseViewModel()
+    const data = vm.getDummyDoctorDiseases().data
+    const heads = [
+        "ID", "DATE", "PATIENT ID", "REQUEST", "STATUS",
+        "LAB TECHNICIAN", "PATHOLOGIC", "DIAGNOSTIC", "ACTIONS"]
 
-                    <th scope="col">DATE</th>
-                    <th scope="col">TITLE</th>
-                    <th scope="col">PATIENT ID</th>
-                    <th scope="col">STATUS</th>
-                    <th scope="col">PATHOLOGICAL REPORT</th>
-                    <th scope="col">DIAGNOSTIC REPORT</th>
-                    <th scope="col">ACTIONS</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    
-                    <td>Tiger Nixon</td>
-                    <td>System Architect</td>
-                    <td>61</td>
-                    <td>Edinburgh</td>
-                    <td className='d-flex'>
-                        <button type="button" className="btn btn-danger btn-sm px-3">
-                            <i className="fas fa-times"></i>
-                        </button>
-                        <button type="button" className="btn btn-warning btn-sm px-3">
-                            <i className="fas fa-times"></i>
-                        </button>
-                        <button type="button" className="btn btn-info btn-sm px-3">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    
-                    <td>Sonya Frost</td>
-                    <td>Software Engineer</td>
-                    <td>23</td>
-                    <td>Edinburgh</td>
-                    <td>
-                        <button type="button" className="btn btn-danger btn-sm px-3">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    
-                    <td>Jena Gaines</td>
-                    <td>Office Manager</td>
-                    <td>30</td>
-                    <td>London</td>
-                    <td>
-                        <button type="button" className="btn btn-danger btn-sm px-3">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    
-                    <td>Quinn Flynn</td>
-                    <td>Support Lead</td>
-                    <td>22</td>
-                    <td>Edinburgh</td>
-                    <td>
-                        <button type="button" className="btn btn-danger btn-sm px-3">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    
-                    <td>Charde Marshall</td>
-                    <td>Regional Director</td>
-                    <td>36</td>
-                    <td>San Francisco</td>
-                    <td>
-                        <button type="button" className="btn btn-danger btn-sm px-3">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                  
-                    <td>Haley Kennedy</td>
-                    <td>Senior Marketing Designer</td>
-                    <td>43</td>
-                    <td>London</td>
-                    <td>
-                        <button type="button" className="btn btn-danger btn-sm px-3">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                
-                    <td>Tatyana Fitzpatrick</td>
-                    <td>Regional Director</td>
-                    <td>19</td>
-                    <td>Warsaw</td>
-                    <td>
-                        <button type="button" className="btn btn-danger btn-sm px-3">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    const searchByActions = ["ID", "PATIENT"]
+    const orderByActions = ["ID Increasing", "PATIENT ID Increasing"]
+
+    return (
+        <div>
+            <TooledSearchBar
+                LeftDropDown = {DropDown({title: "Search By", actions : searchByActions})}
+                RightDropDown ={DropDown({title: "Order By", actions : orderByActions})} />
+
+            <table className="table table-borderless mb-0">
+                <thead>
+                    <TableHead heads={heads}/>
+                </thead>
+                <tbody>
+                {
+                    data.map((val) => {
+                        return <TableData data={val}/>
+                    })
+                }
+                </tbody>
+            </table>
+        </div>
+    )
+}
+
+function TableData({data}) {
+    return (
+        <tr>
+            <td className='text-center'>{data.id}</td>
+            <td className='text-center font-monospace'>27 Feb 2024 13:50</td>
+            <td className='text-center'>{data.patient.userId}</td>
+            <td className='text-center font-monospace fst-italic'>{data.labRequestType}</td>
+            <td className='text-center font-monospace fst-italic'>{data.diseaseState}</td>
+            <td className='text-center'>{data.labTechnician.name} {data.labTechnician.surname}</td>
+            <td>
+                <div className='d-flex justify-content-lg-between'>
+                    <button type="button" className="btn btn-outline-dark btn-sm px-3">
+                        <i className="fa fa-solid fa-tv"> View</i>
+                    </button>
+                    <button type="button" className="btn btn-dark btn-sm px-2 btn-outline-primary">
+                        <i className="fa fa-solid outline fa-download"></i>
+                    </button>
+                </div>
+            </td>
+            <td>
+                <div className='d-flex justify-content-lg-between'>
+                    <button type="button" className="btn btn-outline-dark btn-sm px-3">
+                        <i className="fa fa-solid fa-tv"> View</i>
+                    </button>
+                    <button type="button" className="btn btn-outline-primary btn-sm px-2">
+                        <i className="fa fa-solid fa-download"></i>
+                    </button>
+                </div>
+            </td>
+            <td>
+                <div className='d-flex justify-content-lg-between'>
+                    <button type="button" className="btn btn-warning btn-sm px-3">
+                        <i className="fa fa-solid fa-arrow-circle-right"> Update</i>
+                    </button>
+                    <button type="button" className="btn btn-danger btn-sm px-3">
+                        <i className="fa fa-solid fa-trash"> Delete</i>
+                    </button>
+                </div>
+            </td>
+        </tr>
     )
 }

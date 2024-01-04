@@ -4,14 +4,17 @@ import {MDBDropdown, MDBDropdownItem, MDBDropdownMenu, MDBDropdownToggle} from "
 export default function TooledSearchBar(
     {
         LeftDropDown = DropDown,
-        RightDropDown = DropDown
+        RightDropDown = DropDown,
+        onSearch = query => {},
     }) {
 
     const [searchQuery, setSearchQuery] = useState('');
 
     const handleSearchChange = (e) => {
-        setSearchQuery(e.target.value)
-    }
+        const query = e.target.value;
+        setSearchQuery(query);
+        onSearch(query); // Pass the search query to the callback
+    };
 
     return (
         <div className="d-flex justify-content-between m-3 gap-3">
@@ -28,7 +31,7 @@ export default function TooledSearchBar(
     );
 }
 
-export function DropDown({title = String, actions = Array}){
+export function DropDown({title = String(), actions = Array()}){
     return (
         <MDBDropdown>
             <MDBDropdownToggle caret color="primary">

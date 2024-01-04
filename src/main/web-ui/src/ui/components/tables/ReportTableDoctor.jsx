@@ -1,11 +1,10 @@
-import React from 'react'
+import React, {useState} from 'react'
 import DiseaseViewModel from "../../../viewmodel/DiseaseViewModel";
 import TableHead from "./TableHead";
 import TooledSearchBar, {DropDown} from "../TooledSearchBar";
 
 export default function ReportTableDoctor() {
     const vm = new DiseaseViewModel()
-    const data = vm.getDummyDoctorDiseases().data
     const heads = [
         "ID", "DATE", "PATIENT ID", "REQUEST", "STATUS",
         "LAB TECHNICIAN", "PATHOLOGIC", "DIAGNOSTIC", "ACTIONS"]
@@ -13,11 +12,24 @@ export default function ReportTableDoctor() {
     const searchByActions = ["ID", "PATIENT"]
     const orderByActions = ["ID Increasing", "PATIENT ID Increasing"]
 
+    const realData = vm.getDummyDoctorDiseases().data
+    const [data, setData] = useState(realData);
+
+    const handleSearch = (query) => {
+        const filteredData = realData.filter(item =>
+                item.patient.userId.toString().toLowerCase().includes(query.toLowerCase())
+        );
+
+        setData(filteredData);
+    };
+
     return (
         <div>
             <TooledSearchBar
                 LeftDropDown = {DropDown({title: "Search By", actions : searchByActions})}
-                RightDropDown ={DropDown({title: "Order By", actions : orderByActions})} />
+                RightDropDown ={DropDown({title: "Order By", actions : orderByActions})}
+                onSearch = {handleSearch}
+            />
 
             <table className="table table-borderless mb-0">
                 <thead>

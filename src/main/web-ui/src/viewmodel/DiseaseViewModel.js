@@ -8,7 +8,7 @@ export default class DiseaseViewModel{
                 {
                     "id": 6,
                     "patient": {
-                        "userId": "98765432109",
+                        "userId": "65458165404",
                         "name": "Ayşe",
                         "surname": "Solmaz",
                         "role": "PATIENT"
@@ -28,7 +28,7 @@ export default class DiseaseViewModel{
                 {
                     "id": 6,
                     "patient": {
-                        "userId": "98765432109",
+                        "userId": "65458165400",
                         "name": "Ayşe",
                         "surname": "Solmaz",
                         "role": "PATIENT"
@@ -48,7 +48,7 @@ export default class DiseaseViewModel{
                 {
                     "id": 6,
                     "patient": {
-                        "userId": "98765432109",
+                        "userId": "12345678901",
                         "name": "Ayse",
                         "surname": "Solmaz",
                         "role": "PATIENT"
@@ -119,7 +119,7 @@ export default class DiseaseViewModel{
                         "role": "PATIENT"
                     },
                     "labTechnician": {
-                        "userId": "98765432108",
+                        "userId": "75279146800",
                         "name": "Melike",
                         "surname": "Kaba",
                         "role": "LAB_TECHNICIAN"

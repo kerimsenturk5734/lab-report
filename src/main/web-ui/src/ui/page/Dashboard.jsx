@@ -6,7 +6,7 @@ export default function Dashboard() {
     return (
         <div>
             <NavBar/>
-            <div className="d-flex align-items-center mt-5">
+            <div className="d-flex align-items-center m-5">
                 <div className="container-fluid">
                     <Table/>
                 </div>

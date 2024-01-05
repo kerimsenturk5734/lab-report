@@ -7,10 +7,10 @@ import {DataTypes, HEADS} from './TableConstants';
 export default function ReportTablePatient() {
     const vm = new DiseaseViewModel();
     const realData = vm.getDummyDoctorDiseases().data;
-    const dataType = DataTypes.DOCTOR;
+    const dataType = DataTypes.PATIENT;
 
     const [data, setData] = useState(realData);
-    const [searchBy, setSearchBy] = useState(dataType.SEARCH_BY.PATIENT_ID);
+    const [searchBy, setSearchBy] = useState(dataType.SEARCH_BY.DOCTOR);
     const [orderBy, setOrderBy] = useState(dataType.ORDER_BY.ID_ASC);
 
     const searchByActions = getDropDownActions({
@@ -29,7 +29,7 @@ export default function ReportTablePatient() {
 
     const handleSearch = (query) => {
         const filteredData = realData.filter((item) =>
-            selectSearchByField(item)
+            selectSearchField(item)
                 .toString()
                 .toLowerCase()
                 .includes(query.toLowerCase())
@@ -38,17 +38,8 @@ export default function ReportTablePatient() {
         setData(filteredData);
     };
 
-    const selectSearchByField = (item) => {
-        let field;
-
-        if (searchBy === dataType.SEARCH_BY.ID) field = item.id;
-        else if (searchBy === dataType.SEARCH_BY.LAB_TECHNICIAN) {
-            field = item.labTechnician
-                ? `${item.labTechnician.name} ${item.labTechnician.surname}`
-                : 'Working on...';
-        } else field = item.patient.userId;
-
-        return field;
+    const selectSearchField = (item) => {
+        return searchBy === dataType.SEARCH_BY.ID ? item.id : `${item.doctor.name} ${item.doctor.surname}`;
     };
 
     const handleOrderBy = () => {
@@ -61,12 +52,6 @@ export default function ReportTablePatient() {
                 break;
             case sort.ID_DESC:
                 sortedData = realData.slice().sort((a, b) => b.id - a.id);
-                break;
-            case sort.PATIENT_ID_ASC:
-                sortedData = realData.slice().sort((a, b) => a.patient.userId - b.patient.userId);
-                break;
-            case sort.PATIENT_ID_DESC:
-                sortedData = realData.slice().sort((a, b) => b.patient.userId - a.patient.userId);
                 break;
             case sort.DATE_NEW_TO_OLD:
                 sortedData = realData.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -83,7 +68,7 @@ export default function ReportTablePatient() {
     };
 
     return (
-        <div>
+        <div className={"container-sm"}>
             <TooledSearchBar
                 LeftDropDown={DropDown({ title: `Search By (${searchBy})`, actions: searchByActions })}
                 RightDropDown={DropDown({ title: `Order By (${orderBy})`, actions: orderByActions })}
@@ -93,7 +78,7 @@ export default function ReportTablePatient() {
 
             <table className="table table-borderless mb-0">
                 <thead>
-                <TableHead heads={HEADS.DOCTOR} />
+                <TableHead heads={HEADS.PATIENT} />
                 </thead>
                 <tbody>
                 {data.map((val, index) => (
@@ -107,48 +92,51 @@ export default function ReportTablePatient() {
 
 function TableData({ data }) {
     const getStatusClass = () => {
-        return data.diseaseState === 'WAITING_RESULTS' ? 'bg-info' : 'bg-warning';
+        const statusClasses = {
+            WAITING_RESULTS: 'bg-secondary',
+            DIAGNOSTIC_RESULTED: 'bg-success',
+            PATHOLOGICAL_RESULTED: 'bg-info',
+        };
+
+        return statusClasses[data.diseaseState] || 'bg-warning';
     };
+
+    const isActionEnabled = (actionStates) => actionStates.includes(data.diseaseState) ? '' : 'disabled';
 
     return (
         <tr>
             <td className="text-center">{data.id}</td>
             <td className="text-center font-monospace">27 Feb 2024 13:50</td>
-            <td className="text-center">{data.patient.userId}</td>
+            <td className="text-center">{`${data.doctor.name} ${data.doctor.surname}`}</td>
             <td className="text-center font-monospace fst-italic">{data.labRequestType}</td>
             <td className={`text-center font-monospace fst-italic ${getStatusClass()} rounded-2`}>
                 {data.diseaseState}
             </td>
-            <td className="text-center text-warning">
-                {data.labTechnician ? `${data.labTechnician.name} ${data.labTechnician.surname}` : 'Working on...'}
-            </td>
             <td>
-                <div className="d-flex justify-content-lg-between">
-                    <button type="button" className="btn btn-outline-dark btn-sm px-3">
+                <div className="d-flex justify-content-around">
+                    <button type="button" className={`btn btn-outline-dark btn-sm px-3
+                    ${isActionEnabled(['PATHOLOGICAL_RESULTED', 'DIAGNOSTIC_RESULTED', 'UPDATED'])}`}>
+
                         <i className="fa fa-solid fa-tv"> View</i>
                     </button>
-                    <button type="button" className="btn btn-dark btn-sm px-2 btn-outline-primary">
+                    <button type="button" className={`btn btn-dark btn-sm px-2 btn-outline-primary 
+                    ${isActionEnabled(['PATHOLOGICAL_RESULTED', 'DIAGNOSTIC_RESULTED', 'UPDATED'])}`}>
+
                         <i className="fa fa-solid outline fa-download"></i>
                     </button>
                 </div>
             </td>
             <td>
-                <div className="d-flex justify-content-lg-between">
-                    <button type="button" className="btn btn-outline-dark btn-sm px-3">
+                <div className="d-flex justify-content-around">
+                    <button type="button" className={`btn btn-outline-dark btn-sm px-3 
+                    ${isActionEnabled(['DIAGNOSTIC_RESULTED', 'UPDATED'])}`}>
+
                         <i className="fa fa-solid fa-tv"> View</i>
                     </button>
-                    <button type="button" className="btn btn-outline-primary btn-sm px-2">
+                    <button type="button" className={`btn btn-outline-primary btn-sm px-2 
+                    ${isActionEnabled(['DIAGNOSTIC_RESULTED', 'UPDATED'])}`}>
+
                         <i className="fa fa-solid fa-download"></i>
-                    </button>
-                </div>
-            </td>
-            <td>
-                <div className="d-flex justify-content-lg-between">
-                    <button type="button" className="btn btn-warning btn-sm px-3">
-                        <i className="fa fa-solid fa-arrow-circle-right"> Update</i>
-                    </button>
-                    <button type="button" className="btn btn-danger btn-sm px-3">
-                        <i className="fa fa-solid fa-trash"> Delete</i>
                     </button>
                 </div>
             </td>

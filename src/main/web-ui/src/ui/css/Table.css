@@ -9,7 +9,7 @@
 
   table td,
   table th {
-    text-overflow: fade();
+    text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     font-size: small;

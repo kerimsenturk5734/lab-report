@@ -17,13 +17,13 @@ export default class DiseaseViewModel{
                     "doctor": {
                         "userId": "1234567",
                         "name": "Burak",
-                        "surname": "Kara",
+                        "surname": "Kaya",
                         "role": "DOCTOR"
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
                     "pathologicReport": null,
                     "diagnosticReport": null,
-                    "diseaseState": "WAITING_RESULTS"
+                    "diseaseState": "DIAGNOSTIC_RESULTED"
                 },
                 {
                     "id": 2,
@@ -36,8 +36,8 @@ export default class DiseaseViewModel{
                     "labTechnician": null,
                     "doctor": {
                         "userId": "1234567",
-                        "name": "Burak",
-                        "surname": "Kara",
+                        "name": "Utku",
+                        "surname": "Şensoy",
                         "role": "DOCTOR"
                     },
                     "labRequestType": "BLOOD_ANALYSIS",

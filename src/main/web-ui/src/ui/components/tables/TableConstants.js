@@ -1,7 +1,7 @@
 export const HEADS = {
     "DOCTOR" : [
         "ID", "DATE", "PATIENT ID", "REQUEST", "STATUS",
-        "LAB TECHNICIAN", "PATHOLOGIC", "DIAGNOSTIC", "ACTIONS"],
+        "LAB TECHNICIAN", "PATHOLOGIC REPORT", "DIAGNOSTIC REPORT", "ACTIONS"],
 }
 
 export const DataTypes = {

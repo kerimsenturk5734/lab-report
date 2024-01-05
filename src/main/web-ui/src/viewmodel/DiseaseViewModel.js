@@ -6,7 +6,7 @@ export default class DiseaseViewModel{
             "message": "1 diseases founded",
             "data": [
                 {
-                    "id": 6,
+                    "id": 1,
                     "patient": {
                         "userId": "65458165404",
                         "name": "Ayşe",
@@ -26,7 +26,7 @@ export default class DiseaseViewModel{
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
-                    "id": 6,
+                    "id": 2,
                     "patient": {
                         "userId": "65458165400",
                         "name": "Ayşe",
@@ -46,7 +46,7 @@ export default class DiseaseViewModel{
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
-                    "id": 6,
+                    "id": 3,
                     "patient": {
                         "userId": "12345678901",
                         "name": "Ayse",
@@ -71,7 +71,7 @@ export default class DiseaseViewModel{
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
-                    "id": 6,
+                    "id": 4,
                     "patient": {
                         "userId": "98765432109",
                         "name": "Ayşe",
@@ -91,7 +91,7 @@ export default class DiseaseViewModel{
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
-                    "id": 6,
+                    "id": 5,
                     "patient": {
                         "userId": "98765432109",
                         "name": "Ayşe",
@@ -136,7 +136,7 @@ export default class DiseaseViewModel{
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
-                    "id": 6,
+                    "id": 7,
                     "patient": {
                         "userId": "98765432109",
                         "name": "Ayşe",
@@ -156,7 +156,7 @@ export default class DiseaseViewModel{
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
-                    "id": 6,
+                    "id": 8,
                     "patient": {
                         "userId": "98765432109",
                         "name": "Ayşe",
@@ -176,7 +176,7 @@ export default class DiseaseViewModel{
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
-                    "id": 6,
+                    "id": 9,
                     "patient": {
                         "userId": "98765432109",
                         "name": "Ayse",
@@ -198,10 +198,10 @@ export default class DiseaseViewModel{
                     "labRequestType": "BLOOD_ANALYSIS",
                     "pathologicReport": null,
                     "diagnosticReport": null,
-                    "diseaseState": "WAITING_RESULTS"
+                    "diseaseState": "PATHOLOGICAL_RESULTED"
                 },
                 {
-                    "id": 6,
+                    "id": 10,
                     "patient": {
                         "userId": "98765432109",
                         "name": "Ayşe",
@@ -226,7 +226,7 @@ export default class DiseaseViewModel{
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
-                    "id": 6,
+                    "id": 11,
                     "patient": {
                         "userId": "98765432109",
                         "name": "Ayşe",
@@ -251,7 +251,7 @@ export default class DiseaseViewModel{
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
-                    "id": 6,
+                    "id": 12,
                     "patient": {
                         "userId": "98765432109",
                         "name": "Ayse",

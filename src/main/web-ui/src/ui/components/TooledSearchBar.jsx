@@ -6,6 +6,7 @@ export default function TooledSearchBar(
         LeftDropDown = DropDown,
         RightDropDown = DropDown,
         onSearch = query => {},
+        placeHolder = "Search..."
     }) {
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -22,7 +23,7 @@ export default function TooledSearchBar(
             <input
                 type="text"
                 className="form-control"
-                placeholder="Search..."
+                placeholder={placeHolder}
                 value={searchQuery}
                 onChange={handleSearchChange}
             />

@@ -6,7 +6,7 @@ function TableHead({heads}) {
             {
                 heads.map((val, index) => {
                     return (
-                        <th className="text-center" scope="col">
+                        <th key={index} className="text-center" scope="col">
                             {val.toUpperCase()}
                             <hr/>
                         </th>

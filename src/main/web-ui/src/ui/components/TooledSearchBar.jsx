@@ -4,14 +4,18 @@ import {MDBDropdown, MDBDropdownItem, MDBDropdownMenu, MDBDropdownToggle} from "
 export default function TooledSearchBar(
     {
         LeftDropDown = DropDown,
-        RightDropDown = DropDown
+        RightDropDown = DropDown,
+        onSearch = query => {},
+        placeHolder = "Search..."
     }) {
 
     const [searchQuery, setSearchQuery] = useState('');
 
     const handleSearchChange = (e) => {
-        setSearchQuery(e.target.value)
-    }
+        const query = e.target.value;
+        setSearchQuery(query);
+        onSearch(query); // Pass the search query to the callback
+    };
 
     return (
         <div className="d-flex justify-content-between m-3 gap-3">
@@ -19,7 +23,7 @@ export default function TooledSearchBar(
             <input
                 type="text"
                 className="form-control"
-                placeholder="Search..."
+                placeholder={placeHolder}
                 value={searchQuery}
                 onChange={handleSearchChange}
             />
@@ -28,19 +32,38 @@ export default function TooledSearchBar(
     );
 }
 
-export function DropDown({title = String, actions = Array}){
+export function DropDown({title = String(), actions = []}){
     return (
         <MDBDropdown>
-            <MDBDropdownToggle caret color="primary">
+            <MDBDropdownToggle color="primary">
                 {title}
             </MDBDropdownToggle>
             <MDBDropdownMenu className={"dropdown-menu"}>
-                {actions.map((item) => (
-                    <MDBDropdownItem className="dropdown-item" href="#">{item}</MDBDropdownItem>
+                {actions.map((action, index) => (
+                    <div key={index}>
+                        {action}
+                    </div>
                 ))}
             </MDBDropdownMenu>
         </MDBDropdown>
 
     )
 }
-
+export function DropDownAction({title = String(), onSelect = () => {}}){
+    return (
+        <MDBDropdownItem
+            onClick={onSelect}
+            className="dropdown-item"
+            href="#"
+        >
+            {title}
+        </MDBDropdownItem>
+    )
+}
+export function getDropDownActions({actionData, onSelect = (val) => {}}){
+    return Object.entries(actionData).map(([key,value]) => (
+        <div key={key}>
+            {DropDownAction({title: value, onSelect: () => {onSelect(value)}})}
+        </div>
+    ))
+}

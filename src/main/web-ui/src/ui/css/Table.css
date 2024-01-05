@@ -1,12 +1,18 @@
 .intro {
     height: 100%;
   }
-  
+
+  table{
+    border-spacing: 0 1em;
+    border-collapse:separate;
+  }
+
   table td,
   table th {
-    text-overflow: ellipsis;
+    text-overflow: fade();
     white-space: nowrap;
     overflow: hidden;
+    font-size: small;
   }
   
   .card {

@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import DiseaseViewModel from "../../../viewmodel/DiseaseViewModel";
 import TableHead from "./TableHead";
-import TooledSearchBar, {DropDown, getActions} from "../TooledSearchBar";
+import TooledSearchBar, {DropDown, getDropDownActions} from "../TooledSearchBar";
 import {DataTypes, HEADS} from "./TableConstants";
 
 export default function ReportTableDoctor() {
@@ -14,15 +14,14 @@ export default function ReportTableDoctor() {
     const [orderBy, setOrderBy] = useState("")
 
 
-    const searchByActions = getActions(
+    const searchByActions = getDropDownActions(
         {actionData : dataType.SEARCH_BY, onSelect:setSearchBy})
-    const orderByActions = getActions(
+    const orderByActions = getDropDownActions(
         {actionData : dataType.ORDER_BY, onSelect:setOrderBy})
 
-
     const handleSearch = (query) => {
-        const filteredData = realData.filter(item =>
-            item.patient.userId
+        const filteredData = realData.filter((item) =>
+            selectSearchField(item)
                 .toString()
                 .toLowerCase()
                 .includes(query.toLowerCase())
@@ -31,11 +30,29 @@ export default function ReportTableDoctor() {
         setData(filteredData);
     };
 
+    const selectSearchField = (item) => {
+        let field
+
+        if(searchBy === dataType.SEARCH_BY.ID)
+            field = item.id
+        else if(searchBy === dataType.SEARCH_BY.LAB_TECHNICIAN){
+            if(item.labTechnician === null)
+                field = "Working on..."
+            else
+                field = item.labTechnician.name.concat(item.labTechnician.surname)
+        }
+        else
+            field = item.patient.userId
+
+        console.log(dataType.SEARCH_BY.LAB_TECHNICIAN)
+        return field
+    }
+
     return (
         <div>
             <TooledSearchBar
-                LeftDropDown = {DropDown({title: "Search By", actions : searchByActions})}
-                RightDropDown ={DropDown({title: "Order By", actions : orderByActions})}
+                LeftDropDown = {DropDown({title: "Search By"+`(${searchBy})`, actions : searchByActions})}
+                RightDropDown = {DropDown({title: "Order By"+`(${orderBy})`, actions : orderByActions})}
                 onSearch = {handleSearch}
             />
 
@@ -63,10 +80,15 @@ function TableData({data}) {
             <td className='text-center'>{data.patient.userId}</td>
             <td className='text-center font-monospace fst-italic'>{data.labRequestType}</td>
             <td className='text-center font-monospace fst-italic'>{data.diseaseState}</td>
-            <td className='text-center'>{data.labTechnician.name} {data.labTechnician.surname}</td>
+            {
+                (data.labTechnician !== null) ?
+                    <td className='text-center text-bg-success'>{data.labTechnician.name} {data.labTechnician.surname}</td>
+                    :
+                    <td className='text-center text-bg-info fst-italic'>Working on...</td>
+            }
             <td>
                 <div className='d-flex justify-content-lg-between'>
-                    <button type="button" className="btn btn-outline-dark btn-sm px-3">
+                <button type="button" className="btn btn-outline-dark btn-sm px-3">
                         <i className="fa fa-solid fa-tv"> View</i>
                     </button>
                     <button type="button" className="btn btn-dark btn-sm px-2 btn-outline-primary">

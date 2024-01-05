@@ -13,7 +13,7 @@ export default class DiseaseViewModel{
                         "surname": "Solmaz",
                         "role": "PATIENT"
                     },
-                    "labTechnician": "null",
+                    "labTechnician": null,
                     "doctor": {
                         "userId": "1234567",
                         "name": "Burak",
@@ -21,8 +21,8 @@ export default class DiseaseViewModel{
                         "role": "DOCTOR"
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
-                    "pathologicReport": "null",
-                    "diagnosticReport": "null",
+                    "pathologicReport": null,
+                    "diagnosticReport": null,
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
@@ -33,7 +33,7 @@ export default class DiseaseViewModel{
                         "surname": "Solmaz",
                         "role": "PATIENT"
                     },
-                    "labTechnician": "null",
+                    "labTechnician": null,
                     "doctor": {
                         "userId": "1234567",
                         "name": "Burak",
@@ -41,8 +41,8 @@ export default class DiseaseViewModel{
                         "role": "DOCTOR"
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
-                    "pathologicReport": "null",
-                    "diagnosticReport": "null",
+                    "pathologicReport": null,
+                    "diagnosticReport": null,
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
@@ -66,8 +66,8 @@ export default class DiseaseViewModel{
                         "role": "DOCTOR"
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
-                    "pathologicReport": "null",
-                    "diagnosticReport": "null",
+                    "pathologicReport": null,
+                    "diagnosticReport": null,
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
@@ -78,7 +78,7 @@ export default class DiseaseViewModel{
                         "surname": "Solmaz",
                         "role": "PATIENT"
                     },
-                    "labTechnician": "null",
+                    "labTechnician": null,
                     "doctor": {
                         "userId": "1234567",
                         "name": "Burak",
@@ -86,8 +86,8 @@ export default class DiseaseViewModel{
                         "role": "DOCTOR"
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
-                    "pathologicReport": "null",
-                    "diagnosticReport": "null",
+                    "pathologicReport": null,
+                    "diagnosticReport": null,
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
@@ -98,7 +98,7 @@ export default class DiseaseViewModel{
                         "surname": "Solmaz",
                         "role": "PATIENT"
                     },
-                    "labTechnician": "null",
+                    "labTechnician": null,
                     "doctor": {
                         "userId": "1234567",
                         "name": "Burak",
@@ -106,8 +106,8 @@ export default class DiseaseViewModel{
                         "role": "DOCTOR"
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
-                    "pathologicReport": "null",
-                    "diagnosticReport": "null",
+                    "pathologicReport": null,
+                    "diagnosticReport": null,
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
@@ -131,8 +131,8 @@ export default class DiseaseViewModel{
                         "role": "DOCTOR"
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
-                    "pathologicReport": "null",
-                    "diagnosticReport": "null",
+                    "pathologicReport": null,
+                    "diagnosticReport": null,
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
@@ -143,7 +143,7 @@ export default class DiseaseViewModel{
                         "surname": "Solmaz",
                         "role": "PATIENT"
                     },
-                    "labTechnician": "null",
+                    "labTechnician":null,
                     "doctor": {
                         "userId": "1234567",
                         "name": "Burak",
@@ -151,8 +151,8 @@ export default class DiseaseViewModel{
                         "role": "DOCTOR"
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
-                    "pathologicReport": "null",
-                    "diagnosticReport": "null",
+                    "pathologicReport": null,
+                    "diagnosticReport": null,
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
@@ -163,7 +163,7 @@ export default class DiseaseViewModel{
                         "surname": "Solmaz",
                         "role": "PATIENT"
                     },
-                    "labTechnician": "null",
+                    "labTechnician":null,
                     "doctor": {
                         "userId": "1234567",
                         "name": "Burak",
@@ -171,8 +171,8 @@ export default class DiseaseViewModel{
                         "role": "DOCTOR"
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
-                    "pathologicReport": "null",
-                    "diagnosticReport": "null",
+                    "pathologicReport": null,
+                    "diagnosticReport": null,
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
@@ -196,8 +196,8 @@ export default class DiseaseViewModel{
                         "role": "DOCTOR"
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
-                    "pathologicReport": "null",
-                    "diagnosticReport": "null",
+                    "pathologicReport": null,
+                    "diagnosticReport": null,
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
@@ -208,7 +208,12 @@ export default class DiseaseViewModel{
                         "surname": "Solmaz",
                         "role": "PATIENT"
                     },
-                    "labTechnician": "null",
+                    "labTechnician": {
+                        "userId": "75279146800",
+                        "name": "Melike",
+                        "surname": "Kaba",
+                        "role": "LAB_TECHNICIAN"
+                    },
                     "doctor": {
                         "userId": "1234567",
                         "name": "Burak",
@@ -216,8 +221,8 @@ export default class DiseaseViewModel{
                         "role": "DOCTOR"
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
-                    "pathologicReport": "null",
-                    "diagnosticReport": "null",
+                    "pathologicReport": null,
+                    "diagnosticReport": null,
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
@@ -228,7 +233,12 @@ export default class DiseaseViewModel{
                         "surname": "Solmaz",
                         "role": "PATIENT"
                     },
-                    "labTechnician": "null",
+                    "labTechnician": {
+                        "userId": "75279146800",
+                        "name": "Melike",
+                        "surname": "Kaba",
+                        "role": "LAB_TECHNICIAN"
+                    },
                     "doctor": {
                         "userId": "1234567",
                         "name": "Burak",
@@ -236,8 +246,8 @@ export default class DiseaseViewModel{
                         "role": "DOCTOR"
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
-                    "pathologicReport": "null",
-                    "diagnosticReport": "null",
+                    "pathologicReport": null,
+                    "diagnosticReport": null,
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
@@ -261,8 +271,8 @@ export default class DiseaseViewModel{
                         "role": "DOCTOR"
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
-                    "pathologicReport": "null",
-                    "diagnosticReport": "null",
+                    "pathologicReport": null,
+                    "diagnosticReport": null,
                     "diseaseState": "WAITING_RESULTS"
                 }
             ]

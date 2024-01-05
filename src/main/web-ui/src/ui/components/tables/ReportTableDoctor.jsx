@@ -1,23 +1,31 @@
 import React, {useState} from 'react'
 import DiseaseViewModel from "../../../viewmodel/DiseaseViewModel";
 import TableHead from "./TableHead";
-import TooledSearchBar, {DropDown} from "../TooledSearchBar";
+import TooledSearchBar, {DropDown, getActions} from "../TooledSearchBar";
+import {DataTypes, HEADS} from "./TableConstants";
 
 export default function ReportTableDoctor() {
     const vm = new DiseaseViewModel()
-    const heads = [
-        "ID", "DATE", "PATIENT ID", "REQUEST", "STATUS",
-        "LAB TECHNICIAN", "PATHOLOGIC", "DIAGNOSTIC", "ACTIONS"]
-
-    const searchByActions = ["ID", "PATIENT"]
-    const orderByActions = ["ID Increasing", "PATIENT ID Increasing"]
-
     const realData = vm.getDummyDoctorDiseases().data
+    const dataType = DataTypes.DOCTOR
+
     const [data, setData] = useState(realData);
+    const [searchBy, setSearchBy] = useState(dataType.SEARCH_BY.PATIENT_ID)
+    const [orderBy, setOrderBy] = useState("")
+
+
+    const searchByActions = getActions(
+        {actionData : dataType.SEARCH_BY, onSelect:setSearchBy})
+    const orderByActions = getActions(
+        {actionData : dataType.ORDER_BY, onSelect:setOrderBy})
+
 
     const handleSearch = (query) => {
         const filteredData = realData.filter(item =>
-                item.patient.userId.toString().toLowerCase().includes(query.toLowerCase())
+            item.patient.userId
+                .toString()
+                .toLowerCase()
+                .includes(query.toLowerCase())
         );
 
         setData(filteredData);
@@ -33,12 +41,12 @@ export default function ReportTableDoctor() {
 
             <table className="table table-borderless mb-0">
                 <thead>
-                    <TableHead heads={heads}/>
+                    <TableHead heads={HEADS.DOCTOR}/>
                 </thead>
                 <tbody>
                 {
-                    data.map((val) => {
-                        return <TableData data={val}/>
+                    data.map((val, index) => {
+                        return <TableData key = {index} data={val}/>
                     })
                 }
                 </tbody>

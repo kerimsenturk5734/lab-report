@@ -31,19 +31,39 @@ export default function TooledSearchBar(
     );
 }
 
-export function DropDown({title = String(), actions = Array()}){
+export function DropDown({title = String(), actions = []}){
+    console.log(actions)
     return (
         <MDBDropdown>
-            <MDBDropdownToggle caret color="primary">
+            <MDBDropdownToggle color="primary">
                 {title}
             </MDBDropdownToggle>
             <MDBDropdownMenu className={"dropdown-menu"}>
-                {actions.map((item) => (
-                    <MDBDropdownItem className="dropdown-item" href="#">{item}</MDBDropdownItem>
+                {actions.map((action, index) => (
+                    <div key={index}>
+                        {action}
+                    </div>
                 ))}
             </MDBDropdownMenu>
         </MDBDropdown>
 
     )
 }
-
+export function DropDownAction({title = String(), onSelect = () => {}}){
+    return (
+        <MDBDropdownItem
+            onClick={onSelect}
+            className="dropdown-item"
+            href="#"
+        >
+            {title}
+        </MDBDropdownItem>
+    )
+}
+export function getActions({actionData, onSelect = (val) => {}}){
+    return Object.entries(actionData).map(([key,value]) => (
+        <div key={key}>
+            {DropDownAction({title: value, onSelect: () => {onSelect(key)}})}
+        </div>
+    ))
+}

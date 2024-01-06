@@ -1,6 +1,6 @@
 import React from 'react'
 import '../../css/Table.css'
-import ReportTablePatient from "./ReportTablePatient";
+import ReportTableLabTechnician from "./ReportTableLabTechnician";
 
 export default function Table() {
     return (
@@ -9,7 +9,7 @@ export default function Table() {
                 <div className="card shadow-2-strong" style={{backgroundColor: "#f5f7fa"}}>
                     <div className="card-body">
                         <div className="table-responsive">
-                            <ReportTablePatient/>
+                            <ReportTableLabTechnician/>
                         </div>
                     </div>
                 </div>

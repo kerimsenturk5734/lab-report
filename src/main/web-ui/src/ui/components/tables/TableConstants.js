@@ -4,6 +4,8 @@ export const HEADS = {
         "LAB TECHNICIAN", "PATHOLOGIC REPORT", "DIAGNOSTIC REPORT", "ACTIONS"],
     "PATIENT" : [
         "ID", "DATE", "DOCTOR", "REQUEST", "STATUS", "PATHOLOGIC REPORT", "DIAGNOSTIC REPORT"],
+    "LAB_TECHNICIAN" : [
+        "ID", "DATE", "DOCTOR", "REQUEST", "LAB TECHNICIAN", "STATUS", "PATHOLOGIC REPORT"],
 }
 
 export const DataTypes = {
@@ -26,6 +28,19 @@ export const DataTypes = {
         "SEARCH_BY" : {
             "ID" : "ID",
             "DOCTOR" : "DOCTOR",
+        },
+        "ORDER_BY" : {
+            "ID_ASC" : "ID Ascending",
+            "ID_DESC" : "ID Descending",
+            "DATE_NEW_TO_OLD" : "DATE New to Old",
+            "DATE_OLD_TO_NEW" : "DATE Old to New"
+        }
+    },
+    "LAB_TECHNICIAN" : {
+        "SEARCH_BY" : {
+            "ID" : "ID",
+            "DOCTOR" : "DOCTOR",
+            "LAB_TECHNICIAN" : "LAB TECHNICIAN"
         },
         "ORDER_BY" : {
             "ID_ASC" : "ID Ascending",

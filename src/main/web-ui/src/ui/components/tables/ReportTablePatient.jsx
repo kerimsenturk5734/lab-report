@@ -95,10 +95,10 @@ function TableData({ data }) {
         const statusClasses = {
             WAITING_RESULTS: 'bg-secondary',
             DIAGNOSTIC_RESULTED: 'bg-success',
-            PATHOLOGICAL_RESULTED: 'bg-info',
+            PATHOLOGICAL_RESULTED: 'bg-warning',
         };
 
-        return statusClasses[data.diseaseState] || 'bg-warning';
+        return statusClasses[data.diseaseState];
     };
 
     const isActionEnabled = (actionStates) => actionStates.includes(data.diseaseState) ? '' : 'disabled';

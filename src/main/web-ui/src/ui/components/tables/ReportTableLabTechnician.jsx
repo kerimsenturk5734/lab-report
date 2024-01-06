@@ -1,133 +1,149 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react';
+import DiseaseViewModel from '../../../viewmodel/DiseaseViewModel';
+import TableHead from './TableHead';
+import TooledSearchBar, {DropDown, getDropDownActions} from '../TooledSearchBar';
+import {DataTypes, HEADS} from './TableConstants';
 
-export default function ReportTableLabTechnician() {
+export default function ReportTablePatient() {
+    const vm = new DiseaseViewModel();
+    const realData = vm.getDummyLabTechnicianDiseases().data;
+    const dataType = DataTypes.LAB_TECHNICIAN;
+
+    const [data, setData] = useState(realData);
+    const [searchBy, setSearchBy] = useState(dataType.SEARCH_BY.DOCTOR);
+    const [orderBy, setOrderBy] = useState(dataType.ORDER_BY.ID_ASC);
+
+    const searchByActions = getDropDownActions({
+        actionData: dataType.SEARCH_BY,
+        onSelect: setSearchBy,
+    });
+
+    const orderByActions = getDropDownActions({
+        actionData: dataType.ORDER_BY,
+        onSelect: setOrderBy,
+    });
+
+    useEffect(() => {
+        handleOrderBy();
+    }, [orderBy]);
+
+    const handleSearch = (query) => {
+        const filteredData = realData.filter((item) =>
+            selectSearchField(item)
+                .toString()
+                .toLowerCase()
+                .includes(query.toLowerCase())
+        );
+
+        setData(filteredData);
+    };
+
+    const selectSearchField = (item) => {
+        switch (searchBy){
+            case dataType.SEARCH_BY.ID : return item.id
+            case dataType.SEARCH_BY.DOCTOR : return `${item.doctor.name} ${item.doctor.surname}`
+            case dataType.SEARCH_BY.LAB_TECHNICIAN : return item.labTechnician
+                ? `${item.labTechnician.name} ${item.labTechnician.surname}`
+                : 'Working on...';
+        }
+    };
+
+    const handleOrderBy = () => {
+        const sort = dataType.ORDER_BY;
+        let sortedData;
+
+        switch (orderBy) {
+            case sort.ID_ASC:
+                sortedData = realData.slice().sort((a, b) => a.id - b.id);
+                break;
+            case sort.ID_DESC:
+                sortedData = realData.slice().sort((a, b) => b.id - a.id);
+                break;
+            case sort.DATE_NEW_TO_OLD:
+                sortedData = realData.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+                break;
+            case sort.DATE_OLD_TO_NEW:
+                sortedData = realData.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+                break;
+            default:
+                console.log('An error occurred');
+                break;
+        }
+
+        setData(sortedData);
+    };
+
     return (
-        <table className="table table-borderless mb-0">
-            <thead>
-                <tr>
-                    <th scope="col">
-                    </th>
-                    <th scope="col">EMPLOYEES</th>
-                    <th scope="col">POSITION</th>
-                    <th scope="col">AGE</th>
-                    <th scope="col">ADDRESS</th>
-                    <th scope="col">Close</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">
-                        <div className="form-check">
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault1" checked />
-                        </div>
-                    </th>
-                    <td>Tiger Nixon</td>
-                    <td>System Architect</td>
-                    <td>61</td>
-                    <td>Edinburgh</td>
-                    <td>
-                        <button type="button" className="btn btn-danger btn-sm px-3">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">
-                        <div className="form-check">
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault2" />
-                        </div>
-                    </th>
-                    <td>Sonya Frost</td>
-                    <td>Software Engineer</td>
-                    <td>23</td>
-                    <td>Edinburgh</td>
-                    <td>
-                        <button type="button" className="btn btn-danger btn-sm px-3">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">
-                        <div className="form-check">
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault3" checked />
-                        </div>
-                    </th>
-                    <td>Jena Gaines</td>
-                    <td>Office Manager</td>
-                    <td>30</td>
-                    <td>London</td>
-                    <td>
-                        <button type="button" className="btn btn-danger btn-sm px-3">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">
-                        <div className="form-check">
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault4" checked />
-                        </div>
-                    </th>
-                    <td>Quinn Flynn</td>
-                    <td>Support Lead</td>
-                    <td>22</td>
-                    <td>Edinburgh</td>
-                    <td>
-                        <button type="button" className="btn btn-danger btn-sm px-3">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">
-                        <div className="form-check">
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault5" checked />
-                        </div>
-                    </th>
-                    <td>Charde Marshall</td>
-                    <td>Regional Director</td>
-                    <td>36</td>
-                    <td>San Francisco</td>
-                    <td>
-                        <button type="button" className="btn btn-danger btn-sm px-3">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">
-                        <div className="form-check">
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault6" />
-                        </div>
-                    </th>
-                    <td>Haley Kennedy</td>
-                    <td>Senior Marketing Designer</td>
-                    <td>43</td>
-                    <td>London</td>
-                    <td>
-                        <button type="button" className="btn btn-danger btn-sm px-3">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">
-                        <div className="form-check">
-                            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault7" checked />
-                        </div>
-                    </th>
-                    <td>Tatyana Fitzpatrick</td>
-                    <td>Regional Director</td>
-                    <td>19</td>
-                    <td>Warsaw</td>
-                    <td>
-                        <button type="button" className="btn btn-danger btn-sm px-3">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    )
+        <div className={"container-sm"}>
+            <TooledSearchBar
+                LeftDropDown={DropDown({ title: `Search By (${searchBy})`, actions: searchByActions })}
+                RightDropDown={DropDown({ title: `Order By (${orderBy})`, actions: orderByActions })}
+                onSearch={handleSearch}
+                placeHolder={`Search ${searchBy}`}
+            />
+
+            <table className="table table-borderless mb-0">
+                <thead>
+                <TableHead heads={HEADS.LAB_TECHNICIAN} />
+                </thead>
+                <tbody>
+                {data.map((val, index) => (
+                    <TableData key={index} data={val} />
+                ))}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
+function TableData({ data }) {
+    const getStatusClass = () => {
+        const statusClasses = {
+            WAITING_RESULTS: 'bg-secondary',
+            DIAGNOSTIC_RESULTED: 'bg-success',
+            PATHOLOGICAL_RESULTED: 'bg-warning',
+        };
+
+        return statusClasses[data.diseaseState] || 'bg-warning';
+    };
+
+    const getTextClass = () => {
+        console.log(data.diseaseState)
+        return data.diseaseState === 'WAITING_RESULTS' ? 'text-secondary' : 'text-warning';
+    };
+
+    return (
+        <tr>
+            <td className="text-center">{data.id}</td>
+            <td className="text-center font-monospace">27 Feb 2024 13:50</td>
+            <td className="text-center">{`${data.doctor.name} ${data.doctor.surname}`}</td>
+            <td className="text-center font-monospace fst-italic">{data.labRequestType}</td>
+            <td className={`text-center ${getTextClass()}`}>
+                {data.labTechnician ? `${data.labTechnician.name} ${data.labTechnician.surname}` : 'Working on...'}
+            </td>
+            <td className={`text-center font-monospace fst-italic ${getStatusClass()} rounded-2`}>
+                {data.diseaseState}
+            </td>
+            <td>
+                <div className="d-flex justify-content-evenly">
+                    {
+                        data.diseaseState !== "WAITING_RESULTS" ?
+                            <>
+                                <button type="button" className={`btn btn-outline-dark btn-sm px-2`}>
+                                    <i className="fa fa-solid fa-tv"> View</i>
+                                </button>
+                                <button type="button" className={`btn btn-dark btn-sm px-3 btn-outline-primary`}>
+
+                                    <i className="fa fa-solid outline fa-download"></i>
+                                </button>
+                            </>
+                            :
+                            <button type="button" className={`btn btn-dark btn-sm px-3 btn-outline-success`}>
+                                <i className="fa fa-solid outline fa-download"> Create Report</i>
+                            </button>
+                    }
+                </div>
+            </td>
+        </tr>
+    );
 }

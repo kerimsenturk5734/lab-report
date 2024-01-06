@@ -4,7 +4,7 @@ import TableHead from './TableHead';
 import TooledSearchBar, {DropDown, getDropDownActions} from '../TooledSearchBar';
 import {DataTypes, HEADS} from './TableConstants';
 
-export default function ReportTablePatient() {
+export default function ReportTableDoctor() {
     const vm = new DiseaseViewModel();
     const realData = vm.getDummyDoctorDiseases().data;
     const dataType = DataTypes.DOCTOR;
@@ -107,7 +107,20 @@ export default function ReportTablePatient() {
 
 function TableData({ data }) {
     const getStatusClass = () => {
-        return data.diseaseState === 'WAITING_RESULTS' ? 'bg-info' : 'bg-warning';
+        const statusClasses = {
+            WAITING_RESULTS: 'bg-secondary',
+            DIAGNOSTIC_RESULTED: 'bg-success',
+            PATHOLOGICAL_RESULTED: 'bg-warning',
+        };
+
+        return statusClasses[data.diseaseState];
+    };
+    const getTextClass = () => {
+        switch (data.diseaseState){
+            case 'WAITING_RESULTS' : return 'text-secondary'
+            case 'DIAGNOSTIC_RESULTED' : return 'text-success'
+            case 'PATHOLOGICAL_RESULTED' : return  'text-warning'
+        }
     };
 
     return (
@@ -119,7 +132,7 @@ function TableData({ data }) {
             <td className={`text-center font-monospace fst-italic ${getStatusClass()} rounded-2`}>
                 {data.diseaseState}
             </td>
-            <td className="text-center text-warning">
+            <td className={`text-center ${getTextClass()}`}>
                 {data.labTechnician ? `${data.labTechnician.name} ${data.labTechnician.surname}` : 'Working on...'}
             </td>
             <td>

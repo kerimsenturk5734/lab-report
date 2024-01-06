@@ -1,0 +1,5 @@
+export const UserType = {
+    DOCTOR:"DOCTOR",
+    PATIENT:"PATIENT",
+    LAB_TECHNICIAN:"LAB_TECHNICIAN"
+}

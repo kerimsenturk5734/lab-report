@@ -1,10 +1,11 @@
 import React from 'react';
 import './ui/css/App.css'
-import Login from "./ui/page/Login";
+import Dashboard from "./ui/page/Dashboard";
+import {UserType} from "./ui/components/Constants";
 
 function App() {
   return (
-    <Login/>
+    <Dashboard userType={UserType.DOCTOR}/>
   );
 }
 

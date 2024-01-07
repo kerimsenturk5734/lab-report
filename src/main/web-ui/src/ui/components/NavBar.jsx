@@ -1,15 +1,17 @@
 import React from 'react'
-import {NavItemFactory} from "./nav_items/NavItemFactory";
 import {UserType} from "./Constants";
 import {MDBDropdown, MDBDropdownMenu, MDBDropdownToggle, MDBNavbarItem, MDBNavbarLink,} from "mdb-react-ui-kit";
+import NavItemsDoctor from "./nav_items/NavItemsDoctor";
+import NavItemLabTechnician from "./nav_items/NavItemLabTechnician";
+import NavItemPatient from "./nav_items/NavItemPatient";
 
-export default function NavBar() {
+export default function NavBar({userType = UserType.DEFAULT}) {
     return (
         <div>
             <nav className="navbar navbar-toggler rounded-3 ms-3 me-3 p-3 bg-white" >
                 <div className="container-fluid justify-content-between">
                     <NavBrand />
-                    <NavItems />
+                    <NavItems userType={userType}/>
                     <UserProfile />
                 </div>
             </nav>
@@ -34,11 +36,11 @@ const NavBrand = () => {
     );
 };
 
-const NavItems = () => {
+function NavItems({userType = UserType.DEFAULT}){
     return (
         <>
             <ul className="navbar-nav flex-row d-none d-md-flex">
-                <NavItemFactory userType={UserType.LAB_TECHNICIAN} />
+                <NavItemFactory userType={userType} />
             </ul>
         </>
     );
@@ -72,6 +74,15 @@ const UserProfile = () => {
         </ul>
     );
 };
+
+function NavItemFactory({userType = UserType.DEFAULT}){
+    switch (userType){
+        case UserType.DOCTOR: return <NavItemsDoctor/>
+        case UserType.LAB_TECHNICIAN: return  <NavItemLabTechnician/>
+        case UserType.PATIENT: return <NavItemPatient/>
+        default : return <>Wrong Selection -> ${userType}</>
+    }
+}
 
 
 

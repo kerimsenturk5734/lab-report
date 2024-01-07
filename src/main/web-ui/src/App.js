@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './ui/css/App.css'
-import Dashboard from './ui/page/Dashboard';
+import Login from "./ui/page/Login";
 
 function App() {
   return (
-    <Dashboard/>
+    <Login/>
   );
 }
 

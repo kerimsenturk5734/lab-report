@@ -1,18 +1,12 @@
-import React, { useState } from 'react';
-import './App.css'
-import {
-  MDBBtn,
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBInput
-} from 'mdb-react-ui-kit';
+import React, {useState} from 'react';
+import './../css/App.css'
+import {MDBBtn, MDBContainer, MDBInput} from 'mdb-react-ui-kit';
 
 function Login() {
-  var [content, setContent] = useState("login")
+  const [content, setContent] = useState("login")
 
-  var Screen = () => {
-    if (content == "login") {
+  const Screen = () => {
+    if (content === "login") {
       return (
         <>
           <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-4">
@@ -35,7 +29,6 @@ function Login() {
     }
     else {
       return (
-
         <>
           <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-4">
             <MDBBtn outline className='mx-2' color='secondary' onClick={() => { setContent("login") }}>
@@ -64,10 +57,10 @@ function Login() {
   return (
     <MDBContainer className="gradient-form">
       <div className="row d-flex justify-content-center">
-        <div className="col-md-5 box-shadow mt-5 border">
-          <div className="text-center">
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
-              style={{ width: '185px' }} alt="logo" />
+        <div className="col-md-5 box-shadow bg-gray mt-5 mb-5">
+          <div className="text-center mt-5">
+            <img src="https://cdn-icons-png.flaticon.com/512/8204/8204580.png"
+              style={{ width: '150px' }} alt="logo"/>
             <h4 className="mt-1 mb-5 pb-1">Lab Report</h4>
           </div>
           <Screen />

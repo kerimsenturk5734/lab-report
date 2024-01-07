@@ -5,15 +5,15 @@ import {MDBDropdown, MDBDropdownMenu, MDBDropdownToggle, MDBNavbarItem, MDBNavba
 
 export default function NavBar() {
     return (
-        <>
-            <nav className="navbar navbar-expand-lg navbar-toggler sticky-top bg-white">
+        <div>
+            <nav className="navbar navbar-toggler rounded-3 ms-3 me-3 p-3 bg-white" >
                 <div className="container-fluid justify-content-between">
                     <NavBrand />
                     <NavItems />
                     <UserProfile />
                 </div>
             </nav>
-        </>
+        </div>
     );
 }
 
@@ -22,12 +22,13 @@ const NavBrand = () => {
         <div className="d-flex">
             <a className="navbar-brand me-2 mb-1 d-flex align-items-center" href="#">
                 <img
-                    src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
-                    height="20"
+                    src="https://cdn-icons-png.flaticon.com/512/8204/8204580.png"
+                    height="60"
                     alt="MDB Logo"
                     loading="lazy"
                     style={{ marginTop: "2px" }}
                 />
+                <h4>Lab Report</h4>
             </a>
         </div>
     );

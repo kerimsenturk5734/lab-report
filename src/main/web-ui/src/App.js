@@ -5,7 +5,7 @@ import {UserType} from "./ui/components/Constants";
 
 function App() {
   return (
-    <Dashboard userType={UserType.DOCTOR}/>
+    <Dashboard userType={UserType.LAB_TECHNICIAN}/>
   );
 }
 

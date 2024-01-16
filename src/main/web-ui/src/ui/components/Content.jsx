@@ -1,6 +1,7 @@
 import React from 'react';
 import Table from "./Table";
 import {ContentType, UserType} from "./Constants";
+import Profile from "./Profile";
 
 export default function Content({userType = UserType.DEFAULT, contentType = ContentType.DEFAULT}) {
     return (
@@ -22,7 +23,7 @@ function ContentFactory({contentType = ContentType, userType = UserType}) {
     switch (contentType) {
         case ContentType.TABLE :
             return <Table userType={userType}/>;
-        case ContentType.PROFILE : return <div>Profile</div>;
+        case ContentType.PROFILE : return <Profile/>;
         case ContentType.CREATE_REPORT : return <div>Create Report</div>;
         default: return <>Wrong Selection -> ${contentType}</>
     }

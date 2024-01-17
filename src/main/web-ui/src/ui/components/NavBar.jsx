@@ -28,7 +28,7 @@ export default function NavBar({userType = UserType.DEFAULT, handleContent = (va
                                 <i className="fas fa-user"></i> Profile
                             </MDBNavbarLink>
                             <MDBNavbarLink className={"dropdown-item text-danger rounded-3"}
-                                           onClick={() => handleContent(ContentType.DEFAULT)}>
+                                           onClick={() => handleContent(ContentType.LOG_OUT)}>
                                 <i className="fas fa-chevron-right"></i> Log Out
                             </MDBNavbarLink>
                         </MDBDropdownMenu>

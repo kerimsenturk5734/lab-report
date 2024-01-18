@@ -10,7 +10,7 @@ function Profile() {
                        <img
                            src={"https://cdn-icons-png.flaticon.com/512/456/456141.png"}
                            alt={"profile"}
-                           width={"50%"}
+                           className={"w-responsive w-75 h-75"}
                        />
                    </MDBCol>
                    <MDBCol>

@@ -4,6 +4,7 @@ import {ContentType, UserType} from "./Constants";
 import Profile from "./Profile";
 import MyReports from "./MyReports";
 import LogOut from "./LogOut";
+import CreateDisease from "./CreateDisease";
 
 export default function Content({userType = UserType.DEFAULT, contentType = ContentType.DEFAULT}) {
     return (
@@ -24,6 +25,7 @@ function ContentFactory({contentType = ContentType, userType = UserType}) {
     switch (contentType) {
         case ContentType.TABLE : return <Table userType={userType}/>;
         case ContentType.PROFILE : return <Profile/>;
+        case ContentType.CREATE_DISEASE : return <CreateDisease/>
         case ContentType.CREATE_REPORT : return <div>Create Report</div>;
         case ContentType.MY_REPORTS : return <MyReports/>
         case ContentType.LOG_OUT : return <LogOut/>

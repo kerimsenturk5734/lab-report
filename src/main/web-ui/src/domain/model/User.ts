@@ -1,5 +1,5 @@
 
-enum UserRole {
+export enum UserRole {
     ADMIN = "ADMIN",
     PATIENT = "PATIENT",
     LAB_TECHNICIAN = "LAB_TECHNICIAN",

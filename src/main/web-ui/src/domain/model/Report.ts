@@ -1,5 +1,5 @@
 
-enum ReportType{
+export enum ReportType{
     PATHOLOGICAL = "PATHOLOGICAL",
     DIAGNOSTIC = "DIAGNOSTIC"
 }

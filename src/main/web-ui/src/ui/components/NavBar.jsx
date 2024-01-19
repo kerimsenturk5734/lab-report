@@ -1,9 +1,10 @@
 import React from 'react'
-import {ContentType, UserType} from "./Constants";
+import {UserType} from "./Constants";
 import {MDBDropdown, MDBDropdownMenu, MDBDropdownToggle, MDBNavbarItem, MDBNavbarLink,} from "mdb-react-ui-kit";
 import NavItemsDoctor from "./nav_items/NavItemsDoctor";
 import NavItemLabTechnician from "./nav_items/NavItemLabTechnician";
 import NavItemPatient from "./nav_items/NavItemPatient";
+import {ContentType} from "./Content";
 
 export default function NavBar({userType = UserType.DEFAULT, handleContent = (val) => {}}) {
 

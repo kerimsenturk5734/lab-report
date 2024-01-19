@@ -1,5 +1,6 @@
 import React from 'react';
-import {ContentType} from "../Constants";
+
+import {ContentType} from "../Content";
 
 function NavItemsDoctor({setContent = (val) => {}}) {
     return (

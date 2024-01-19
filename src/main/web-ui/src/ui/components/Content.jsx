@@ -1,6 +1,6 @@
 import React from 'react';
 import Table from "./Table";
-import {ContentType, UserType} from "./Constants";
+import {UserType} from "./Constants";
 import Profile from "./Profile";
 import MyReports from "./MyReports";
 import LogOut from "./LogOut";
@@ -31,4 +31,14 @@ function ContentFactory({contentType = ContentType, userType = UserType}) {
         case ContentType.LOG_OUT : return <LogOut/>
         default: return <>Wrong Selection -> ${contentType}</>
     }
+}
+
+export const ContentType = {
+    DEFAULT: "DEFAULT",
+    TABLE: "TABLE",
+    PROFILE: "PROFILE",
+    CREATE_REPORT: "CREATE_REPORT",
+    CREATE_DISEASE: "CREATE_DISEASE",
+    MY_REPORTS: "MY_REPORTS",
+    LOG_OUT: "LOG_OUT"
 }

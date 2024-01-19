@@ -5,12 +5,3 @@ export const UserType = {
     LAB_TECHNICIAN:"LAB_TECHNICIAN"
 }
 
-export const ContentType = {
-    DEFAULT:"DEFAULT",
-    TABLE:"TABLE",
-    PROFILE:"PROFILE",
-    CREATE_REPORT:"CREATE_REPORT",
-    CREATE_DISEASE: "CREATE_DISEASE",
-    MY_REPORTS:"MY_REPORTS",
-    LOG_OUT:"LOG_OUT"
-}

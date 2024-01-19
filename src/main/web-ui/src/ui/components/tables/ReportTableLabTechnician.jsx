@@ -3,6 +3,8 @@ import DiseaseViewModel from '../../../viewmodel/DiseaseViewModel';
 import TableHead from './TableHead';
 import TooledSearchBar, {DropDown, getDropDownActions} from '../TooledSearchBar';
 import {DataTypes, HEADS} from './TableConstants';
+import {DiseaseState} from "../../../domain/model/Disease";
+import {getBgClassByStatus, getTextClassByStatus} from "./FieldClasses";
 
 export default function ReportTablePatient() {
     const vm = new DiseaseViewModel();
@@ -97,20 +99,6 @@ export default function ReportTablePatient() {
 }
 
 function TableData({ data }) {
-    const getStatusClass = () => {
-        const statusClasses = {
-            WAITING_RESULTS: 'bg-secondary',
-            DIAGNOSTIC_RESULTED: 'bg-success',
-            PATHOLOGICAL_RESULTED: 'bg-warning',
-        };
-
-        return statusClasses[data.diseaseState] || 'bg-warning';
-    };
-
-    const getTextClass = () => {
-        console.log(data.diseaseState)
-        return data.diseaseState === 'WAITING_RESULTS' ? 'text-secondary' : 'text-warning';
-    };
 
     return (
         <tr>
@@ -118,16 +106,18 @@ function TableData({ data }) {
             <td className="text-center font-monospace">27 Feb 2024 13:50</td>
             <td className="text-center">{`${data.doctor.name} ${data.doctor.surname}`}</td>
             <td className="text-center font-monospace fst-italic">{data.labRequestType}</td>
-            <td className={`text-center ${getTextClass()}`}>
+            <td className={`text-center ${getTextClassByStatus(data.diseaseState)}`}>
                 {data.labTechnician ? `${data.labTechnician.name} ${data.labTechnician.surname}` : 'Working on...'}
             </td>
-            <td className={`text-center font-monospace fst-italic ${getStatusClass()} rounded-2`}>
-                {data.diseaseState}
+            <td className={`text-center font-monospace fst-italic`}>
+                <div className={`${getBgClassByStatus(data.diseaseState)} py-1 rounded-2`}>
+                    {data.diseaseState}
+                </div>
             </td>
             <td>
-                <div className="d-flex justify-content-evenly">
+            <div className="d-flex justify-content-evenly">
                     {
-                        data.diseaseState !== "WAITING_RESULTS" ?
+                        data.diseaseState !== DiseaseState.WAITING_RESULTS?
                             <>
                                 <button type="button" className={`btn btn-outline-dark btn-sm px-2`}>
                                     <i className="fa fa-solid fa-tv"> View</i>
@@ -139,7 +129,7 @@ function TableData({ data }) {
                             </>
                             :
                             <button type="button" className={`btn btn-dark btn-sm px-3 btn-outline-success`}>
-                                <i className="fa fa-solid outline fa-download"> Create Report</i>
+                                <i className="fa fa-solid outline fa-file"> </i> Create Report
                             </button>
                     }
                 </div>

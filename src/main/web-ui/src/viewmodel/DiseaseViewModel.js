@@ -24,7 +24,7 @@ export default class DiseaseViewModel{
                     "labRequestType": "BLOOD_ANALYSIS",
                     "pathologicReport": null,
                     "diagnosticReport": null,
-                    "diseaseState": "DIAGNOSTIC_RESULTED"
+                    "diseaseState": "UPDATED"
                 },
                 {
                     "id": 2,
@@ -437,7 +437,7 @@ export default class DiseaseViewModel{
                     "labRequestType": "BLOOD_ANALYSIS",
                     "pathologicReport": null,
                     "diagnosticReport": null,
-                    "diseaseState": "PATHOLOGICAL_RESULTED"
+                    "diseaseState": "PATHOLOGIC_RESULTED"
                 },
                 {
                     "id": 10,
@@ -487,7 +487,7 @@ export default class DiseaseViewModel{
                     "labRequestType": "BLOOD_ANALYSIS",
                     "pathologicReport": null,
                     "diagnosticReport": "asd",
-                    "diseaseState": "WAITING_RESULTS"
+                    "diseaseState": "DELETED"
                 },
                 {
                     "id": 12,
@@ -512,7 +512,7 @@ export default class DiseaseViewModel{
                     "labRequestType": "BLOOD_ANALYSIS",
                     "pathologicReport": null,
                     "diagnosticReport": "asd",
-                    "diseaseState": "WAITING_RESULTS"
+                    "diseaseState": "DIAGNOSTIC_RESULTED"
                 }
             ]
         }

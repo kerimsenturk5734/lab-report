@@ -4,6 +4,7 @@ import TableHead from './TableHead';
 import TooledSearchBar, {DropDown, getDropDownActions} from '../TooledSearchBar';
 import {DataTypes, HEADS} from './TableConstants';
 import {DiseaseState} from "../../../domain/model/Disease";
+import {getBgClassByStatus, getTextClassByStatus} from "./FieldClasses";
 
 export default function ReportTableDoctor() {
     const vm = new DiseaseViewModel();
@@ -125,9 +126,11 @@ function TableData({ data }) {
             <td className="text-center">{data.patient.userId}</td>
             <td className="text-center font-monospace fst-italic">{data.labRequestType}</td>
             <td className={`text-center font-monospace fst-italic rounded-2`}>
-                {data.diseaseState}
+                <div className={`${getBgClassByStatus(diseaseState)} py-1 rounded-2`}>
+                    {data.diseaseState}
+                </div>
             </td>
-            <td className={`text-center `}>
+            <td className={`text-center ${getTextClassByStatus(diseaseState)}`}>
                 {data.labTechnician ? `${data.labTechnician.name} ${data.labTechnician.surname}` : 'Working on...'}
             </td>
             <td>

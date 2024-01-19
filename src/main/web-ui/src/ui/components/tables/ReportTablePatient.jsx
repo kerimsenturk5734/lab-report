@@ -3,6 +3,8 @@ import DiseaseViewModel from '../../../viewmodel/DiseaseViewModel';
 import TableHead from './TableHead';
 import TooledSearchBar, {DropDown, getDropDownActions} from '../TooledSearchBar';
 import {DataTypes, HEADS} from './TableConstants';
+import {getBgClassByStatus} from "./FieldClasses";
+import {DiseaseState} from "../../../domain/model/Disease";
 
 export default function ReportTablePatient() {
     const vm = new DiseaseViewModel();
@@ -91,17 +93,13 @@ export default function ReportTablePatient() {
 }
 
 function TableData({ data }) {
-    const getStatusClass = () => {
-        const statusClasses = {
-            WAITING_RESULTS: 'bg-secondary',
-            DIAGNOSTIC_RESULTED: 'bg-success',
-            PATHOLOGICAL_RESULTED: 'bg-warning',
-        };
+    const diseaseState = data.diseaseState
 
-        return statusClasses[data.diseaseState];
-    };
+    const isPathologicActionDisabled =
+        [DiseaseState.DELETED, DiseaseState.WAITING_RESULTS].includes(diseaseState)
 
-    const isActionEnabled = (actionStates) => actionStates.includes(data.diseaseState) ? '' : 'disabled';
+    const isDiagnosticActionDisabled =
+        [DiseaseState.DELETED, DiseaseState.WAITING_RESULTS, DiseaseState.PATHOLOGIC_RESULTED].includes(diseaseState)
 
     return (
         <tr>
@@ -109,36 +107,38 @@ function TableData({ data }) {
             <td className="text-center font-monospace">27 Feb 2024 13:50</td>
             <td className="text-center">{`${data.doctor.name} ${data.doctor.surname}`}</td>
             <td className="text-center font-monospace fst-italic">{data.labRequestType}</td>
-            <td className={`text-center font-monospace fst-italic ${getStatusClass()} rounded-2`}>
-                {data.diseaseState}
-            </td>
-            <td>
-                <div className="d-flex justify-content-around">
-                    <button type="button" className={`btn btn-outline-dark btn-sm px-3
-                    ${isActionEnabled(['PATHOLOGICAL_RESULTED', 'DIAGNOSTIC_RESULTED', 'UPDATED'])}`}>
-
-                        <i className="fa fa-solid fa-tv"> View</i>
-                    </button>
-                    <button type="button" className={`btn btn-dark btn-sm px-2 btn-outline-primary 
-                    ${isActionEnabled(['PATHOLOGICAL_RESULTED', 'DIAGNOSTIC_RESULTED', 'UPDATED'])}`}>
-
-                        <i className="fa fa-solid outline fa-download"></i>
-                    </button>
+            <td className={`text-center font-monospace fst-italic`}>
+                <div className={`${getBgClassByStatus(diseaseState)} py-1 rounded-2`}>
+                    {data.diseaseState}
                 </div>
             </td>
             <td>
-                <div className="d-flex justify-content-around">
-                    <button type="button" className={`btn btn-outline-dark btn-sm px-3 
-                    ${isActionEnabled(['DIAGNOSTIC_RESULTED', 'UPDATED'])}`}>
-
-                        <i className="fa fa-solid fa-tv"> View</i>
-                    </button>
-                    <button type="button" className={`btn btn-outline-primary btn-sm px-2 
-                    ${isActionEnabled(['DIAGNOSTIC_RESULTED', 'UPDATED'])}`}>
-
-                        <i className="fa fa-solid fa-download"></i>
-                    </button>
-                </div>
+                {
+                    isPathologicActionDisabled ?
+                        <></> :
+                        <div className="d-flex justify-content-evenly">
+                            <button type="button" className="btn btn-dark btn-outline-dark btn-sm px-3">
+                                <i className="fa fa-solid fa-tv"> View</i>
+                            </button>
+                            <button type="button" className="btn btn-dark btn-sm px-2 btn-outline-primary">
+                                <i className="fa fa-solid outline fa-download"></i>
+                            </button>
+                        </div>
+                }
+            </td>
+            <td>
+                {
+                    isDiagnosticActionDisabled ?
+                        <></> :
+                        <div className="d-flex justify-content-evenly">
+                            <button type="button" className="btn btn-dark btn-outline-dark btn-sm px-3">
+                                <i className="fa fa-solid fa-tv"> View</i>
+                            </button>
+                            <button type="button" className="btn btn-dark btn-sm px-2 btn-outline-primary">
+                                <i className="fa fa-solid outline fa-download"></i>
+                            </button>
+                        </div>
+                }
             </td>
         </tr>
     );

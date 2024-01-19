@@ -1,3 +1,4 @@
+import {DiseaseState} from "../domain/model/Disease";
 
 export default class DiseaseViewModel{
     getDummyDoctorDiseases = () => {
@@ -43,7 +44,7 @@ export default class DiseaseViewModel{
                     "labRequestType": "BLOOD_ANALYSIS",
                     "pathologicReport": null,
                     "diagnosticReport": null,
-                    "diseaseState": "WAITING_RESULTS"
+                    "diseaseState": DiseaseState.WAITING_RESULTS
                 },
                 {
                     "id": 3,
@@ -198,7 +199,7 @@ export default class DiseaseViewModel{
                     "labRequestType": "BLOOD_ANALYSIS",
                     "pathologicReport": null,
                     "diagnosticReport": null,
-                    "diseaseState": "PATHOLOGICAL_RESULTED"
+                    "diseaseState": "PATHOLOGIC_RESULTED"
                 },
                 {
                     "id": 10,
@@ -222,7 +223,7 @@ export default class DiseaseViewModel{
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
                     "pathologicReport": null,
-                    "diagnosticReport": null,
+                    "diagnosticReport": "asdasd",
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
@@ -272,7 +273,7 @@ export default class DiseaseViewModel{
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
                     "pathologicReport": null,
-                    "diagnosticReport": null,
+                    "diagnosticReport": "asdasd",
                     "diseaseState": "WAITING_RESULTS"
                 }
             ]
@@ -485,7 +486,7 @@ export default class DiseaseViewModel{
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
                     "pathologicReport": null,
-                    "diagnosticReport": null,
+                    "diagnosticReport": "asd",
                     "diseaseState": "WAITING_RESULTS"
                 },
                 {
@@ -510,7 +511,7 @@ export default class DiseaseViewModel{
                     },
                     "labRequestType": "BLOOD_ANALYSIS",
                     "pathologicReport": null,
-                    "diagnosticReport": null,
+                    "diagnosticReport": "asd",
                     "diseaseState": "WAITING_RESULTS"
                 }
             ]

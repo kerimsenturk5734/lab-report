@@ -10,12 +10,12 @@ export default function NavBar({userType = UserType.DEFAULT, handleContent = (va
 
     const UserProfile = () => {
         return (
-            <ul className="navbar-nav flex-row">
+            <ul className="navbar-nav flex-row gap-2">
                 <MDBNavbarItem className="me-3 me-lg-1 d-sm-flex align-items-sm-center">
-                    <i className="fa fa-user-nurse"></i>
-                    <i className="fa fa-stethoscope"></i>
-                    <i className="fa fa-user"></i>
-                    <strong className="d-none d-sm-block ms-1">John</strong>
+                    {userBannerIcon(userType)}
+                </MDBNavbarItem>
+                <MDBNavbarItem className="me-3 me-lg-1 d-sm-flex align-items-sm-center">
+                    <strong className="d-none d-sm-block ms-1">Alper Kaan Dalarslan</strong>
                 </MDBNavbarItem>
 
                 <MDBNavbarItem className="dropdown">
@@ -63,9 +63,20 @@ export default function NavBar({userType = UserType.DEFAULT, handleContent = (va
         }
     }
 
+    const userBannerIcon = (userType) => {
+        switch (userType) {
+            case UserType.PATIENT :
+                return <i className="fa fa-user"></i>
+            case UserType.DOCTOR :
+                return <i className="fa fa-stethoscope"></i>
+            case UserType.LAB_TECHNICIAN :
+                return <i className="fa fa-user-nurse"></i>
+        }
+    }
+
     return (
         <div>
-            <nav className="navbar navbar-toggler rounded-3 ms-3 me-3 p-3 bg-white" >
+        <nav className="navbar navbar-toggler rounded-3 ms-3 me-3 p-3 bg-white" >
                 <div className="container-fluid justify-content-between">
                     <NavBrand />
                     <ul className="navbar-nav flex-row d-none d-md-flex">

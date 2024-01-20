@@ -5,68 +5,68 @@ export enum ReportType{
 }
 
 export class Report {
-    reportId: string;
-    title: string;
-    details: string;
-    issueDate: Date;
-    filePath: string;
-    reportType: ReportType;
+    private _reportId: string;
+    private _title: string;
+    private _details: string;
+    private _issueDate: Date;
+    private _filePath: string;
+    private _reportType: ReportType;
 
     constructor(reportId: string, title: string, details: string,
                 issueDate: Date, filePath: string, reportType: ReportType) {
-        this.reportId = reportId;
-        this.title = title;
-        this.details = details;
-        this.issueDate = issueDate;
-        this.filePath = filePath;
-        this.reportType = reportType;
+        this._reportId = reportId;
+        this._title = title;
+        this._details = details;
+        this._issueDate = issueDate;
+        this._filePath = filePath;
+        this._reportType = reportType;
     }
 
-    getReportId(): string {
-        return this.reportId;
+    get reportId(): string {
+        return this._reportId;
     }
 
-    setReportId(reportId: string): void {
-        this.reportId = reportId;
+    set reportId(value: string) {
+        this._reportId = value;
     }
 
-    getTitle(): string {
-        return this.title;
+    get title(): string {
+        return this._title;
     }
 
-    setTitle(title: string): void {
-        this.title = title;
+    set title(value: string) {
+        this._title = value;
     }
 
-    getDetails(): string {
-        return this.details;
+    get details(): string {
+        return this._details;
     }
 
-    setDetails(details: string): void {
-        this.details = details;
+    set details(value: string) {
+        this._details = value;
     }
 
-    getIssueDate(): Date {
-        return this.issueDate;
+    get issueDate(): Date {
+        return this._issueDate;
     }
 
-    setIssueDate(issueDate: Date): void {
-        this.issueDate = issueDate;
+    set issueDate(value: Date) {
+        this._issueDate = value;
     }
 
-    getFilePath(): string {
-        return this.filePath;
+    get filePath(): string {
+        return this._filePath;
     }
 
-    setFilePath(filePath: string): void {
-        this.filePath = filePath;
+    set filePath(value: string) {
+        this._filePath = value;
     }
 
-    getReportType(): ReportType {
-        return this.reportType;
+    get reportType(): ReportType {
+        return this._reportType;
     }
 
-    setReportType(reportType: ReportType): void {
-        this.reportType = reportType;
+    set reportType(value: ReportType) {
+        this._reportType = value;
     }
 }

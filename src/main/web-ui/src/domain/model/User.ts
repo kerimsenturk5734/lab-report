@@ -7,57 +7,57 @@ export enum UserRole {
 }
 
 export class User {
-    userId: string;
-    name: string;
-    surname: string;
-    password: string;
-    role: UserRole;
+    private _userId: string;
+    private _name: string;
+    private _surname: string;
+    private _password: string;
+    private _role: UserRole;
 
     constructor(userId: string, name: string, surname: string, password: string, role: UserRole) {
-        this.userId = userId;
-        this.name = name;
-        this.surname = surname;
-        this.password = password;
-        this.role = role;
+        this._userId = userId;
+        this._name = name;
+        this._surname = surname;
+        this._password = password;
+        this._role = role;
     }
 
-    getUserId(): string {
-        return this.userId;
+    get userId(): string {
+        return this._userId;
     }
 
-    setUserId(userId: string): void {
-        this.userId = userId;
+    set userId(value: string) {
+        this._userId = value;
     }
 
-    getName(): string {
-        return this.name;
+    get name(): string {
+        return this._name;
     }
 
-    setName(name: string): void {
-        this.name = name;
+    set name(value: string) {
+        this._name = value;
     }
 
-    getSurname(): string {
-        return this.surname;
+    get surname(): string {
+        return this._surname;
     }
 
-    setSurname(surname: string): void {
-        this.surname = surname;
+    set surname(value: string) {
+        this._surname = value;
     }
 
-    getPassword(): string {
-        return this.password;
+    get password(): string {
+        return this._password;
     }
 
-    setPassword(password: string): void {
-        this.password = password;
+    set password(value: string) {
+        this._password = value;
     }
 
-    getRole(): UserRole {
-        return this.role;
+    get role(): UserRole {
+        return this._role;
     }
 
-    setRole(role: UserRole): void {
-        this.role = role;
+    set role(value: UserRole) {
+        this._role = value;
     }
 }

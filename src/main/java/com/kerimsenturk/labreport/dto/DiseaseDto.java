@@ -3,6 +3,8 @@ package com.kerimsenturk.labreport.dto;
 import com.kerimsenturk.labreport.model.enums.DiseaseState;
 import com.kerimsenturk.labreport.model.enums.LabRequestType;
 
+import java.time.LocalDateTime;
+
 public class DiseaseDto {
     int id;
     UserDto patient;
@@ -12,10 +14,14 @@ public class DiseaseDto {
     ReportDto pathologicReport;
     ReportDto diagnosticReport;
     DiseaseState diseaseState;
+    LocalDateTime creationDate = LocalDateTime.now();
+
     public DiseaseDto() {
     }
 
-    public DiseaseDto(int id, UserDto patient, UserDto labTechnician, UserDto doctor, LabRequestType labRequestType, ReportDto pathologicReport, ReportDto diagnosticReport,  DiseaseState diseaseState) {
+    public DiseaseDto(int id, UserDto patient, UserDto labTechnician, UserDto doctor,
+                      LabRequestType labRequestType, ReportDto pathologicReport,
+                      ReportDto diagnosticReport, DiseaseState diseaseState, LocalDateTime creationDate) {
         this.id = id;
         this.patient = patient;
         this.labTechnician = labTechnician;
@@ -24,6 +30,7 @@ public class DiseaseDto {
         this.pathologicReport = pathologicReport;
         this.diagnosticReport = diagnosticReport;
         this.diseaseState = diseaseState;
+        this.creationDate = creationDate;
     }
 
     public int getId() {
@@ -88,5 +95,12 @@ public class DiseaseDto {
 
     public void setDiseaseState(DiseaseState diseaseState) {
         this.diseaseState = diseaseState;
+    }
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 }

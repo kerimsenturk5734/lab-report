@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = exports.UserRole = void 0;
 var UserRole;
 (function (UserRole) {
@@ -10,42 +10,62 @@ var UserRole;
 })(UserRole = exports.UserRole || (exports.UserRole = {}));
 var User = /** @class */ (function () {
     function User(userId, name, surname, password, role) {
-        this.userId = userId;
-        this.name = name;
-        this.surname = surname;
-        this.password = password;
-        this.role = role;
+        this._userId = userId;
+        this._name = name;
+        this._surname = surname;
+        this._password = password;
+        this._role = role;
     }
-    User.prototype.getUserId = function () {
-        return this.userId;
-    };
-    User.prototype.setUserId = function (userId) {
-        this.userId = userId;
-    };
-    User.prototype.getName = function () {
-        return this.name;
-    };
-    User.prototype.setName = function (name) {
-        this.name = name;
-    };
-    User.prototype.getSurname = function () {
-        return this.surname;
-    };
-    User.prototype.setSurname = function (surname) {
-        this.surname = surname;
-    };
-    User.prototype.getPassword = function () {
-        return this.password;
-    };
-    User.prototype.setPassword = function (password) {
-        this.password = password;
-    };
-    User.prototype.getRole = function () {
-        return this.role;
-    };
-    User.prototype.setRole = function (role) {
-        this.role = role;
-    };
+    Object.defineProperty(User.prototype, "userId", {
+        get: function () {
+            return this._userId;
+        },
+        set: function (value) {
+            this._userId = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(User.prototype, "name", {
+        get: function () {
+            return this._name;
+        },
+        set: function (value) {
+            this._name = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(User.prototype, "surname", {
+        get: function () {
+            return this._surname;
+        },
+        set: function (value) {
+            this._surname = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(User.prototype, "password", {
+        get: function () {
+            return this._password;
+        },
+        set: function (value) {
+            this._password = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(User.prototype, "role", {
+        get: function () {
+            return this._role;
+        },
+        set: function (value) {
+            this._role = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
     return User;
 }());
 exports.User = User;

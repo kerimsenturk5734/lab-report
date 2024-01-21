@@ -13,7 +13,7 @@ export default function App() {
     Get userType from local storage.
     Even if change the userType as manual user can not access the forbidden endpoints
   */
-  const userType = UserType.DOCTOR
+  const userType = UserType.LAB_TECHNICIAN
 
   return (
       <BrowserRouter>

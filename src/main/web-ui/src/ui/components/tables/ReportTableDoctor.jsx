@@ -5,8 +5,7 @@ import TooledSearchBar, {DropDown, getDropDownActions} from '../TooledSearchBar'
 import {DataTypes, HEADS} from './TableConstants';
 import {DiseaseState} from "../../../domain/model/Disease";
 import {getBgClassByStatus, getTextClassByStatus} from "./FieldClasses";
-import PdfView from "../PdfView";
-import CustomModal from "../modals/CustomModal";
+import PdfViewModal from "../modals/PdfViewModal";
 import CreateReportModal from "../modals/CreateReportModal";
 import {ReportType} from "../../../domain/model/Report";
 import UpdateReportModal from "../modals/UpdateReportModal";
@@ -124,15 +123,15 @@ function TableData({ data }) {
     const isDiagnosticCreationDisabled = (diseaseState !== DiseaseState.PATHOLOGIC_RESULTED)
     console.log(data.diagnosticReport)
 
-    const [showPdfViewModal, setShowPdfViewModal] = useState(false);
+    const [pdfViewModalIsOpen, setPdfViewModalIsOpen] = useState(false);
     const [createReportModalIsOpen, setCreateReportModalIsOpen] = useState(false)
     const [updateReportModalIsOpen, setUpdateReportModalIsOpen] = useState(false)
 
-    const handleShowPdfViewModal = () => {
-        setShowPdfViewModal(true);
+    const showPdfViewModal = () => {
+        setPdfViewModalIsOpen(true);
     };
-    const handleClosePdfViewModal = () => {
-        setShowPdfViewModal(false);
+    const closePdfViewModal = () => {
+        setPdfViewModalIsOpen(false);
     };
 
     const showCreateReportModal = () => {
@@ -169,18 +168,16 @@ function TableData({ data }) {
                         <div className="d-flex justify-content-lg-between">
                             <button type="button"
                                     className="btn btn-dark btn-outline-dark btn-sm px-3"
-                                    onClick={handleShowPdfViewModal}>
+                                    onClick={showPdfViewModal}>
 
                                 <i className="fa fa-solid fa-tv"> View</i>
                             </button>
                             <button type="button" className="btn btn-dark btn-sm px-2 btn-outline-primary">
                                 <i className="fa fa-solid outline fa-download"></i>
                             </button>
-                            <CustomModal open = {showPdfViewModal} onClose = {handleClosePdfViewModal}>
-                                <PdfView/>
-                                {/* Use below version when fetching data from api*/}
-                                {/* <PdfView reportId={data.pathologicReport.reportId}/> */}
-                            </CustomModal>
+                            <PdfViewModal reportId={""}
+                                          open={pdfViewModalIsOpen}
+                                          onCLose={closePdfViewModal}/>
                         </div>
                 }
             </td>
@@ -194,18 +191,16 @@ function TableData({ data }) {
                                     <div className="d-flex justify-content-lg-between">
                                         <button type="button"
                                                 className="btn btn-dark btn-outline-dark btn-sm px-3"
-                                                onClick={handleShowPdfViewModal}>
+                                                onClick={showPdfViewModal}>
 
                                             <i className="fa fa-solid fa-tv"> View</i>
                                         </button>
                                         <button type="button" className="btn btn-dark btn-outline-primary btn-sm px-2">
                                             <i className="fa fa-solid fa-download"></i>
                                         </button>
-                                        <CustomModal open = {showPdfViewModal} onClose = {handleClosePdfViewModal}>
-                                            <PdfView/>
-                                            {/* Use below version when fetching data from api*/}
-                                            {/*<PdfView reportId={data.diagnosticReport.reportId}/>*/}
-                                        </CustomModal>
+                                        <PdfViewModal reportId={""}
+                                                      open={pdfViewModalIsOpen}
+                                                      onCLose={closePdfViewModal}/>
                                     </div>
                             }
                         </>
@@ -217,10 +212,9 @@ function TableData({ data }) {
 
                                 <i className="fa fa-solid outline fa-file"> </i> Create Report
                             </button>
-                            <CustomModal open={createReportModalIsOpen} onClose={closeCreateReportModal}>
-                                <CreateReportModal reportType={ReportType.DIAGNOSTIC}
-                                                   onCancel={closeCreateReportModal}/>
-                            </CustomModal>
+                            <CreateReportModal open={createReportModalIsOpen}
+                                               reportType={ReportType.DIAGNOSTIC}
+                                               onCancel={closeCreateReportModal}/>
                         </>
 
                 }
@@ -236,10 +230,9 @@ function TableData({ data }) {
 
                                     <i className="fa fa-solid fa-arrow-circle-right"> </i> Update Report
                                 </button>
-                                <CustomModal open={updateReportModalIsOpen} onClose={closeUpdateReportModal}>
-                                    <UpdateReportModal reportType={ReportType.DIAGNOSTIC}
-                                                       onCancel={closeUpdateReportModal}/>
-                                </CustomModal>
+                                <UpdateReportModal open={updateReportModalIsOpen}
+                                                   reportType={ReportType.DIAGNOSTIC}
+                                                   onCancel={closeUpdateReportModal}/>
                             </>
                             :
                             <button type="button" className="btn btn-warning btn-sm disabled text-black-50 px-2">

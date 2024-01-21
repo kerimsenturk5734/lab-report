@@ -5,8 +5,7 @@ import TooledSearchBar, {DropDown, getDropDownActions} from '../TooledSearchBar'
 import {DataTypes, HEADS} from './TableConstants';
 import {DiseaseState} from "../../../domain/model/Disease";
 import {getBgClassByStatus, getTextClassByStatus} from "./FieldClasses";
-import PdfView from "../PdfView";
-import CustomModal from "../modals/CustomModal";
+import PdfViewModal from "../modals/PdfViewModal";
 import CreateReportModal from "../modals/CreateReportModal";
 import {ReportType} from "../../../domain/model/Report";
 
@@ -108,13 +107,13 @@ export default function ReportTablePatient() {
 
 function TableData({data}) {
 
-    const [showPdfViewModal, setShowPdfViewModal] = useState(false);
+    const [pdfViewModalIsOpen, setPdfViewModalIsOpen] = useState(false);
     const [createReportModalIsOpen, setCreateReportModalIsOpen] = useState(false)
-    const handleShowPdfViewModal = () => {
-        setShowPdfViewModal(true);
+    const showPdfViewModal = () => {
+        setPdfViewModalIsOpen(true);
     };
-    const handleClosePdfViewModal = () => {
-        setShowPdfViewModal(false);
+    const closePdfViewModal = () => {
+        setPdfViewModalIsOpen(false);
     };
 
     const showCreateReportModal = () => {
@@ -145,7 +144,7 @@ function TableData({data}) {
                             <>
                                 <button type="button"
                                         className={`btn btn-dark btn-outline-dark btn-sm px-2`}
-                                        onClick={handleShowPdfViewModal}>
+                                        onClick={showPdfViewModal}>
 
                                     <i className="fa fa-solid fa-tv"> View</i>
                                 </button>
@@ -153,11 +152,10 @@ function TableData({data}) {
 
                                     <i className="fa fa-solid outline fa-download"></i>
                                 </button>
-                                <CustomModal open={showPdfViewModal} onClose={handleClosePdfViewModal}>
-                                    <PdfView/>
-                                    {/* Use below version when fetching data from api*/}
-                                    {/* <PdfView reportId={data.pathologicReport.reportId}/> */}
-                                </CustomModal>
+
+                                <PdfViewModal reportId={""}
+                                              open={pdfViewModalIsOpen}
+                                              onCLose={closePdfViewModal}/>
                             </>
                             :
                             <>
@@ -167,10 +165,9 @@ function TableData({data}) {
 
                                     <i className="fa fa-solid outline fa-file"> </i> Create Report
                                 </button>
-                                <CustomModal open={createReportModalIsOpen} onClose={closeCreateReportModal}>
-                                    <CreateReportModal reportType={ReportType.PATHOLOGICAL}
-                                                       onCancel={closeCreateReportModal}/>
-                                </CustomModal>
+                                <CreateReportModal open={createReportModalIsOpen}
+                                                   reportType={ReportType.PATHOLOGICAL}
+                                                   onCancel={closeCreateReportModal}/>
                             </>
                     }
                 </div>

@@ -9,6 +9,7 @@ import PdfView from "../PdfView";
 import CustomModal from "../modals/CustomModal";
 import CreateReportModal from "../modals/CreateReportModal";
 import {ReportType} from "../../../domain/model/Report";
+import UpdateReportModal from "../modals/UpdateReportModal";
 
 export default function ReportTableDoctor() {
     const vm = new DiseaseViewModel();
@@ -125,6 +126,7 @@ function TableData({ data }) {
 
     const [showPdfViewModal, setShowPdfViewModal] = useState(false);
     const [createReportModalIsOpen, setCreateReportModalIsOpen] = useState(false)
+    const [updateReportModalIsOpen, setUpdateReportModalIsOpen] = useState(false)
 
     const handleShowPdfViewModal = () => {
         setShowPdfViewModal(true);
@@ -139,6 +141,12 @@ function TableData({ data }) {
     const closeCreateReportModal = () => {
         setCreateReportModalIsOpen(false);
     };
+    const showUpdateReportModal = () => {
+        setUpdateReportModalIsOpen(true);
+    };
+    const closeUpdateReportModal = () => {
+        setUpdateReportModalIsOpen(false);
+    };
 
     return (
         <tr>
@@ -147,7 +155,7 @@ function TableData({ data }) {
             <td className="text-center">{data.patient.userId}</td>
             <td className="text-center font-monospace fst-italic">{data.labRequestType}</td>
             <td className={`text-center font-monospace fst-italic rounded-2`}>
-                <div className={`${getBgClassByStatus(diseaseState)} py-1 rounded-2`}>
+                <div className={`${getBgClassByStatus(diseaseState)} p-1 rounded-2`}>
                     {data.diseaseState}
                 </div>
             </td>
@@ -221,9 +229,19 @@ function TableData({ data }) {
                 <div className="d-flex justify-content-lg-between">
                     {
                         (data.diagnosticReport != null) ?
-                            <button type="button" className="btn btn-warning btn-sm px-2">
-                                <i className="fa fa-solid fa-arrow-circle-right"> </i> Update Report
-                            </button> :
+                            <>
+                                <button type="button"
+                                        className="btn btn-warning btn-sm px-2"
+                                        onClick={showUpdateReportModal}>
+
+                                    <i className="fa fa-solid fa-arrow-circle-right"> </i> Update Report
+                                </button>
+                                <CustomModal open={updateReportModalIsOpen} onClose={closeUpdateReportModal}>
+                                    <UpdateReportModal reportType={ReportType.DIAGNOSTIC}
+                                                       onCancel={closeUpdateReportModal}/>
+                                </CustomModal>
+                            </>
+                            :
                             <button type="button" className="btn btn-warning btn-sm disabled text-black-50 px-2">
                                 <i className="fa fa-solid fa-arrow-circle-right"> </i> Update Report
                             </button>

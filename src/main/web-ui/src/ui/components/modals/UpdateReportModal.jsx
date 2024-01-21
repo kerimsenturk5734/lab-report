@@ -2,16 +2,16 @@ import React, {useState} from 'react';
 import {ReportType} from "../../../domain/model/Report";
 
 /**
-* @property {ReportType} reportType - The type of the report.
-* @property {function} onConfirm - Callback function when the user confirms.
-* @property {function} onCancel - Callback function when the user cancels.
-*/
+ * @property {ReportType} reportType - The type of the report.
+ * @property {function} onConfirm - Callback function when the user confirms.
+ * @property {function} onCancel - Callback function when the user cancels.
+ */
 
-function CreateReportModal({reportType, onCancel}) {
+function UpdateReportModal({reportType, onCancel}) {
     const [titleInput, setTitleInput] = useState('');
     const [contentInput, setContentInput] = useState('');
     const modalTitle =
-        (reportType === ReportType.PATHOLOGICAL) ? "Create Pathologic Report" : "Create Diagnostic Report"
+        (reportType === ReportType.PATHOLOGICAL) ? "Update Pathologic Report" : "Update Diagnostic Report"
     const handleTitleInputChange = (e) => {
         const input = e.target.value;
         setTitleInput(input);
@@ -29,7 +29,7 @@ function CreateReportModal({reportType, onCancel}) {
         resize:'none',
     };
 
-    const createReport = () => {
+    const updateReport = () => {
 
     }
 
@@ -76,10 +76,10 @@ function CreateReportModal({reportType, onCancel}) {
 
             <div className={"d-flex justify-content-end gap-2 mt-5"}>
                 <button type="button"
-                        className={`btn btn-dark btn-sm btn-outline-success`}
-                        onClick={createReport}>
+                        className={`btn btn-dark btn-sm btn-outline-warning`}
+                        onClick={updateReport}>
 
-                    <i className="fa fa-solid outline fa-plus"> Create Report </i>
+                    <i className="fa fa-solid outline fa-pen"> Update Report </i>
                 </button>
                 <button type="button"
                         className="btn btn-dark btn-outline-danger btn-sm"
@@ -92,4 +92,4 @@ function CreateReportModal({reportType, onCancel}) {
     );
 }
 
-export default CreateReportModal;
+export default UpdateReportModal;

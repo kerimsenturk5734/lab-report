@@ -6,8 +6,8 @@ import {DataTypes, HEADS} from './TableConstants';
 import {DiseaseState} from "../../../domain/model/Disease";
 import {getBgClassByStatus, getTextClassByStatus} from "./FieldClasses";
 import PdfView from "../PdfView";
-import CustomModal from "../CustomModal";
-import CreateReportModal from "../CreateReportModal";
+import CustomModal from "../modals/CustomModal";
+import CreateReportModal from "../modals/CreateReportModal";
 import {ReportType} from "../../../domain/model/Report";
 
 export default function ReportTablePatient() {

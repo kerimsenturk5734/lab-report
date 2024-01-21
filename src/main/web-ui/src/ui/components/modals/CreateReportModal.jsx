@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {ReportType} from "../../domain/model/Report";
+import {ReportType} from "../../../domain/model/Report";
 
 /**
 * @property {ReportType} reportType - The type of the report.

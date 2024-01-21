@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {MDBCard} from "mdb-react-ui-kit";
 import PdfView from "./PdfView";
-import CustomModal from "./CustomModal";
+import CustomModal from "./modals/CustomModal";
 
 function MyReports(props) {
     return (

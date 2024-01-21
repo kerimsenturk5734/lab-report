@@ -5,7 +5,7 @@ import TooledSearchBar, {DropDown, getDropDownActions} from '../TooledSearchBar'
 import {DataTypes, HEADS} from './TableConstants';
 import {getBgClassByStatus} from "./FieldClasses";
 import {DiseaseState} from "../../../domain/model/Disease";
-import CustomModal from "../CustomModal";
+import CustomModal from "../modals/CustomModal";
 import PdfView from "../PdfView";
 
 export default function ReportTablePatient() {

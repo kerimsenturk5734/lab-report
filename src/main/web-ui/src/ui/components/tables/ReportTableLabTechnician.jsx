@@ -7,6 +7,8 @@ import {DiseaseState} from "../../../domain/model/Disease";
 import {getBgClassByStatus, getTextClassByStatus} from "./FieldClasses";
 import PdfView from "../PdfView";
 import CustomModal from "../CustomModal";
+import CreateReportModal from "../CreateReportModal";
+import {ReportType} from "../../../domain/model/Report";
 
 export default function ReportTablePatient() {
     const vm = new DiseaseViewModel();
@@ -107,11 +109,19 @@ export default function ReportTablePatient() {
 function TableData({data}) {
 
     const [showPdfViewModal, setShowPdfViewModal] = useState(false);
+    const [createReportModalIsOpen, setCreateReportModalIsOpen] = useState(false)
     const handleShowPdfViewModal = () => {
         setShowPdfViewModal(true);
     };
     const handleClosePdfViewModal = () => {
         setShowPdfViewModal(false);
+    };
+
+    const showCreateReportModal = () => {
+        setCreateReportModalIsOpen(true);
+    };
+    const closeCreateReportModal = () => {
+        setCreateReportModalIsOpen(false);
     };
 
     return (
@@ -150,9 +160,18 @@ function TableData({data}) {
                                 </CustomModal>
                             </>
                             :
-                            <button type="button" className={`btn btn-dark btn-sm px-3 btn-outline-success`}>
-                                <i className="fa fa-solid outline fa-file"> </i> Create Report
-                            </button>
+                            <>
+                                <button type="button"
+                                        className={`btn btn-dark btn-sm px-3 btn-outline-success`}
+                                        onClick={showCreateReportModal}>
+
+                                    <i className="fa fa-solid outline fa-file"> </i> Create Report
+                                </button>
+                                <CustomModal open={createReportModalIsOpen} onClose={closeCreateReportModal}>
+                                    <CreateReportModal reportType={ReportType.PATHOLOGICAL}
+                                                       onCancel={closeCreateReportModal}/>
+                                </CustomModal>
+                            </>
                     }
                 </div>
             </td>

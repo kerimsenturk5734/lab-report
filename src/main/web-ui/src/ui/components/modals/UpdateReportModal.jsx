@@ -44,7 +44,7 @@ function UpdateReportModal({open, reportType, onCancel}) {
                                  className={"w-responsive w-25"}
                                  alt={"create_report"}/>
                             :
-                            <img src="https://cdn-icons-png.flaticon.com/512/12237/12237109.png"
+                            <img src="https://cdn-icons-png.flaticon.com/512/7870/7870848.png"
                                  className={"w-responsive w-25"}
                                  alt={"create_report"}/>
                     }

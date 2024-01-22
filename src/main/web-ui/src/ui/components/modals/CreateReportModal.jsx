@@ -40,7 +40,7 @@ function CreateReportModal({open, reportType, onCancel}) {
                 <div className={"d-flex justify-content-center"}>
                     {
                         (reportType === ReportType.PATHOLOGICAL) ?
-                            <img src="https://cdn-icons-png.flaticon.com/512/8204/8204579.png"
+                            <img src="https://cdn-icons-png.flaticon.com/512/7622/7622915.png"
                                  className={"w-responsive w-25"}
                                  alt={"create_report"}/>
                             :

@@ -9,6 +9,7 @@ import PdfViewModal from "../modals/PdfViewModal";
 import CreateReportModal from "../modals/CreateReportModal";
 import {ReportType} from "../../../domain/model/Report";
 import UpdateReportModal from "../modals/UpdateReportModal";
+import AreYouSureModal from "../modals/AreYouSureModal";
 
 export default function ReportTableDoctor() {
     const vm = new DiseaseViewModel();
@@ -126,7 +127,7 @@ function TableData({ data }) {
     const [pdfViewModalIsOpen, setPdfViewModalIsOpen] = useState(false);
     const [createReportModalIsOpen, setCreateReportModalIsOpen] = useState(false)
     const [updateReportModalIsOpen, setUpdateReportModalIsOpen] = useState(false)
-
+    const [deleteDiseaseModalIsOpen, setDeleteDiseaseModalIsOpen] = useState(false)
     const showPdfViewModal = () => {
         setPdfViewModalIsOpen(true);
     };
@@ -146,6 +147,15 @@ function TableData({ data }) {
     const closeUpdateReportModal = () => {
         setUpdateReportModalIsOpen(false);
     };
+    const showDeleteDiseaseModal = () => {
+        setDeleteDiseaseModalIsOpen(true)
+    }
+    const closeDeleteDiseaseModal = () => {
+        setDeleteDiseaseModalIsOpen(false)
+    }
+    const deleteDisease = () => {
+
+    }
 
     return (
         <tr>
@@ -239,9 +249,13 @@ function TableData({ data }) {
                                 <i className="fa fa-solid fa-arrow-circle-right"> </i> Update Report
                             </button>
                     }
-                    <button type="button" className="btn btn-danger btn-sm px-2">
+                    <button type="button" className="btn btn-danger btn-sm px-2" onClick={showDeleteDiseaseModal}>
                         <i className="fa fa-solid fa-trash"> </i> Delete
                     </button>
+                    <AreYouSureModal open={deleteDiseaseModalIsOpen}
+                                     question={`Are you sure to delete disease with id: ${data.id} ?`}
+                                     onConfirm={deleteDisease}
+                                     onCancel={closeDeleteDiseaseModal}/>
                 </div>
             </td>
         </tr>

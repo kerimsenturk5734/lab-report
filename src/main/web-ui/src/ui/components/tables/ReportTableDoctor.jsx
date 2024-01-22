@@ -122,7 +122,6 @@ function TableData({ data }) {
         [DiseaseState.DELETED, DiseaseState.WAITING_RESULTS, DiseaseState.PATHOLOGIC_RESULTED].includes(diseaseState)
 
     const isDiagnosticCreationDisabled = (diseaseState !== DiseaseState.PATHOLOGIC_RESULTED)
-    console.log(data.diagnosticReport)
 
     const [pdfViewModalIsOpen, setPdfViewModalIsOpen] = useState(false);
     const [createReportModalIsOpen, setCreateReportModalIsOpen] = useState(false)

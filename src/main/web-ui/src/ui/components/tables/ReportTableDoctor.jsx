@@ -5,6 +5,11 @@ import TooledSearchBar, {DropDown, getDropDownActions} from '../TooledSearchBar'
 import {DataTypes, HEADS} from './TableConstants';
 import {DiseaseState} from "../../../domain/model/Disease";
 import {getBgClassByStatus, getTextClassByStatus} from "./FieldClasses";
+import PdfViewModal from "../modals/PdfViewModal";
+import CreateReportModal from "../modals/CreateReportModal";
+import {ReportType} from "../../../domain/model/Report";
+import UpdateReportModal from "../modals/UpdateReportModal";
+import AreYouSureModal from "../modals/AreYouSureModal";
 
 export default function ReportTableDoctor() {
     const vm = new DiseaseViewModel();
@@ -117,7 +122,39 @@ function TableData({ data }) {
         [DiseaseState.DELETED, DiseaseState.WAITING_RESULTS, DiseaseState.PATHOLOGIC_RESULTED].includes(diseaseState)
 
     const isDiagnosticCreationDisabled = (diseaseState !== DiseaseState.PATHOLOGIC_RESULTED)
-    console.log(data.diagnosticReport)
+
+    const [pdfViewModalIsOpen, setPdfViewModalIsOpen] = useState(false);
+    const [createReportModalIsOpen, setCreateReportModalIsOpen] = useState(false)
+    const [updateReportModalIsOpen, setUpdateReportModalIsOpen] = useState(false)
+    const [deleteDiseaseModalIsOpen, setDeleteDiseaseModalIsOpen] = useState(false)
+    const showPdfViewModal = () => {
+        setPdfViewModalIsOpen(true);
+    };
+    const closePdfViewModal = () => {
+        setPdfViewModalIsOpen(false);
+    };
+
+    const showCreateReportModal = () => {
+        setCreateReportModalIsOpen(true);
+    };
+    const closeCreateReportModal = () => {
+        setCreateReportModalIsOpen(false);
+    };
+    const showUpdateReportModal = () => {
+        setUpdateReportModalIsOpen(true);
+    };
+    const closeUpdateReportModal = () => {
+        setUpdateReportModalIsOpen(false);
+    };
+    const showDeleteDiseaseModal = () => {
+        setDeleteDiseaseModalIsOpen(true)
+    }
+    const closeDeleteDiseaseModal = () => {
+        setDeleteDiseaseModalIsOpen(false)
+    }
+    const deleteDisease = () => {
+
+    }
 
     return (
         <tr>
@@ -126,7 +163,7 @@ function TableData({ data }) {
             <td className="text-center">{data.patient.userId}</td>
             <td className="text-center font-monospace fst-italic">{data.labRequestType}</td>
             <td className={`text-center font-monospace fst-italic rounded-2`}>
-                <div className={`${getBgClassByStatus(diseaseState)} py-1 rounded-2`}>
+                <div className={`${getBgClassByStatus(diseaseState)} p-1 rounded-2`}>
                     {data.diseaseState}
                 </div>
             </td>
@@ -138,12 +175,18 @@ function TableData({ data }) {
                     isPathologicActionDisabled ?
                         <></> :
                         <div className="d-flex justify-content-lg-between">
-                            <button type="button" className="btn btn-dark btn-outline-dark btn-sm px-3">
+                            <button type="button"
+                                    className="btn btn-dark btn-outline-dark btn-sm px-3"
+                                    onClick={showPdfViewModal}>
+
                                 <i className="fa fa-solid fa-tv"> View</i>
                             </button>
                             <button type="button" className="btn btn-dark btn-sm px-2 btn-outline-primary">
                                 <i className="fa fa-solid outline fa-download"></i>
                             </button>
+                            <PdfViewModal reportId={""}
+                                          open={pdfViewModalIsOpen}
+                                          onCLose={closePdfViewModal}/>
                         </div>
                 }
             </td>
@@ -155,35 +198,63 @@ function TableData({ data }) {
                                 isDiagnosticActionDisabled ?
                                     <></> :
                                     <div className="d-flex justify-content-lg-between">
-                                        <button type="button" className="btn btn-dark btn-outline-dark btn-sm px-3">
+                                        <button type="button"
+                                                className="btn btn-dark btn-outline-dark btn-sm px-3"
+                                                onClick={showPdfViewModal}>
+
                                             <i className="fa fa-solid fa-tv"> View</i>
                                         </button>
                                         <button type="button" className="btn btn-dark btn-outline-primary btn-sm px-2">
                                             <i className="fa fa-solid fa-download"></i>
                                         </button>
+                                        <PdfViewModal reportId={""}
+                                                      open={pdfViewModalIsOpen}
+                                                      onCLose={closePdfViewModal}/>
                                     </div>
                             }
                         </>
                         :
-                        <button type="button" className={`btn btn-dark btn-sm px-2 btn-outline-success`}>
-                            <i className="fa fa-solid outline fa-file"> </i> Create Report
-                        </button>
+                        <>
+                            <button type="button"
+                                    className={`btn btn-dark btn-sm px-2 btn-outline-success`}
+                                    onClick={showCreateReportModal}>
+
+                                <i className="fa fa-solid outline fa-file"> </i> Create Report
+                            </button>
+                            <CreateReportModal open={createReportModalIsOpen}
+                                               reportType={ReportType.DIAGNOSTIC}
+                                               onCancel={closeCreateReportModal}/>
+                        </>
+
                 }
             </td>
             <td>
                 <div className="d-flex justify-content-lg-between">
                     {
                         (data.diagnosticReport != null) ?
-                            <button type="button" className="btn btn-warning btn-sm px-2">
-                                <i className="fa fa-solid fa-arrow-circle-right"> </i> Update Report
-                            </button> :
+                            <>
+                                <button type="button"
+                                        className="btn btn-warning btn-sm px-2"
+                                        onClick={showUpdateReportModal}>
+
+                                    <i className="fa fa-solid fa-arrow-circle-right"> </i> Update Report
+                                </button>
+                                <UpdateReportModal open={updateReportModalIsOpen}
+                                                   reportType={ReportType.DIAGNOSTIC}
+                                                   onCancel={closeUpdateReportModal}/>
+                            </>
+                            :
                             <button type="button" className="btn btn-warning btn-sm disabled text-black-50 px-2">
                                 <i className="fa fa-solid fa-arrow-circle-right"> </i> Update Report
                             </button>
                     }
-                    <button type="button" className="btn btn-danger btn-sm px-2">
+                    <button type="button" className="btn btn-danger btn-sm px-2" onClick={showDeleteDiseaseModal}>
                         <i className="fa fa-solid fa-trash"> </i> Delete
                     </button>
+                    <AreYouSureModal open={deleteDiseaseModalIsOpen}
+                                     question={`Are you sure to delete disease with id: ${data.id} ?`}
+                                     onConfirm={deleteDisease}
+                                     onCancel={closeDeleteDiseaseModal}/>
                 </div>
             </td>
         </tr>

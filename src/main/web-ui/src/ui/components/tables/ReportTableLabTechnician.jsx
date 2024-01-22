@@ -5,6 +5,9 @@ import TooledSearchBar, {DropDown, getDropDownActions} from '../TooledSearchBar'
 import {DataTypes, HEADS} from './TableConstants';
 import {DiseaseState} from "../../../domain/model/Disease";
 import {getBgClassByStatus, getTextClassByStatus} from "./FieldClasses";
+import PdfViewModal from "../modals/PdfViewModal";
+import CreateReportModal from "../modals/CreateReportModal";
+import {ReportType} from "../../../domain/model/Report";
 
 export default function ReportTablePatient() {
     const vm = new DiseaseViewModel();
@@ -15,6 +18,10 @@ export default function ReportTablePatient() {
     const [searchBy, setSearchBy] = useState(dataType.SEARCH_BY.DOCTOR);
     const [orderBy, setOrderBy] = useState(dataType.ORDER_BY.ID_ASC);
 
+    useEffect(() => {
+        handleOrderBy();
+    }, [orderBy]);
+
     const searchByActions = getDropDownActions({
         actionData: dataType.SEARCH_BY,
         onSelect: setSearchBy,
@@ -24,10 +31,6 @@ export default function ReportTablePatient() {
         actionData: dataType.ORDER_BY,
         onSelect: setOrderBy,
     });
-
-    useEffect(() => {
-        handleOrderBy();
-    }, [orderBy]);
 
     const handleSearch = (query) => {
         const filteredData = realData.filter((item) =>
@@ -75,30 +78,50 @@ export default function ReportTablePatient() {
         setData(sortedData);
     };
 
+
+
+
+
     return (
         <div className={"container-sm"}>
             <TooledSearchBar
-                LeftDropDown={DropDown({ title: `Search By (${searchBy})`, actions: searchByActions })}
-                RightDropDown={DropDown({ title: `Order By (${orderBy})`, actions: orderByActions })}
+                LeftDropDown={DropDown({title: `Search By (${searchBy})`, actions: searchByActions})}
+                RightDropDown={DropDown({title: `Order By (${orderBy})`, actions: orderByActions})}
                 onSearch={handleSearch}
                 placeHolder={`Search ${searchBy}`}
             />
-
             <table className="table table-borderless mb-0">
                 <thead>
-                <TableHead heads={HEADS.LAB_TECHNICIAN} />
+                    <TableHead heads={HEADS.LAB_TECHNICIAN}/>
                 </thead>
                 <tbody>
-                {data.map((val, index) => (
-                    <TableData key={index} data={val} />
-                ))}
+                    {data.map((val, index) => (
+                        <TableData key={index} data={val}/>
+                    ))}
                 </tbody>
             </table>
         </div>
     );
 }
 
-function TableData({ data }) {
+
+function TableData({data}) {
+
+    const [pdfViewModalIsOpen, setPdfViewModalIsOpen] = useState(false);
+    const [createReportModalIsOpen, setCreateReportModalIsOpen] = useState(false)
+    const showPdfViewModal = () => {
+        setPdfViewModalIsOpen(true);
+    };
+    const closePdfViewModal = () => {
+        setPdfViewModalIsOpen(false);
+    };
+
+    const showCreateReportModal = () => {
+        setCreateReportModalIsOpen(true);
+    };
+    const closeCreateReportModal = () => {
+        setCreateReportModalIsOpen(false);
+    };
 
     return (
         <tr>
@@ -115,22 +138,37 @@ function TableData({ data }) {
                 </div>
             </td>
             <td>
-            <div className="d-flex justify-content-evenly">
+                <div className="d-flex justify-content-evenly">
                     {
-                        data.diseaseState !== DiseaseState.WAITING_RESULTS?
+                        data.diseaseState !== DiseaseState.WAITING_RESULTS ?
                             <>
-                                <button type="button" className={`btn btn-outline-dark btn-sm px-2`}>
+                                <button type="button"
+                                        className={`btn btn-dark btn-outline-dark btn-sm px-2`}
+                                        onClick={showPdfViewModal}>
+
                                     <i className="fa fa-solid fa-tv"> View</i>
                                 </button>
                                 <button type="button" className={`btn btn-dark btn-sm px-3 btn-outline-primary`}>
 
                                     <i className="fa fa-solid outline fa-download"></i>
                                 </button>
+
+                                <PdfViewModal reportId={""}
+                                              open={pdfViewModalIsOpen}
+                                              onCLose={closePdfViewModal}/>
                             </>
                             :
-                            <button type="button" className={`btn btn-dark btn-sm px-3 btn-outline-success`}>
-                                <i className="fa fa-solid outline fa-file"> </i> Create Report
-                            </button>
+                            <>
+                                <button type="button"
+                                        className={`btn btn-dark btn-sm px-3 btn-outline-success`}
+                                        onClick={showCreateReportModal}>
+
+                                    <i className="fa fa-solid outline fa-file"> </i> Create Report
+                                </button>
+                                <CreateReportModal open={createReportModalIsOpen}
+                                                   reportType={ReportType.PATHOLOGICAL}
+                                                   onCancel={closeCreateReportModal}/>
+                            </>
                     }
                 </div>
             </td>

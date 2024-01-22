@@ -1,7 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {MDBCard, MDBCol, MDBContainer, MDBRow} from "mdb-react-ui-kit";
+import ChangeUserInfoModal from "./modals/ChangeUserInfoModal";
 
 function Profile() {
+    const [updateUserModalIsOpen, setUpdateUserModalIsOpen] = useState(false)
+
+    const showUpdateUserModal = () => {
+        setUpdateUserModalIsOpen(true)
+    }
+    const closeUpdateUserModal = () => {
+        setUpdateUserModalIsOpen(false)
+    }
+
     return (
         <MDBContainer className="mt-5 col-7" fluid={false}>
             <MDBCard >
@@ -27,9 +37,13 @@ function Profile() {
                                <h5><i>Senturk</i></h5>
                                <h5><i>DOCTOR</i></h5>
                                <MDBRow className={"mt-5"}>
-                                   <button type="button" className="btn btn-outline-danger btn-sm px-3">
-                                       <i className="fa fa-solid fa-key"> Change Password</i>
+                                   <button type="button"
+                                           className="btn btn-outline-warning btn-sm px-3"
+                                           onClick={showUpdateUserModal}>
+
+                                       <i className="fa fa-solid fa-pen"> Change User Info</i>
                                    </button>
+                                   <ChangeUserInfoModal open={updateUserModalIsOpen} onCancel={closeUpdateUserModal}/>
                                </MDBRow>
                            </MDBCol>
                        </MDBRow>

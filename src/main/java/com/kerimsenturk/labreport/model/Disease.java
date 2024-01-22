@@ -4,6 +4,8 @@ import com.kerimsenturk.labreport.model.enums.DiseaseState;
 import com.kerimsenturk.labreport.model.enums.LabRequestType;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "diseases")
@@ -33,11 +35,15 @@ public class Disease {
     @Enumerated(EnumType.STRING)
     @Column(name = "disease_state")
     DiseaseState diseaseState;
+    @Column(name = "creation_date", columnDefinition = "TIMESTAMP")
+    LocalDateTime creationDate = LocalDateTime.now();
 
     public Disease() {
     }
 
-    public Disease(int id, User patient, User labTechnician, User doctor, LabRequestType labRequestType, Report pathologicReport, Report diagnosticReport, DiseaseState diseaseState) {
+    public Disease(int id, User patient, User labTechnician, User doctor,
+                   LabRequestType labRequestType, Report pathologicReport,
+                   Report diagnosticReport, DiseaseState diseaseState, LocalDateTime creationDate) {
         this.id = id;
         this.patient = patient;
         this.labTechnician = labTechnician;
@@ -46,6 +52,7 @@ public class Disease {
         this.pathologicReport = pathologicReport;
         this.diagnosticReport = diagnosticReport;
         this.diseaseState = diseaseState;
+        this.creationDate = creationDate;
     }
 
     public int getId() {
@@ -109,5 +116,11 @@ public class Disease {
 
     public void setDiseaseState(DiseaseState diseaseState) {
         this.diseaseState = diseaseState;
+    }
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 }

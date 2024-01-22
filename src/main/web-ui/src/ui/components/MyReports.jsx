@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {MDBCard} from "mdb-react-ui-kit";
+import PdfViewModal from "./modals/PdfViewModal";
 
 function MyReports(props) {
     return (
@@ -25,6 +26,14 @@ function MyReports(props) {
 }
 
 function ReportCard(){
+    const [pdfViewModalIsOpen, setPdfViewModalIsOpen] = useState(false);
+    const showPdfViewModal = () => {
+        setPdfViewModalIsOpen(true);
+    };
+    const closePdfViewModal = () => {
+        setPdfViewModalIsOpen(false);
+    };
+
     return (
         <MDBCard className={"col-2 m-4 p-2 gap-2"}>
             <div className={"d-flex justify-content-center"}>
@@ -37,13 +46,19 @@ function ReportCard(){
                 </h6>
             </div>
             <div className={"d-flex justify-content-around"}>
-                <button type="button" className="btn btn-dark btn-outline-black btn-sm px-3">
+                <button type="button"
+                        className="btn btn-dark btn-outline-black btn-sm px-3"
+                        onClick={showPdfViewModal}>
+
                     <i className="fa fa-solid fa-tv"> View</i>
                 </button>
                 <button type="button" className="btn btn-dark btn-outline-primary btn-sm px-3">
                     <i className="fa fa-solid fa-download"> Download</i>
                 </button>
             </div>
+            <PdfViewModal reportId={""}
+                          open={pdfViewModalIsOpen}
+                          onCLose={closePdfViewModal}/>
         </MDBCard>
     )
 }

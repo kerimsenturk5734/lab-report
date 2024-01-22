@@ -1,9 +1,10 @@
-class UpdateUserRequest {
+export class UpdateUserRequest {
     username?: string;
     name?: string;
     surname?: string;
     password?: string;
 
+    constructor()
     constructor(
         username?: string,
         name?: string,

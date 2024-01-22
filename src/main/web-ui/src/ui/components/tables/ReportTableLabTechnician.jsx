@@ -5,8 +5,9 @@ import TooledSearchBar, {DropDown, getDropDownActions} from '../TooledSearchBar'
 import {DataTypes, HEADS} from './TableConstants';
 import {DiseaseState} from "../../../domain/model/Disease";
 import {getBgClassByStatus, getTextClassByStatus} from "./FieldClasses";
-import PdfView from "../PdfView";
-import CustomModal from "../CustomModal";
+import PdfViewModal from "../modals/PdfViewModal";
+import CreateReportModal from "../modals/CreateReportModal";
+import {ReportType} from "../../../domain/model/Report";
 
 export default function ReportTablePatient() {
     const vm = new DiseaseViewModel();
@@ -106,12 +107,20 @@ export default function ReportTablePatient() {
 
 function TableData({data}) {
 
-    const [showPdfViewModal, setShowPdfViewModal] = useState(false);
-    const handleShowPdfViewModal = () => {
-        setShowPdfViewModal(true);
+    const [pdfViewModalIsOpen, setPdfViewModalIsOpen] = useState(false);
+    const [createReportModalIsOpen, setCreateReportModalIsOpen] = useState(false)
+    const showPdfViewModal = () => {
+        setPdfViewModalIsOpen(true);
     };
-    const handleClosePdfViewModal = () => {
-        setShowPdfViewModal(false);
+    const closePdfViewModal = () => {
+        setPdfViewModalIsOpen(false);
+    };
+
+    const showCreateReportModal = () => {
+        setCreateReportModalIsOpen(true);
+    };
+    const closeCreateReportModal = () => {
+        setCreateReportModalIsOpen(false);
     };
 
     return (
@@ -135,7 +144,7 @@ function TableData({data}) {
                             <>
                                 <button type="button"
                                         className={`btn btn-dark btn-outline-dark btn-sm px-2`}
-                                        onClick={handleShowPdfViewModal}>
+                                        onClick={showPdfViewModal}>
 
                                     <i className="fa fa-solid fa-tv"> View</i>
                                 </button>
@@ -143,16 +152,23 @@ function TableData({data}) {
 
                                     <i className="fa fa-solid outline fa-download"></i>
                                 </button>
-                                <CustomModal open={showPdfViewModal} onClose={handleClosePdfViewModal}>
-                                    <PdfView/>
-                                    {/* Use below version when fetching data from api*/}
-                                    {/* <PdfView reportId={data.pathologicReport.reportId}/> */}
-                                </CustomModal>
+
+                                <PdfViewModal reportId={""}
+                                              open={pdfViewModalIsOpen}
+                                              onCLose={closePdfViewModal}/>
                             </>
                             :
-                            <button type="button" className={`btn btn-dark btn-sm px-3 btn-outline-success`}>
-                                <i className="fa fa-solid outline fa-file"> </i> Create Report
-                            </button>
+                            <>
+                                <button type="button"
+                                        className={`btn btn-dark btn-sm px-3 btn-outline-success`}
+                                        onClick={showCreateReportModal}>
+
+                                    <i className="fa fa-solid outline fa-file"> </i> Create Report
+                                </button>
+                                <CreateReportModal open={createReportModalIsOpen}
+                                                   reportType={ReportType.PATHOLOGICAL}
+                                                   onCancel={closeCreateReportModal}/>
+                            </>
                     }
                 </div>
             </td>

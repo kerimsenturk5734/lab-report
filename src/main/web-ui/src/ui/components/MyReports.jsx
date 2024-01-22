@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {MDBCard} from "mdb-react-ui-kit";
-import PdfView from "./PdfView";
-import CustomModal from "./CustomModal";
+import PdfViewModal from "./modals/PdfViewModal";
 
 function MyReports(props) {
     return (
@@ -27,12 +26,12 @@ function MyReports(props) {
 }
 
 function ReportCard(){
-    const [showPdfViewModal, setShowPdfViewModal] = useState(false);
-    const handleShowPdfViewModal = () => {
-        setShowPdfViewModal(true);
+    const [pdfViewModalIsOpen, setPdfViewModalIsOpen] = useState(false);
+    const showPdfViewModal = () => {
+        setPdfViewModalIsOpen(true);
     };
-    const handleClosePdfViewModal = () => {
-        setShowPdfViewModal(false);
+    const closePdfViewModal = () => {
+        setPdfViewModalIsOpen(false);
     };
 
     return (
@@ -49,7 +48,7 @@ function ReportCard(){
             <div className={"d-flex justify-content-around"}>
                 <button type="button"
                         className="btn btn-dark btn-outline-black btn-sm px-3"
-                        onClick={handleShowPdfViewModal}>
+                        onClick={showPdfViewModal}>
 
                     <i className="fa fa-solid fa-tv"> View</i>
                 </button>
@@ -57,11 +56,9 @@ function ReportCard(){
                     <i className="fa fa-solid fa-download"> Download</i>
                 </button>
             </div>
-            <CustomModal open = {showPdfViewModal} onClose = {handleClosePdfViewModal}>
-                <PdfView/>
-                {/* Use below version when fetching data from api*/}
-                {/* <PdfView reportId={data.pathologicReport.reportId}/> */}
-            </CustomModal>
+            <PdfViewModal reportId={""}
+                          open={pdfViewModalIsOpen}
+                          onCLose={closePdfViewModal}/>
         </MDBCard>
     )
 }

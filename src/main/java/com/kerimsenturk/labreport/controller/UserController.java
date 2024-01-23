@@ -30,6 +30,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/api/users")
 @Validated
+@CrossOrigin
 public class UserController {
     private final UserService userService;
     private final MessageBuilder messageBuilder;
@@ -62,9 +63,9 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
-    @GetMapping("/")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getUserByID(
-            @RequestParam
+            @PathVariable
             @Pattern(regexp = "^([0-9]+){7,11}$", message = "{pattern.unmatched.userId}")
             String id){
 

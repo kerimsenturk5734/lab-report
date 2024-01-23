@@ -15,12 +15,14 @@ import com.kerimsenturk.labreport.repository.ReportRepository;
 import com.kerimsenturk.labreport.repository.UserRepository;
 import com.kerimsenturk.labreport.service.ReportFileManager;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.sql.DataSource;
 import java.util.List;
 
 @RequestMapping("v1/api/test")
+@CrossOrigin
 public class TestController {
     private final JdbcTemplate jdbcTemplate;
     private final UserRepository userRepository;

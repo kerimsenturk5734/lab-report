@@ -24,6 +24,7 @@ import java.util.List;
 @SecurityRequirement(name = "Bearer Authentication")
 @RestController
 @RequestMapping("v1/api/reports")
+@CrossOrigin
 public class ReportController {
     private final ReportService reportService;
     private final MessageBuilder messageBuilder;
@@ -93,9 +94,9 @@ public class ReportController {
 
         return ResponseEntity.ok(new SuccessResult(message));
     }
-    @GetMapping("/downloadReport")
+    @GetMapping("/downloadReport/{reportId}")
     @ResponseBody
-    public ResponseEntity<?> downloadReport(@RequestParam String reportId) {
+    public ResponseEntity<?> downloadReport(@PathVariable String reportId) {
         DownloadReportResponse res = reportService.downloadReport(reportId);
 
         String fileNameHeader = new StringBuilder("attachment; filename=").append(res.fileName()).toString();

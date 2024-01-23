@@ -5,6 +5,7 @@ import {UserType} from "./ui/components/Constants";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Login from "./ui/page/Login";
 import NoPage from "./ui/page/NoPage";
+import diseaseDao from "./data/api/dao/DiseaseDao";
 
 export default function App() {
 
@@ -15,6 +16,7 @@ export default function App() {
   */
   const userType = UserType.DOCTOR
 
+    diseaseDao.getDiseasesByDoctorId(1234567).then((value) => console.log(value))
   return (
       <BrowserRouter>
         <Routes>

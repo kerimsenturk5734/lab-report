@@ -1,6 +1,6 @@
 import {LabRequestType} from "../../model/Disease";
 
-class CreateDiseaseRequest {
+export class CreateDiseaseRequest {
     patientId: string;
 
     doctorId: string;

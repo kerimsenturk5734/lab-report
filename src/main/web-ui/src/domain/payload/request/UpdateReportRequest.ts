@@ -1,4 +1,4 @@
-class UpdateReportRequest {
+export class UpdateReportRequest {
     reportId?: string;
     title?: string;
     details?: string;

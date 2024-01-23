@@ -1,6 +1,6 @@
 import {UserRole} from "../../model/User";
 
-class CreateUserRequest {
+export class CreateUserRequest {
     userId: string;
 
     name: string;

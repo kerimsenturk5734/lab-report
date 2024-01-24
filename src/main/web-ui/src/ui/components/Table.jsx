@@ -18,7 +18,6 @@ export default function Table({userType = UserType.DEFAULT}) {
 }
 
 function TableFactory({userType = UserType.DEFAULT}){
-    console.log(userType)
     switch (userType) {
         case UserType.DOCTOR : return <ReportTableDoctor/>
         case UserType.PATIENT : return <ReportTablePatient/>

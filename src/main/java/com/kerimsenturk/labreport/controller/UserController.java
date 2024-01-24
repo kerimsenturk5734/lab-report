@@ -64,10 +64,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserByID(
-            @PathVariable
-            @Pattern(regexp = "^([0-9]+){7,11}$", message = "{pattern.unmatched.userId}")
-            String id){
+    public ResponseEntity<?> getUserByID(@PathVariable String id){
 
         //Get the user by id
         UserDto userDto = userService.getUserById(id);

@@ -11,3 +11,10 @@ export const api = axios.create({
         'Authorization':`Bearer ${TOKEN}`
     },
 });
+
+export const apiNoneSecure = axios.create({
+    baseURL: ROOT_URL.concat(API_VERSION_URL),
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});

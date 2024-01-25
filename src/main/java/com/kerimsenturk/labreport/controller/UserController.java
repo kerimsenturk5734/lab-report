@@ -6,6 +6,7 @@ import com.kerimsenturk.labreport.dto.request.PatientCreateRequest;
 import com.kerimsenturk.labreport.dto.request.UpdateUserRequest;
 
 import com.kerimsenturk.labreport.dto.request.UserLoginRequest;
+import com.kerimsenturk.labreport.dto.response.UserLoginResponse;
 import com.kerimsenturk.labreport.service.UserService;
 import com.kerimsenturk.labreport.util.MessageBuilder;
 import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
@@ -41,9 +42,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Token> login(@Valid @RequestBody UserLoginRequest userLoginRequest){
+    public ResponseEntity<?> login(@Valid @RequestBody UserLoginRequest userLoginRequest){
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-        return ResponseEntity.created(uri).body(userService.login(userLoginRequest));
+        return ResponseEntity
+                .created(uri)
+                .body(new SuccessDataResult<>(userService.login(userLoginRequest), "Login successful"));
     }
 
     @PreAuthorize("hasAuthority(@ROLES.ADMIN)")

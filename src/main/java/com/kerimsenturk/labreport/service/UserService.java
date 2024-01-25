@@ -3,6 +3,7 @@ package com.kerimsenturk.labreport.service;
 import com.kerimsenturk.labreport.auth.JwtTokenManager;
 import com.kerimsenturk.labreport.dto.UserDto;
 import com.kerimsenturk.labreport.dto.converter.UserAndUserDtoConverter;
+import com.kerimsenturk.labreport.dto.response.UserLoginResponse;
 import com.kerimsenturk.labreport.exception.AlreadyExist.UserAlreadyExistException;
 import com.kerimsenturk.labreport.dto.request.CreateUserRequest;
 import com.kerimsenturk.labreport.dto.request.PatientCreateRequest;
@@ -84,13 +85,14 @@ public class UserService {
         return userRepository.save(newUser).getUserId();
     }
 
-    public Token login(UserLoginRequest userLoginRequest){
+    public UserLoginResponse login(UserLoginRequest userLoginRequest){
         Authentication auth = authenticationManager
                 .authenticate(new
                         UsernamePasswordAuthenticationToken(userLoginRequest.userId(), userLoginRequest.password()));
 
         if(auth.isAuthenticated())
-            return jwtTokenManager.generate(userLoginRequest.userId());
+            return new UserLoginResponse(
+                    jwtTokenManager.generate(userLoginRequest.userId()), getUserById(userLoginRequest.userId()));
 
         throw new UsernameNotFoundException("User Id or password incorrect");
     }

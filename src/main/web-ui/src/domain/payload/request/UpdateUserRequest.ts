@@ -4,7 +4,7 @@ export class UpdateUserRequest {
     surname?: string;
     password?: string;
 
-    constructor()
+
     constructor(
         username?: string,
         name?: string,

@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var api_1 = require("../api");
 var DOMAIN_BASE_URL = "/reports";
 var reportDao = {
@@ -14,6 +14,6 @@ var reportDao = {
     },
     updateReport: function (updateReportRequest) {
         return api_1.api.put(DOMAIN_BASE_URL.concat('/updateReport'), updateReportRequest);
-    },
+    }
 };
-exports.default = reportDao;
+exports["default"] = reportDao;

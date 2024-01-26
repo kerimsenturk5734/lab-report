@@ -1,22 +1,14 @@
 "use strict";
 exports.__esModule = true;
-exports.User = exports.UserRole = void 0;
-var UserRole;
-(function (UserRole) {
-    UserRole["ADMIN"] = "ADMIN";
-    UserRole["PATIENT"] = "PATIENT";
-    UserRole["LAB_TECHNICIAN"] = "LAB_TECHNICIAN";
-    UserRole["DOCTOR"] = "DOCTOR";
-})(UserRole = exports.UserRole || (exports.UserRole = {}));
-var User = /** @class */ (function () {
-    function User(userId, name, surname, password, role) {
+exports.UserDto = void 0;
+var UserDto = /** @class */ (function () {
+    function UserDto(userId, name, surname, role) {
         this._userId = userId;
         this._name = name;
         this._surname = surname;
-        this._password = password;
         this._role = role;
     }
-    Object.defineProperty(User.prototype, "userId", {
+    Object.defineProperty(UserDto.prototype, "userId", {
         get: function () {
             return this._userId;
         },
@@ -26,7 +18,7 @@ var User = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(User.prototype, "name", {
+    Object.defineProperty(UserDto.prototype, "name", {
         get: function () {
             return this._name;
         },
@@ -36,7 +28,7 @@ var User = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(User.prototype, "surname", {
+    Object.defineProperty(UserDto.prototype, "surname", {
         get: function () {
             return this._surname;
         },
@@ -46,17 +38,7 @@ var User = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(User.prototype, "password", {
-        get: function () {
-            return this._password;
-        },
-        set: function (value) {
-            this._password = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(User.prototype, "role", {
+    Object.defineProperty(UserDto.prototype, "role", {
         get: function () {
             return this._role;
         },
@@ -66,6 +48,6 @@ var User = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    return User;
+    return UserDto;
 }());
-exports.User = User;
+exports.UserDto = UserDto;

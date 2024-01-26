@@ -1,4 +1,4 @@
-import {api} from "../api";
+import {api, apiNoneSecure} from "../api";
 import {UserLoginRequest} from "../../../domain/payload/request/UserLoginRequest";
 import {UpdateUserRequest} from "../../../domain/payload/request/UpdateUserRequest";
 import {CreateUserRequest} from "../../../domain/payload/request/CreateUserRequest";
@@ -13,7 +13,7 @@ const userDao = {
     getAllUsers: () => api.get(DOMAIN_BASE_URL.concat('/getAllUsers')),
 
     loginUser: (userLoginRequest: UserLoginRequest) =>
-        api.post(DOMAIN_BASE_URL.concat('/login'), userLoginRequest),
+        apiNoneSecure.post(DOMAIN_BASE_URL.concat('/login'), userLoginRequest),
 
     updateUser: (updateUserRequest : UpdateUserRequest) =>
         api.put(DOMAIN_BASE_URL.concat('/updateUser'), updateUserRequest),
@@ -22,7 +22,7 @@ const userDao = {
         api.post(DOMAIN_BASE_URL.concat('/register'), createUserRequest),
 
     registerPatient: (patientCreateRequest : PatientCreateRequest) =>
-        api.post(DOMAIN_BASE_URL.concat('/registerPatient'), patientCreateRequest)
+        apiNoneSecure.post(DOMAIN_BASE_URL.concat('/registerPatient'), patientCreateRequest)
 };
 
 export default userDao;

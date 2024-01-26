@@ -1,22 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Disease = exports.DiseaseState = exports.LabRequestType = void 0;
-var LabRequestType;
-(function (LabRequestType) {
-    LabRequestType["BLOOD_ANALYSIS"] = "BLOOD_ANALYSIS";
-    LabRequestType["URINE_TEST"] = "URINE_TEST";
-    LabRequestType["BIOPSY"] = "BIOPSY";
-})(LabRequestType = exports.LabRequestType || (exports.LabRequestType = {}));
-var DiseaseState;
-(function (DiseaseState) {
-    DiseaseState["WAITING_RESULTS"] = "WAITING_RESULTS";
-    DiseaseState["PATHOLOGIC_RESULTED"] = "PATHOLOGIC_RESULTED";
-    DiseaseState["DIAGNOSTIC_RESULTED"] = "DIAGNOSTIC_RESULTED";
-    DiseaseState["UPDATED"] = "UPDATED";
-    DiseaseState["DELETED"] = "DELETED";
-})(DiseaseState = exports.DiseaseState || (exports.DiseaseState = {}));
-var Disease = /** @class */ (function () {
-    function Disease(id, patient, labTechnician, doctor, labRequestType, pathologicReport, diagnosticReport, diseaseState, creationDate) {
+exports.DiseaseDto = void 0;
+var DiseaseDto = /** @class */ (function () {
+    function DiseaseDto(id, patient, labTechnician, doctor, labRequestType, pathologicReport, diagnosticReport, diseaseState, creationDate) {
         this._id = id;
         this._patient = patient;
         this._labTechnician = labTechnician;
@@ -27,7 +13,7 @@ var Disease = /** @class */ (function () {
         this._diseaseState = diseaseState;
         this._creationDate = creationDate;
     }
-    Object.defineProperty(Disease.prototype, "id", {
+    Object.defineProperty(DiseaseDto.prototype, "id", {
         get: function () {
             return this._id;
         },
@@ -37,7 +23,7 @@ var Disease = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(Disease.prototype, "patient", {
+    Object.defineProperty(DiseaseDto.prototype, "patient", {
         get: function () {
             return this._patient;
         },
@@ -47,7 +33,7 @@ var Disease = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(Disease.prototype, "labTechnician", {
+    Object.defineProperty(DiseaseDto.prototype, "labTechnician", {
         get: function () {
             return this._labTechnician;
         },
@@ -57,7 +43,7 @@ var Disease = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(Disease.prototype, "doctor", {
+    Object.defineProperty(DiseaseDto.prototype, "doctor", {
         get: function () {
             return this._doctor;
         },
@@ -67,7 +53,7 @@ var Disease = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(Disease.prototype, "labRequestType", {
+    Object.defineProperty(DiseaseDto.prototype, "labRequestType", {
         get: function () {
             return this._labRequestType;
         },
@@ -77,7 +63,7 @@ var Disease = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(Disease.prototype, "pathologicReport", {
+    Object.defineProperty(DiseaseDto.prototype, "pathologicReport", {
         get: function () {
             return this._pathologicReport;
         },
@@ -87,7 +73,7 @@ var Disease = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(Disease.prototype, "diagnosticReport", {
+    Object.defineProperty(DiseaseDto.prototype, "diagnosticReport", {
         get: function () {
             return this._diagnosticReport;
         },
@@ -97,7 +83,7 @@ var Disease = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(Disease.prototype, "diseaseState", {
+    Object.defineProperty(DiseaseDto.prototype, "diseaseState", {
         get: function () {
             return this._diseaseState;
         },
@@ -107,7 +93,7 @@ var Disease = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(Disease.prototype, "creationDate", {
+    Object.defineProperty(DiseaseDto.prototype, "creationDate", {
         get: function () {
             return this._creationDate;
         },
@@ -117,6 +103,6 @@ var Disease = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    return Disease;
+    return DiseaseDto;
 }());
-exports.Disease = Disease;
+exports.DiseaseDto = DiseaseDto;

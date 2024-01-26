@@ -46,7 +46,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.useUpdateUserCase = void 0;
 var react_1 = require("react");
 var UserDao_1 = require("../../../data/api/dao/UserDao");
@@ -55,14 +55,14 @@ var useUpdateUserCase = function () {
         successMessage: '',
         error: {},
         errorMessage: '',
-        isLoading: false,
+        isLoading: false
     }), state = _a[0], setState = _a[1];
     var updateUser = function (updateUserRequest) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     setState(__assign(__assign({}, state), { isLoading: true }));
-                    return [4 /*yield*/, UserDao_1.default.updateUser(updateUserRequest)
+                    return [4 /*yield*/, UserDao_1["default"].updateUser(updateUserRequest)
                             .then(function (res) {
                             console.log(res);
                             setState({
@@ -71,8 +71,7 @@ var useUpdateUserCase = function () {
                                 errorMessage: '',
                                 isLoading: false
                             });
-                        })
-                            .catch(function (err) {
+                        })["catch"](function (err) {
                             console.log(err);
                             if (err.code == "ERR_NETWORK") {
                                 setState({
@@ -82,11 +81,19 @@ var useUpdateUserCase = function () {
                                     isLoading: false
                                 });
                             }
-                            else if (err.response.status == 403) {
+                            else if (err.response.status == 401) {
                                 setState({
                                     successMessage: '',
                                     error: err,
                                     errorMessage: "Authentication required!!!",
+                                    isLoading: false
+                                });
+                            }
+                            else if (err.response.status == 403) {
+                                setState({
+                                    successMessage: '',
+                                    error: err,
+                                    errorMessage: 'Access Denied',
                                     isLoading: false
                                 });
                             }

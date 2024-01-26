@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.CreateReportRequest = void 0;
 var CreateReportRequest = /** @class */ (function () {
     function CreateReportRequest(patientId, title, details, reportType) {

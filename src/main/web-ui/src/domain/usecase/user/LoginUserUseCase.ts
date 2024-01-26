@@ -39,12 +39,12 @@ export const useLoginUser = () => {
                         isLoading: false
                     })
                 }
-                else if(err.response.status == 403){
+                else if(err.response.status == 401){
                     setState({
                         credential: {} as UserLoginResponse,
                         successMessage: '',
                         error: err,
-                        errorMessage: "Authentication required!!!",
+                        errorMessage: "Username or password incorrect!!!",
                         isLoading: false
                     });
                 }

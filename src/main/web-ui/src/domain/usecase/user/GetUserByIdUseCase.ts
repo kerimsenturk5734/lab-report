@@ -38,6 +38,24 @@ export const useGetUserById = () => {
                         isLoading: false
                     })
                 }
+                else if(err.response.status == 401){
+                    setState({
+                        data: {} as UserDto,
+                        successMessage: '',
+                        error: err,
+                        errorMessage: 'Authentication Required',
+                        isLoading: false
+                    });
+                }
+                else if(err.response.status == 403){
+                    setState({
+                        data: {} as UserDto,
+                        successMessage: '',
+                        error: err,
+                        errorMessage: 'Access Denied',
+                        isLoading: false
+                    });
+                }
                 else{
                     setState({
                         data: {} as UserDto,

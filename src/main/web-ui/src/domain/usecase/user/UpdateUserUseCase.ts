@@ -34,11 +34,19 @@ export const useUpdateUserCase = () => {
                         isLoading: false
                     })
                 }
-                else if(err.response.status == 403){
+                else if(err.response.status == 401){
                     setState({
                         successMessage: '',
                         error: err,
                         errorMessage: "Authentication required!!!",
+                        isLoading: false
+                    });
+                }
+                else if(err.response.status == 403){
+                    setState({
+                        successMessage: '',
+                        error: err,
+                        errorMessage: 'Access Denied',
                         isLoading: false
                     });
                 }

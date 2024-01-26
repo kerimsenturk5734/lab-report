@@ -37,12 +37,21 @@ export const useGetAllUsers = () => {
                         isLoading: false
                     })
                 }
-                else if(err.response.status == 403){
+                else if(err.response.status == 401){
                     setState({
                         users: [] as UserDto[],
                         successMessage: '',
                         error: err,
                         errorMessage: 'Authentication required',
+                        isLoading: false
+                    });
+                }
+                else if(err.response.status == 403){
+                    setState({
+                        users: [] as UserDto[],
+                        successMessage: '',
+                        error: err,
+                        errorMessage: 'Access Denied',
                         isLoading: false
                     });
                 }

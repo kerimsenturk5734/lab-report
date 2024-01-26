@@ -22,7 +22,7 @@ const userDao = {
         api.post(DOMAIN_BASE_URL.concat('/register'), createUserRequest),
 
     registerPatient: (patientCreateRequest : PatientCreateRequest) =>
-        api.post(DOMAIN_BASE_URL.concat('/registerPatient'), patientCreateRequest)
+        apiNoneSecure.post(DOMAIN_BASE_URL.concat('/registerPatient'), patientCreateRequest)
 };
 
 export default userDao;

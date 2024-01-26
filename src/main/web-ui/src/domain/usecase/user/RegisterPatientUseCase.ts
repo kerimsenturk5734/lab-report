@@ -1,9 +1,9 @@
 import {useState} from "react";
 import userDao from "../../../data/api/dao/UserDao";
-import {CreateUserRequest} from "../../payload/request/CreateUserRequest";
+import {PatientCreateRequest} from "../../payload/request/PatientCreateRequest";
 
 //HTTP 403, 400, 409, 201
-export const useRegisterUser = () => {
+export const useRegisterPatient = () => {
     const [state, setState] = useState({
         successMessage:'',
         error: {},
@@ -11,14 +11,14 @@ export const useRegisterUser = () => {
         isLoading: false,
     });
 
-    const registerUser = async (createUserRequest : CreateUserRequest) => {
+    const registerPatient = async (patientCreateRequest : PatientCreateRequest) => {
         setState({ ...state, isLoading: true });
 
-        await userDao.register(createUserRequest)
+        await userDao.registerPatient(patientCreateRequest)
             .then((res) => {
                 console.log(res)
                 setState({
-                    successMessage: `User created successfully with id:${createUserRequest.userId}`,
+                    successMessage: `User created successfully with id:${patientCreateRequest.userId}`,
                     error: {},
                     errorMessage: '',
                     isLoading: false
@@ -70,5 +70,5 @@ export const useRegisterUser = () => {
             })
     };
 
-    return { state, registerUser };
+    return { state, registerPatient };
 };

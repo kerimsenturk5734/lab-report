@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.Disease = exports.DiseaseState = exports.LabRequestType = void 0;
 var LabRequestType;
 (function (LabRequestType) {

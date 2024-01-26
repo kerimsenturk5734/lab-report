@@ -47,29 +47,27 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.useGetUserById = void 0;
+exports.useRegisterPatient = void 0;
 var react_1 = require("react");
 var UserDao_1 = require("../../../data/api/dao/UserDao");
-//HTTP 403, 404, 200, 400
-var useGetUserById = function () {
+//HTTP 403, 400, 409, 201
+var useRegisterPatient = function () {
     var _a = (0, react_1.useState)({
-        data: {},
         successMessage: '',
         error: {},
         errorMessage: '',
         isLoading: false
     }), state = _a[0], setState = _a[1];
-    var getUserById = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+    var registerPatient = function (patientCreateRequest) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     setState(__assign(__assign({}, state), { isLoading: true }));
-                    return [4 /*yield*/, UserDao_1["default"].getUserById(id)
+                    return [4 /*yield*/, UserDao_1["default"].registerPatient(patientCreateRequest)
                             .then(function (res) {
                             console.log(res);
                             setState({
-                                data: res.data.data,
-                                successMessage: res.data.message,
+                                successMessage: "User created successfully with id:".concat(patientCreateRequest.userId),
                                 error: {},
                                 errorMessage: '',
                                 isLoading: false
@@ -78,7 +76,6 @@ var useGetUserById = function () {
                             console.log(err);
                             if (err.code == "ERR_NETWORK") {
                                 setState({
-                                    data: {},
                                     successMessage: '',
                                     error: err,
                                     errorMessage: err.message,
@@ -87,25 +84,30 @@ var useGetUserById = function () {
                             }
                             else if (err.response.status == 401) {
                                 setState({
-                                    data: {},
                                     successMessage: '',
                                     error: err,
-                                    errorMessage: 'Authentication Required',
+                                    errorMessage: "Authentication required!!!",
                                     isLoading: false
                                 });
                             }
                             else if (err.response.status == 403) {
                                 setState({
-                                    data: {},
                                     successMessage: '',
                                     error: err,
                                     errorMessage: 'Access Denied',
                                     isLoading: false
                                 });
                             }
+                            else if (err.response.status == 400) {
+                                setState({
+                                    successMessage: '',
+                                    error: err,
+                                    errorMessage: JSON.stringify(err.response.data, null, 4),
+                                    isLoading: false
+                                });
+                            }
                             else {
                                 setState({
-                                    data: {},
                                     successMessage: '',
                                     error: err,
                                     errorMessage: err.response.data.message,
@@ -119,6 +121,6 @@ var useGetUserById = function () {
             }
         });
     }); };
-    return { state: state, getUserById: getUserById };
+    return { state: state, registerPatient: registerPatient };
 };
-exports.useGetUserById = useGetUserById;
+exports.useRegisterPatient = useRegisterPatient;

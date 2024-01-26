@@ -15,6 +15,6 @@ public record UpdateUserRequest(
         Optional<String> surname,
         Optional<
                 @Pattern(
-                        regexp = "^(?=.*?[a-z]+)(?=.*?[A-Z]+)(?=.*?[0-9]+)$",
+                        regexp = "^(?=.*?[a-z]+)(?=.*?[A-Z]+)(?=.*?[0-9]+).{8,20}$",
                         message = "{pattern.unmatched.password}")String> password) {
 }

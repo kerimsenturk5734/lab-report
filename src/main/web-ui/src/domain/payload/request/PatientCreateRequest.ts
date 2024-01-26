@@ -1,4 +1,4 @@
-class PatientCreateRequest {
+export class PatientCreateRequest {
     userId: string;
     name: string;
     surname: string;

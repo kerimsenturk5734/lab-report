@@ -6,6 +6,7 @@ import com.kerimsenturk.labreport.dto.request.PatientCreateRequest;
 import com.kerimsenturk.labreport.dto.request.UpdateUserRequest;
 
 import com.kerimsenturk.labreport.dto.request.UserLoginRequest;
+import com.kerimsenturk.labreport.dto.response.UserLoginResponse;
 import com.kerimsenturk.labreport.service.UserService;
 import com.kerimsenturk.labreport.util.MessageBuilder;
 import com.kerimsenturk.labreport.util.Result.SuccessDataResult;
@@ -30,6 +31,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/api/users")
 @Validated
+@CrossOrigin
 public class UserController {
     private final UserService userService;
     private final MessageBuilder messageBuilder;
@@ -40,9 +42,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Token> login(@Valid @RequestBody UserLoginRequest userLoginRequest){
+    public ResponseEntity<?> login(@Valid @RequestBody UserLoginRequest userLoginRequest){
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-        return ResponseEntity.created(uri).body(userService.login(userLoginRequest));
+        return ResponseEntity
+                .created(uri)
+                .body(new SuccessDataResult<>(userService.login(userLoginRequest), "Login successful"));
     }
 
     @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
@@ -62,11 +66,8 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
-    @GetMapping("/")
-    public ResponseEntity<?> getUserByID(
-            @RequestParam
-            @Pattern(regexp = "^([0-9]+){7,11}$", message = "{pattern.unmatched.userId}")
-            String id){
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserByID(@PathVariable String id){
 
         //Get the user by id
         UserDto userDto = userService.getUserById(id);

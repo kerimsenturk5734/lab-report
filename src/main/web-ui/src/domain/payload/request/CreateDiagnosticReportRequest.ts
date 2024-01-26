@@ -1,4 +1,4 @@
-class CreateDiagnosticReportRequest {
+export class CreateDiagnosticReportRequest {
     diseaseId: number;
     title: string;
     details: string;

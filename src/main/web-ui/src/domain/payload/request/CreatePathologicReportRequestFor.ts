@@ -1,4 +1,4 @@
-class CreatePathologicReportRequest {
+export class CreatePathologicReportRequest {
     diseaseId: number;
 
     labTechnicianId: string;

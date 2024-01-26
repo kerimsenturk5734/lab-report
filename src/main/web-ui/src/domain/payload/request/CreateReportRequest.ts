@@ -1,6 +1,6 @@
 import {ReportType} from "../../model/Report";
 
-class CreateReportRequest {
+export class CreateReportRequest {
     patientId: string;
 
     title: string;

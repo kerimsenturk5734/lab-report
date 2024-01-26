@@ -24,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/api/diseases")
 @Validated
+@CrossOrigin
 public class DiseaseController {
     private final DiseaseService diseaseService;
     private final MessageBuilder messageBuilder;
@@ -42,8 +43,8 @@ public class DiseaseController {
     }
 
     @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
-    @GetMapping("/")
-    public ResponseEntity<?> getDiseaseById(@RequestParam int id){
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getDiseaseById(@PathVariable int id){
         //Get the disease by id
         DiseaseDto diseaseDto = diseaseService.getDiseaseById(id);
 
@@ -76,8 +77,8 @@ public class DiseaseController {
     }
 
     @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.PATIENT)")
-    @GetMapping("/getDiseasesByPatientId")
-    public ResponseEntity<?> getDiseasesByPatientId(@PatientIdValid @RequestParam String patientId){
+    @GetMapping("/getDiseasesByPatientId/{patientId}")
+    public ResponseEntity<?> getDiseasesByPatientId(@PathVariable @PatientIdValid String patientId){
         //Get related diseases
         List<DiseaseDto> diseaseDtoList = diseaseService.getDiseasesByPatientId(patientId);
 
@@ -92,8 +93,8 @@ public class DiseaseController {
     }
 
     @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.DOCTOR)")
-    @GetMapping("/getDiseasesByDoctorId")
-    public ResponseEntity<?> getDiseasesByDoctorId(@HospitalPersonalIdValid @RequestParam String doctorId){
+    @GetMapping("/getDiseasesByDoctorId/{doctorId}")
+    public ResponseEntity<?> getDiseasesByDoctorId(@HospitalPersonalIdValid @PathVariable String doctorId){
         //Get related diseases
         List<DiseaseDto> diseaseDtoList = diseaseService.getDiseasesByDoctorId(doctorId);
 
@@ -114,8 +115,8 @@ public class DiseaseController {
         return ResponseEntity.ok(new SuccessDataResult<List<DiseaseDto>>(diseaseDtoList,message));
     }
     @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.LAB_TECHNICIAN)")
-    @GetMapping("/getDiseasesByLabTechnicianId")
-    public ResponseEntity<?> getDiseasesByLabTechnicianId(@HospitalPersonalIdValid @RequestParam String labTechnicianId){
+    @GetMapping("/getDiseasesByLabTechnicianId/{labTechnicianId}")
+    public ResponseEntity<?> getDiseasesByLabTechnicianId(@HospitalPersonalIdValid @PathVariable String labTechnicianId){
         //Get related diseases
         List<DiseaseDto> diseaseDtoList = diseaseService.getDiseasesByLabTechnicianId(labTechnicianId);
 
@@ -129,15 +130,15 @@ public class DiseaseController {
         return ResponseEntity.ok(new SuccessDataResult<List<DiseaseDto>>(diseaseDtoList,message));
     }
     @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
-    @DeleteMapping("/deletePathologicalReportOf")
-    public ResponseEntity<?> deletePathologicalReportOf(@RequestParam int diseaseId) {
+    @DeleteMapping("/deletePathologicalReportOf/{diseaseId}")
+    public ResponseEntity<?> deletePathologicalReportOf(@PathVariable int diseaseId) {
         diseaseService.deleteReportOf(diseaseId, ReportType.PATHOLOGICAL);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
-    @DeleteMapping("/deleteDiagnosticReportOf")
-    public ResponseEntity<?> deleteDiagnosticReportOf(@RequestParam int diseaseId) {
+    @DeleteMapping("/deleteDiagnosticReportOf/{diseaseId}")
+    public ResponseEntity<?> deleteDiagnosticReportOf(@PathVariable int diseaseId) {
         diseaseService.deleteReportOf(diseaseId, ReportType.DIAGNOSTIC);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

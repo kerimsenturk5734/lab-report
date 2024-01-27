@@ -8,7 +8,11 @@ const DOMAIN_BASE_URL = "/reports"
 const reportDao = {
 
     // Define your API endpoints here
-    downloadReport: (reportId:string) => api.get(DOMAIN_BASE_URL.concat(`/downloadReport/?reportId=${reportId}`)),
+    getReportBlobById: (reportId:string) =>
+        api.get(DOMAIN_BASE_URL.concat(`/downloadReport/${reportId}`), {responseType: 'blob'}),
+
+    downloadReport: (reportId:string) =>
+        api.get(DOMAIN_BASE_URL.concat(`/downloadReport/${reportId}`)),
 
     getAllReports: () => api.get(DOMAIN_BASE_URL.concat('/getAllReports')),
 

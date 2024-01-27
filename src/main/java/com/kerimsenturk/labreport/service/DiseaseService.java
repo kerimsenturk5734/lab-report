@@ -6,7 +6,9 @@ import com.kerimsenturk.labreport.dto.converter.UserAndUserDtoConverter;
 import com.kerimsenturk.labreport.dto.request.CreateDiseaseRequest;
 import com.kerimsenturk.labreport.exception.NotFound.DiseaseNotFoundException;
 import com.kerimsenturk.labreport.exception.InvalidUserRoleException;
+import com.kerimsenturk.labreport.exception.NotFound.ReportNotFoundException;
 import com.kerimsenturk.labreport.model.Disease;
+import com.kerimsenturk.labreport.model.Report;
 import com.kerimsenturk.labreport.model.User;
 import com.kerimsenturk.labreport.model.enums.DiseaseState;
 import com.kerimsenturk.labreport.model.enums.ReportType;
@@ -175,24 +177,28 @@ public class DiseaseService {
         //Get related disease
         Disease disease = diseaseAndDiseaseDtoConverter.deConvert(getDiseaseById(diseaseId));
 
-        String reportId = null;
-        if(reportType == ReportType.DIAGNOSTIC){
-            //Get diagnostic report of this disease
-            reportId = disease.getDiagnosticReport().getReportId();
+        //Get report of this disease according to reportType
+        Optional<Report> report = Optional.ofNullable(
+                (reportType == ReportType.DIAGNOSTIC) ?
+                        disease.getDiagnosticReport():
+                        disease.getPathologicReport());
 
+        if(reportType == ReportType.DIAGNOSTIC){
             //Set null the foreign key inside disease
             disease.setDiagnosticReport(null);
         }
         else{
-            //Get pathological report of this disease
-            reportId = disease.getPathologicReport().getReportId();
-
             //Set null the foreign key inside disease
             disease.setPathologicReport(null);
         }
 
-        //Now delete the report from local storage
-        reportService.deleteReport(reportId);
+
+        //Now delete the report from local storage if report present
+        String msg = String.format("%s report not found for diseasesId: %s", reportType, diseaseId);
+        reportService
+                .deleteReport(
+                        report.orElseThrow(() -> new ReportNotFoundException(msg))
+                .getReportId());
 
         // and update it
         saveDisease(disease);

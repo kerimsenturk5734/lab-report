@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = require("../api");
 var DOMAIN_BASE_URL = "/diseases";
 var diseaseDao = {
@@ -18,11 +18,11 @@ var diseaseDao = {
     createDisease: function (createDiseaseRequest) {
         return api_1.api.post(DOMAIN_BASE_URL.concat('/createDisease'), createDiseaseRequest);
     },
-    deletePathologicReportOf: function (diseaseId) {
-        return api_1.api["delete"](DOMAIN_BASE_URL.concat("/deletePathologicReportOf/".concat(diseaseId)));
+    deletePathologicalReportOf: function (diseaseId) {
+        return api_1.api.delete(DOMAIN_BASE_URL.concat("/deletePathologicalReportOf/".concat(diseaseId)));
     },
     deleteDiagnosticReportOf: function (diseaseId) {
-        return api_1.api["delete"](DOMAIN_BASE_URL.concat("/deleteDiagnosticReportOf/".concat(diseaseId)));
+        return api_1.api.delete(DOMAIN_BASE_URL.concat("/deleteDiagnosticReportOf/".concat(diseaseId)));
     }
 };
-exports["default"] = diseaseDao;
+exports.default = diseaseDao;

@@ -105,13 +105,21 @@ public class UserService {
 
         //Get the real user object
         //No need to check is it present or not because getUserById() did it above line
-        User user = userRepository.findById(userId).get();
+        User user = getRawUserById(userId).get();
 
         //Update the object
         //If fields not present in updateRequest, don't change the fields
         user.setName(updateUserRequest.name().orElse(user.getName()));
         user.setSurname(updateUserRequest.surname().orElse(user.getSurname()));
-        user.setPassword(updateUserRequest.password().orElse(user.getPassword()));
+
+        //Set don't updated password as initial this pwd already encrypted
+        String pwd = user.getPassword();
+
+        //Encrypt the raw password coming from optional if presents
+        if(updateUserRequest.password().isPresent())
+            pwd = passwordEncoder.encode(updateUserRequest.password().get());
+
+        user.setPassword(pwd);
 
         //return updated userId
         return userRepository.save(user).getUserId();
@@ -127,12 +135,10 @@ public class UserService {
                         .params(id)
                         .build();
 
-        //If it is present convert to dto object and assign to userDto else throw exception
-        UserDto userDto = userAndUserDtoConverter
-                .convert(userOptional.orElseThrow(() -> new UserNotFoundException(message)));
-
+        //If it is present convert to dto object else throw exception
         //return converted UserDto
-        return userDto;
+        return userAndUserDtoConverter
+                .convert(userOptional.orElseThrow(() -> new UserNotFoundException(message)));
     }
     public Optional<User> getRawUserById(String id){
         return userRepository.findById(id);

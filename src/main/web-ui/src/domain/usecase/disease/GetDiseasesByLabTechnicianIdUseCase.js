@@ -47,24 +47,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useGetDiseaseById = void 0;
+exports.useGetDiseasesByLabTechnicianId = void 0;
 var react_1 = require("react");
 var DiseaseDao_1 = require("../../../data/api/dao/DiseaseDao");
-//HTTP 403, 404, 200, 400
-var useGetDiseaseById = function () {
+//HTTP 401, 403, 200
+var useGetDiseasesByLabTechnicianId = function () {
     var _a = (0, react_1.useState)({
-        data: {},
+        data: [],
         successMessage: '',
         error: {},
         errorMessage: '',
         isLoading: false,
     }), state = _a[0], setState = _a[1];
-    var getDiseaseById = function (id) { return __awaiter(void 0, void 0, void 0, function () {
+    var getDiseasesByLabTechnicianId = function (labTechnicianId) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     setState(__assign(__assign({}, state), { isLoading: true }));
-                    return [4 /*yield*/, DiseaseDao_1.default.getDiseaseById(id)
+                    return [4 /*yield*/, DiseaseDao_1.default.getDiseaseByLabTechnicianId(labTechnicianId)
                             .then(function (res) {
                             console.log(res);
                             setState({
@@ -79,7 +79,7 @@ var useGetDiseaseById = function () {
                             console.log(err);
                             if (err.code == "ERR_NETWORK") {
                                 setState({
-                                    data: {},
+                                    data: [],
                                     successMessage: '',
                                     error: err,
                                     errorMessage: err.message,
@@ -88,7 +88,7 @@ var useGetDiseaseById = function () {
                             }
                             else if (err.response.status == 401) {
                                 setState({
-                                    data: {},
+                                    data: [],
                                     successMessage: '',
                                     error: err,
                                     errorMessage: 'Authentication Required',
@@ -97,7 +97,7 @@ var useGetDiseaseById = function () {
                             }
                             else if (err.response.status == 403) {
                                 setState({
-                                    data: {},
+                                    data: [],
                                     successMessage: '',
                                     error: err,
                                     errorMessage: 'Access Denied',
@@ -106,7 +106,7 @@ var useGetDiseaseById = function () {
                             }
                             else if (err.response.status == 400) {
                                 setState({
-                                    data: {},
+                                    data: [],
                                     successMessage: '',
                                     error: err,
                                     errorMessage: JSON.stringify(err.response.data, null, 4),
@@ -115,7 +115,7 @@ var useGetDiseaseById = function () {
                             }
                             else {
                                 setState({
-                                    data: {},
+                                    data: [],
                                     successMessage: '',
                                     error: err,
                                     errorMessage: err.response.data.message,
@@ -129,6 +129,6 @@ var useGetDiseaseById = function () {
             }
         });
     }); };
-    return { state: state, getDiseaseById: getDiseaseById };
+    return { state: state, getDiseasesByLabTechnicianId: getDiseasesByLabTechnicianId };
 };
-exports.useGetDiseaseById = useGetDiseaseById;
+exports.useGetDiseasesByLabTechnicianId = useGetDiseasesByLabTechnicianId;

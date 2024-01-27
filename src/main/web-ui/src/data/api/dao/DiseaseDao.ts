@@ -21,8 +21,8 @@ const diseaseDao = {
     createDisease: (createDiseaseRequest : CreateDiseaseRequest) =>
         api.post(DOMAIN_BASE_URL.concat('/createDisease'), createDiseaseRequest),
 
-    deletePathologicReportOf: (diseaseId : number) =>
-        api.delete(DOMAIN_BASE_URL.concat(`/deletePathologicReportOf/${diseaseId}`)),
+    deletePathologicalReportOf: (diseaseId : number) =>
+        api.delete(DOMAIN_BASE_URL.concat(`/deletePathologicalReportOf/${diseaseId}`)),
 
     deleteDiagnosticReportOf: (diseaseId : number) =>
         api.delete(DOMAIN_BASE_URL.concat(`/deleteDiagnosticReportOf/${diseaseId}`))

@@ -2,20 +2,20 @@ import {useState} from "react";
 import diseaseDao from "../../../data/api/dao/DiseaseDao";
 import {DiseaseDto} from "../../dto/DiseaseDto";
 
-//HTTP 403, 404, 200, 400
-export const useGetDiseaseById = () => {
+//HTTP 401, 403, 200
+export const useGetDiseasesByDoctorId = () => {
     const [state, setState] = useState({
-        data : {} as DiseaseDto,
+        data : [] as DiseaseDto[],
         successMessage:'',
         error: {},
         errorMessage:'',
         isLoading: false,
     });
 
-    const getDiseaseById = async (id : number) => {
+    const getDiseasesByDoctorId = async (doctorId : string) => {
         setState({ ...state, isLoading: true });
 
-        await diseaseDao.getDiseaseById(id)
+        await diseaseDao.getDiseasesByDoctorId(doctorId)
             .then((res) => {
                 console.log(res)
                 setState({
@@ -31,7 +31,7 @@ export const useGetDiseaseById = () => {
 
                 if(err.code == "ERR_NETWORK"){
                     setState({
-                        data: {} as DiseaseDto,
+                        data: [] as DiseaseDto[],
                         successMessage: '',
                         error: err,
                         errorMessage: err.message,
@@ -40,7 +40,7 @@ export const useGetDiseaseById = () => {
                 }
                 else if(err.response.status == 401){
                     setState({
-                        data: {} as DiseaseDto,
+                        data: [] as DiseaseDto[],
                         successMessage: '',
                         error: err,
                         errorMessage: 'Authentication Required',
@@ -49,7 +49,7 @@ export const useGetDiseaseById = () => {
                 }
                 else if(err.response.status == 403){
                     setState({
-                        data: {} as DiseaseDto,
+                        data: [] as DiseaseDto[],
                         successMessage: '',
                         error: err,
                         errorMessage: 'Access Denied',
@@ -58,7 +58,7 @@ export const useGetDiseaseById = () => {
                 }
                 else if(err.response.status == 400){
                     setState({
-                        data: {} as DiseaseDto,
+                        data: [] as DiseaseDto[],
                         successMessage: '',
                         error: err,
                         errorMessage: JSON.stringify(err.response.data, null, 4),
@@ -67,7 +67,7 @@ export const useGetDiseaseById = () => {
                 }
                 else{
                     setState({
-                        data: {} as DiseaseDto,
+                        data: [] as DiseaseDto[],
                         successMessage: '',
                         error: err,
                         errorMessage: err.response.data.message,
@@ -77,5 +77,5 @@ export const useGetDiseaseById = () => {
             })
     };
 
-    return { state, getDiseaseById };
+    return { state, getDiseasesByDoctorId };
 };

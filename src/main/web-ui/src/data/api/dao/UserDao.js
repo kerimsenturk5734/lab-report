@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = require("../api");
 var DOMAIN_BASE_URL = "/users";
 var userDao = {
@@ -19,4 +19,4 @@ var userDao = {
         return api_1.apiNoneSecure.post(DOMAIN_BASE_URL.concat('/registerPatient'), patientCreateRequest);
     }
 };
-exports["default"] = userDao;
+exports.default = userDao;

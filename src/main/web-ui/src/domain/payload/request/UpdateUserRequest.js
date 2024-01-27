@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateUserRequest = void 0;
 var UpdateUserRequest = /** @class */ (function () {
     function UpdateUserRequest(username, name, surname, password) {

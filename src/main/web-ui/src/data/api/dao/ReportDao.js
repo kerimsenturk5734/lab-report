@@ -7,9 +7,6 @@ var reportDao = {
     getReportBlobById: function (reportId) {
         return api_1.api.get(DOMAIN_BASE_URL.concat("/downloadReport/".concat(reportId)), { responseType: 'blob' });
     },
-    downloadReport: function (reportId) {
-        return api_1.api.get(DOMAIN_BASE_URL.concat("/downloadReport/".concat(reportId)));
-    },
     getAllReports: function () { return api_1.api.get(DOMAIN_BASE_URL.concat('/getAllReports')); },
     createDiagnosticReportFor: function (createDiagnosticReportRequest) {
         return api_1.api.post(DOMAIN_BASE_URL.concat('/createDiagnosticReportFor'), createDiagnosticReportRequest);

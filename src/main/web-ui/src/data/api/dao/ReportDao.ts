@@ -11,9 +11,6 @@ const reportDao = {
     getReportBlobById: (reportId:string) =>
         api.get(DOMAIN_BASE_URL.concat(`/downloadReport/${reportId}`), {responseType: 'blob'}),
 
-    downloadReport: (reportId:string) =>
-        api.get(DOMAIN_BASE_URL.concat(`/downloadReport/${reportId}`)),
-
     getAllReports: () => api.get(DOMAIN_BASE_URL.concat('/getAllReports')),
 
     createDiagnosticReportFor: (createDiagnosticReportRequest: CreateDiagnosticReportRequest) =>

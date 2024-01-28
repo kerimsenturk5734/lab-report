@@ -24,7 +24,7 @@ import java.util.List;
 @SecurityRequirement(name = "Bearer Authentication")
 @RestController
 @RequestMapping("v1/api/reports")
-@CrossOrigin
+@CrossOrigin(exposedHeaders = {HttpHeaders.CONTENT_DISPOSITION})
 public class ReportController {
     private final ReportService reportService;
     private final MessageBuilder messageBuilder;
@@ -103,6 +103,7 @@ public class ReportController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, fileNameHeader)
+
                 .contentType(res.mediaType())
                 .body(new InputStreamResource(res.in()));
     }

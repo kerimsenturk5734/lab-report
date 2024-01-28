@@ -50,7 +50,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.useCreatePathologicReportFor = void 0;
 var react_1 = require("react");
 var ReportDao_1 = require("../../../data/api/dao/ReportDao");
-//HTTP 403, 400, 409, 201
+//HTTP 403, 400, 409, 201, 404
 var useCreatePathologicReportFor = function () {
     var _a = (0, react_1.useState)({
         successMessage: '',
@@ -67,7 +67,7 @@ var useCreatePathologicReportFor = function () {
                             .then(function (res) {
                             console.log(res);
                             setState({
-                                successMessage: "Pathologic report created successfully",
+                                successMessage: res.data.message,
                                 error: {},
                                 errorMessage: '',
                                 isLoading: false

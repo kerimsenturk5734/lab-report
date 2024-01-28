@@ -67,7 +67,7 @@ var useCreateDiagnosticReportFor = function () {
                             .then(function (res) {
                             console.log(res);
                             setState({
-                                successMessage: "Diagnostic report created successfully",
+                                successMessage: res.data.message,
                                 error: {},
                                 errorMessage: '',
                                 isLoading: false

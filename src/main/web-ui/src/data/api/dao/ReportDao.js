@@ -12,7 +12,7 @@ var reportDao = {
         return api_1.api.post(DOMAIN_BASE_URL.concat('/createDiagnosticReportFor'), createDiagnosticReportRequest);
     },
     createPathologicReportFor: function (createPathologicReportRequest) {
-        return api_1.api.post(DOMAIN_BASE_URL.concat('/createPathologicReportFor'), createPathologicReportRequest);
+        return api_1.api.post(DOMAIN_BASE_URL.concat('/createPathologicalReportFor'), createPathologicReportRequest);
     },
     updateReport: function (updateReportRequest) {
         return api_1.api.put(DOMAIN_BASE_URL.concat('/updateReport'), updateReportRequest);

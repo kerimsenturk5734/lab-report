@@ -1,8 +1,8 @@
 import {useState} from "react";
 import reportDao from "../../../data/api/dao/ReportDao";
-import {CreatePathologicReportRequest} from "../../payload/request/CreatePathologicReportRequestFor";
+import {CreatePathologicReportRequest} from "../../payload/request/CreatePathologicReportRequest";
 
-//HTTP 403, 400, 409, 201
+//HTTP 403, 400, 409, 201, 404
 export const useCreatePathologicReportFor = () => {
     const [state, setState] = useState({
         successMessage:'',
@@ -18,7 +18,7 @@ export const useCreatePathologicReportFor = () => {
             .then((res) => {
                 console.log(res)
                 setState({
-                    successMessage: `Pathologic report created successfully`,
+                    successMessage: res.data.message,
                     error: {},
                     errorMessage: '',
                     isLoading: false

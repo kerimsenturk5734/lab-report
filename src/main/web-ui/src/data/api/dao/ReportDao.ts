@@ -1,7 +1,7 @@
 import {api} from "../api";
 
 import {CreateDiagnosticReportRequest} from "../../../domain/payload/request/CreateDiagnosticReportRequest";
-import {CreatePathologicReportRequest} from "../../../domain/payload/request/CreatePathologicReportRequestFor";
+import {CreatePathologicReportRequest} from "../../../domain/payload/request/CreatePathologicReportRequest";
 import {UpdateReportRequest} from "../../../domain/payload/request/UpdateReportRequest";
 
 const DOMAIN_BASE_URL = "/reports"
@@ -17,7 +17,7 @@ const reportDao = {
         api.post(DOMAIN_BASE_URL.concat('/createDiagnosticReportFor'), createDiagnosticReportRequest),
 
     createPathologicReportFor: (createPathologicReportRequest : CreatePathologicReportRequest) =>
-        api.post(DOMAIN_BASE_URL.concat('/createPathologicReportFor'), createPathologicReportRequest),
+        api.post(DOMAIN_BASE_URL.concat('/createPathologicalReportFor'), createPathologicReportRequest),
 
     updateReport: (updateReportRequest : UpdateReportRequest) =>
         api.put(DOMAIN_BASE_URL.concat('/updateReport'), updateReportRequest),

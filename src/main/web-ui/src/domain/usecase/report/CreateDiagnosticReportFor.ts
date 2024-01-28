@@ -18,7 +18,7 @@ export const useCreateDiagnosticReportFor = () => {
             .then((res) => {
                 console.log(res)
                 setState({
-                    successMessage: `Diagnostic report created successfully`,
+                    successMessage: res.data.message,
                     error: {},
                     errorMessage: '',
                     isLoading: false

@@ -27,6 +27,11 @@
         background: #F5F7FA;
     }
 
+    pre {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+
     @media (min-width: 768px) {
         .gradient-form {
           height: 100vh !important;

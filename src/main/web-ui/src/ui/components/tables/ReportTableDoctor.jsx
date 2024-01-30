@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import DiseaseViewModel from '../../../viewmodel/DiseaseViewModel';
 import TableHead from './TableHead';
 import TooledSearchBar, {DropDown, getDropDownActions} from '../TooledSearchBar';
 import {DataTypes, HEADS} from './TableConstants';
@@ -10,13 +9,19 @@ import CreateReportModal from "../modals/CreateReportModal";
 import {ReportType} from "../../../domain/model/Report";
 import UpdateReportModal from "../modals/UpdateReportModal";
 import AreYouSureModal from "../modals/AreYouSureModal";
+import {useGetDiseasesByDoctorId} from "../../../domain/usecase/disease/GetDiseasesByDoctorIdUseCase";
+import {LocalStorageManager} from "../../../util/localStorageManager";
+import {jsonBeautifier} from "../../../util/JsonBeautifier";
+import {useDownloadReport} from "../../../domain/usecase/report/DownloadReportUseCase";
 
 export default function ReportTableDoctor() {
-    const vm = new DiseaseViewModel();
-    const realData = vm.getDummyDoctorDiseases().data;
+    const {state, getDiseasesByDoctorId} = useGetDiseasesByDoctorId()
+
     const dataType = DataTypes.DOCTOR;
 
+    const [realData, setRealData] = useState(state.data)
     const [data, setData] = useState(realData);
+
     const [searchBy, setSearchBy] = useState(dataType.SEARCH_BY.PATIENT_ID);
     const [orderBy, setOrderBy] = useState(dataType.ORDER_BY.ID_ASC);
 
@@ -29,6 +34,17 @@ export default function ReportTableDoctor() {
         actionData: dataType.ORDER_BY,
         onSelect: setOrderBy,
     });
+
+    useEffect(() => {
+        const user = LocalStorageManager.loadUser()
+        getDiseasesByDoctorId(user.userId)
+            .then(() => {/*TODO toast loading.. during isLoading is true*/})
+    }, []);
+
+    useEffect(() => {
+        setRealData(state.data)
+        setData(state.data)
+    }, [state.data]);
 
     useEffect(() => {
         handleOrderBy();
@@ -64,23 +80,41 @@ export default function ReportTableDoctor() {
 
         switch (orderBy) {
             case sort.ID_ASC:
-                sortedData = realData.slice().sort((a, b) => a.id - b.id);
+                sortedData = realData
+                    .slice()
+                    .sort((a, b) => a.id - b.id);
                 break;
+
             case sort.ID_DESC:
-                sortedData = realData.slice().sort((a, b) => b.id - a.id);
+                sortedData = realData
+                    .slice()
+                    .sort((a, b) => b.id - a.id);
                 break;
+
             case sort.PATIENT_ID_ASC:
-                sortedData = realData.slice().sort((a, b) => a.patient.userId - b.patient.userId);
+                sortedData = realData
+                    .slice()
+                    .sort((a, b) => a.patient.userId - b.patient.userId);
                 break;
+
             case sort.PATIENT_ID_DESC:
-                sortedData = realData.slice().sort((a, b) => b.patient.userId - a.patient.userId);
+                sortedData = realData
+                    .slice()
+                    .sort((a, b) => b.patient.userId - a.patient.userId);
                 break;
-            case sort.DATE_NEW_TO_OLD:
-                sortedData = realData.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
-                break;
+
             case sort.DATE_OLD_TO_NEW:
-                sortedData = realData.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+                sortedData = realData
+                    .slice()
+                    .sort((a, b) => new Date(a.creationDate) - new Date(b.creationDate));
                 break;
+
+            case sort.DATE_NEW_TO_OLD:
+                sortedData = realData
+                    .slice()
+                    .sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate));
+                break;
+
             default:
                 console.log('An error occurred');
                 break;
@@ -123,17 +157,23 @@ function TableData({ data }) {
 
     const isDiagnosticCreationDisabled = (diseaseState !== DiseaseState.PATHOLOGIC_RESULTED)
 
-    const [pdfViewModalIsOpen, setPdfViewModalIsOpen] = useState(false);
+    const [pathologicPdfViewModalIsOpen, setPathologicPdfViewModalIsOpen] = useState(false);
+    const [diagnosticPdfViewModalIsOpen, setDiagnosticPdfViewModalIsOpen] = useState(false);
     const [createReportModalIsOpen, setCreateReportModalIsOpen] = useState(false)
     const [updateReportModalIsOpen, setUpdateReportModalIsOpen] = useState(false)
     const [deleteDiseaseModalIsOpen, setDeleteDiseaseModalIsOpen] = useState(false)
-    const showPdfViewModal = () => {
-        setPdfViewModalIsOpen(true);
+
+    const {state, downloadReport} = useDownloadReport()
+    const showPathologicPdfViewModal = (reportId : string) => {
+        setPathologicPdfViewModalIsOpen(true);
+    }
+    const showDiagnosticPdfViewModal = (reportId : string) => {
+        setDiagnosticPdfViewModalIsOpen(true);
     };
     const closePdfViewModal = () => {
-        setPdfViewModalIsOpen(false);
+        setPathologicPdfViewModalIsOpen(false);
+        setDiagnosticPdfViewModalIsOpen(false);
     };
-
     const showCreateReportModal = () => {
         setCreateReportModalIsOpen(true);
     };
@@ -159,7 +199,7 @@ function TableData({ data }) {
     return (
         <tr>
             <td className="text-center">{data.id}</td>
-            <td className="text-center font-monospace">27 Feb 2024 13:50</td>
+            <td className="text-center font-monospace">{jsonBeautifier.beautifyDate(data.creationDate)}</td>
             <td className="text-center">{data.patient.userId}</td>
             <td className="text-center font-monospace fst-italic">{data.labRequestType}</td>
             <td className={`text-center font-monospace fst-italic rounded-2`}>
@@ -177,15 +217,16 @@ function TableData({ data }) {
                         <div className="d-flex justify-content-lg-between">
                             <button type="button"
                                     className="btn btn-dark btn-outline-dark btn-sm px-3"
-                                    onClick={showPdfViewModal}>
+                                    onClick={showPathologicPdfViewModal}>
 
-                                <i className="fa fa-solid fa-tv"> View</i>
+                                <i className="fa fa-solid fa-tv"></i>
                             </button>
-                            <button type="button" className="btn btn-dark btn-sm px-2 btn-outline-primary">
+                            <button type="button" className="btn btn-dark btn-sm px-2 btn-outline-primary"
+                                    onClick={() => {downloadReport(data.pathologicReport?.reportId)}}>
                                 <i className="fa fa-solid outline fa-download"></i>
                             </button>
-                            <PdfViewModal reportId={""}
-                                          open={pdfViewModalIsOpen}
+                            <PdfViewModal reportId={data.pathologicReport?.reportId}
+                                          open={pathologicPdfViewModalIsOpen}
                                           onCLose={closePdfViewModal}/>
                         </div>
                 }
@@ -200,15 +241,16 @@ function TableData({ data }) {
                                     <div className="d-flex justify-content-lg-between">
                                         <button type="button"
                                                 className="btn btn-dark btn-outline-dark btn-sm px-3"
-                                                onClick={showPdfViewModal}>
+                                                onClick={showDiagnosticPdfViewModal}>
 
-                                            <i className="fa fa-solid fa-tv"> View</i>
+                                            <i className="fa fa-solid fa-tv"></i>
                                         </button>
-                                        <button type="button" className="btn btn-dark btn-outline-primary btn-sm px-2">
+                                        <button type="button" className="btn btn-dark btn-outline-primary btn-sm px-2"
+                                                onClick={() => {downloadReport(data.diagnosticReport?.reportId)}}>
                                             <i className="fa fa-solid fa-download"></i>
                                         </button>
-                                        <PdfViewModal reportId={""}
-                                                      open={pdfViewModalIsOpen}
+                                        <PdfViewModal reportId={data.diagnosticReport?.reportId}
+                                                      open={diagnosticPdfViewModalIsOpen}
                                                       onCLose={closePdfViewModal}/>
                                     </div>
                             }
@@ -249,7 +291,7 @@ function TableData({ data }) {
                             </button>
                     }
                     <button type="button" className="btn btn-danger btn-sm px-2" onClick={showDeleteDiseaseModal}>
-                        <i className="fa fa-solid fa-trash"> </i> Delete
+                        <i className="fa fa-solid fa-trash"> </i>
                     </button>
                     <AreYouSureModal open={deleteDiseaseModalIsOpen}
                                      question={`Are you sure to delete disease with id: ${data.id} ?`}

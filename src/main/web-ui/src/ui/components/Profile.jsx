@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import {MDBCard, MDBCol, MDBContainer, MDBRow} from "mdb-react-ui-kit";
 import ChangeUserInfoModal from "./modals/ChangeUserInfoModal";
+import {LocalStorageManager} from "../../util/localStorageManager";
 
 function Profile() {
     const [updateUserModalIsOpen, setUpdateUserModalIsOpen] = useState(false)
-
+    const user = LocalStorageManager.loadUser()
     const showUpdateUserModal = () => {
         setUpdateUserModalIsOpen(true)
     }
@@ -32,10 +33,10 @@ function Profile() {
                                <h5><b>User Role:</b></h5>
                            </MDBCol>
                            <MDBCol>
-                               <h5><i>12345678901</i></h5>
-                               <h5><i>Kerim</i></h5>
-                               <h5><i>Senturk</i></h5>
-                               <h5><i>DOCTOR</i></h5>
+                               <h5><i>{user.userId}</i></h5>
+                               <h5><i>{user.name}</i></h5>
+                               <h5><i>{user.surname}</i></h5>
+                               <h5><i>{user.role}</i></h5>
                                <MDBRow className={"mt-5"}>
                                    <button type="button"
                                            className="btn btn-outline-warning btn-sm px-3"

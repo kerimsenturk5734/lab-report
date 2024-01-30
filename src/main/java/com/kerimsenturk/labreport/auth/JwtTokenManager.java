@@ -1,6 +1,7 @@
 package com.kerimsenturk.labreport.auth;
 
 import com.kerimsenturk.labreport.exception.NotFound.ClaimNotFoundException;
+import com.kerimsenturk.labreport.exception.NotFound.UserNotFoundException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.token.DefaultToken;
@@ -12,12 +13,11 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 
 @Service
 public class JwtTokenManager {
-
-    /** TODO: This class throwing many exceptions about claim, signature ... handle them**/
     private final int VALIDITY = 5*60*100000;
     private final String ISSUER = "com.kerimsenturk.labreport";
     private final Key KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
@@ -36,43 +36,46 @@ public class JwtTokenManager {
         return new DefaultToken(tokenKey, new Date().getTime(),"Bearer Jwt Token");
     }
 
-    public boolean validate(String token, UserDetails userDetails){
-        return userDetails != null && !isExpired(token);
+    public boolean validate(String token){
+        return !isExpired(token);
     }
 
     private boolean isExpired(String token){
-        Claims claims = extractClaims(token);
-        return claims.getExpiration().before(new Date(System.currentTimeMillis()));
+        Optional<Claims> optionalClaims = extractClaims(token);
+
+        //return false if claims not present else check claims
+        return optionalClaims.map(
+                claims -> claims.getExpiration().before(new Date(System.currentTimeMillis())))
+                .orElse(true);
     }
 
     public String extractUser(String token){
-        Claims claims = extractClaims(token);
+        Optional<Claims> optionalClaims = extractClaims(token);
 
-        assert claims != null;
-        return claims.getSubject();
+        if(optionalClaims.isPresent())
+            return optionalClaims.get().getSubject();
+        else
+            return "";
     }
 
 
-    private Claims extractClaims(String token) {
-        try{
-            Claims claims = Jwts
-                    .parserBuilder()
-                    .setSigningKey(KEY)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+    private Optional<Claims> extractClaims(String token) {
+       try{
+           Claims claims = Jwts
+                   .parserBuilder()
+                   .setSigningKey(KEY)
+                   .build()
+                   .parseClaimsJws(token)
+                   .getBody();
 
-            if(claims.isEmpty())
-                throw new ClaimNotFoundException(Jwts.header(), claims, "Claims Not Found By "+token);
+           if(claims.isEmpty())
+               throw new ClaimNotFoundException(Jwts.header(), claims, "Claims Not Found By "+token);
 
-            return claims;
-        }
-        catch (Exception e){
-            /** TODO: Handle SignatureException, signature does not match computed signature**/
-            e.printStackTrace();
-            return null;
-        }
+           return Optional.of(claims);
+       }
+       catch (Exception e){
+           e.fillInStackTrace();
+           return Optional.empty();
+       }
     }
-
-
 }

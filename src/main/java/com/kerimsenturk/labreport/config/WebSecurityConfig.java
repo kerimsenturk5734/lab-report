@@ -57,8 +57,11 @@ public class WebSecurityConfig {
                 //Authorize the requests coming to endpoints at the matchers pattern
                 .authorizeHttpRequests(x -> x
 
-                        //Allow every user to want to access login and register endpoints
-                        .requestMatchers("**/users/login","**/users/registerPatient").permitAll()
+                        //Allow every user to want to access login, token validation and register endpoints
+                        .requestMatchers(
+                                "**/users/login",
+                                "**/users/registerPatient",
+                                "**/api/users/isTokenValid/**").permitAll()
 
                         //Allow swagger docs
                         .requestMatchers("**/api-docs/**", "**/swagger-ui/**").permitAll()

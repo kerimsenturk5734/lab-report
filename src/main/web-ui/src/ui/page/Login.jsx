@@ -67,7 +67,8 @@ const LoginCard = () => {
 
     useEffect(() => {
         if (state.successMessage.length > 0) {
-            toast.success(state.successMessage, {style: {width: '-webkit-fit-content'}, position: "top-left"})
+            toast.success(jsonBeautifier.getPreOfJson(state.successMessage),
+                {theme:'colored', style: {width: '-webkit-fit-content'}, position: "top-left", hideProgressBar:true})
             state.successMessage = ''
             saveCredentials()
             setTimeout(() => {
@@ -79,7 +80,7 @@ const LoginCard = () => {
     useEffect(() => {
         if (state.errorMessage.length > 0) {
             toast(jsonBeautifier.getPreOfJson(state.errorMessage),
-                {type: 'error', theme: 'colored', position:"top-left", style:{width:'500px'}})
+                {type: 'error', theme: 'colored', position:"top-left", hideProgressBar:true})
             state.errorMessage = ''
         }
     }, [state.errorMessage]);

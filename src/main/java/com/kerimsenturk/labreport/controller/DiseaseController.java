@@ -129,14 +129,14 @@ public class DiseaseController {
 
         return ResponseEntity.ok(new SuccessDataResult<List<DiseaseDto>>(diseaseDtoList,message));
     }
-    @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.LAB_TECHNICIAN)")
     @DeleteMapping("/deletePathologicalReportOf/{diseaseId}")
     public ResponseEntity<?> deletePathologicalReportOf(@PathVariable int diseaseId) {
         diseaseService.deleteReportOf(diseaseId, ReportType.PATHOLOGICAL);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.DOCTOR)")
     @DeleteMapping("/deleteDiagnosticReportOf/{diseaseId}")
     public ResponseEntity<?> deleteDiagnosticReportOf(@PathVariable int diseaseId) {
         diseaseService.deleteReportOf(diseaseId, ReportType.DIAGNOSTIC);

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import CustomModal from "./CustomModal";
 import {MDBInput} from "mdb-react-ui-kit";
 import {UpdateUserRequest} from "../../../domain/payload/request/UpdateUserRequest";
+import {getButtonClass} from "../tables/FieldClasses";
 
 function ChangeUserInfoModal({open, onCancel}) {
 
@@ -57,13 +58,6 @@ function ChangeUserInfoModal({open, onCancel}) {
             setPassword("-----")
     }
 
-    const getButtonClass = (inputIsDisabled) => {
-        if(inputIsDisabled)
-            return "fa-pen"
-        else
-            return "fa-window-close"
-    }
-
     const isPasswordValid = () => {
         if(!passwordChangeIsDisabled)
             return password.trim().length >= 8
@@ -109,7 +103,7 @@ function ChangeUserInfoModal({open, onCancel}) {
                 </div>
 
                 <div className={"d-flex w-75 mb-4 gap-2"}>
-                <MDBInput label='Surname' type='text' value={surname}
+                    <MDBInput label='Surname' type='text' value={surname}
                               onChange={handleSurnameInputChange} disabled={surnameChangeIsDisabled}/>
                     <button className={"btn p-1 col-1"} onClick={toggleSurnameChange}>
                         <i className={`fa fa-solid outline ${getButtonClass(surnameChangeIsDisabled)}`}></i>
@@ -117,7 +111,7 @@ function ChangeUserInfoModal({open, onCancel}) {
                 </div>
 
                 <div className={"d-flex w-75 mb-4 gap-2"}>
-                <MDBInput label='Password' type='password' value={password}
+                    <MDBInput label='Password' type='password' value={password}
                               onChange={handlePasswordInputChange} disabled={passwordChangeIsDisabled}/>
                     <button className={"btn p-1 col-1"} onClick={togglePasswordChange}>
                         <i className={`fa fa-solid outline ${getButtonClass(passwordChangeIsDisabled)}`}></i>
@@ -130,7 +124,7 @@ function ChangeUserInfoModal({open, onCancel}) {
                         </div>
                         : <></>
                 }
-                <div className={"d-flex justify-content-end gap-2 mt-5"}>
+                <div className={"d-flex w-75 justify-content-end gap-2 mt-5"}>
                     <button type="button"
                             className={`btn btn-dark btn-sm btn-outline-warning`}
                             onClick={changeUserInfo} disabled={!isPasswordValid()}>

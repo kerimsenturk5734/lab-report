@@ -19,3 +19,10 @@ export const getTextClassByStatus = (status) => {
         case DiseaseState.DELETED : return 'text-danger'
     }
 };
+
+export const getButtonClass = (inputIsDisabled) => {
+    if(inputIsDisabled)
+        return "fa-pen"
+    else
+        return "fa-window-close"
+}

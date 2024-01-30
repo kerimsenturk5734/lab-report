@@ -8,6 +8,8 @@ const DOMAIN_BASE_URL = "/users"
 const userDao = {
 
     // Define your API endpoints here
+    isTokenValid: (token:string = "defaultToken") => api.get(DOMAIN_BASE_URL.concat(`/isTokenValid/${token}`)),
+
     getUserById: (id:string) => api.get(DOMAIN_BASE_URL.concat(`/${id}`)),
 
     getAllUsers: () => api.get(DOMAIN_BASE_URL.concat('/getAllUsers')),

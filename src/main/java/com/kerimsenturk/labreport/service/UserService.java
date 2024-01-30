@@ -1,6 +1,7 @@
 package com.kerimsenturk.labreport.service;
 
 import com.kerimsenturk.labreport.auth.JwtTokenManager;
+import com.kerimsenturk.labreport.auth.UserDetailsServiceCustom;
 import com.kerimsenturk.labreport.dto.UserDto;
 import com.kerimsenturk.labreport.dto.converter.UserAndUserDtoConverter;
 import com.kerimsenturk.labreport.dto.response.UserLoginResponse;
@@ -18,6 +19,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.token.Token;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,17 +39,19 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenManager jwtTokenManager;
+    private final UserDetailsServiceCustom userDetailsServiceCustom;
     //-------------------End---------------------
 
     public UserService(UserRepository userRepository, UserAndUserDtoConverter userAndUserDtoConverter,
                        PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager,
-                       JwtTokenManager jwtTokenManager) {
+                       JwtTokenManager jwtTokenManager, UserDetailsServiceCustom userDetailsServiceCustom) {
 
         this.userRepository = userRepository;
         this.userAndUserDtoConverter = userAndUserDtoConverter;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtTokenManager = jwtTokenManager;
+        this.userDetailsServiceCustom = userDetailsServiceCustom;
     }
 
     public String registerPatient(PatientCreateRequest patientCreateRequest){
@@ -153,5 +158,9 @@ public class UserService {
                 .stream()
                 .map(userAndUserDtoConverter::convert)
                 .collect(Collectors.toList());
+    }
+
+    public boolean isTokenValid(String tokenKey){
+        return  jwtTokenManager.validate(tokenKey);
     }
 }

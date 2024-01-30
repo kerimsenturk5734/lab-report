@@ -17,6 +17,7 @@ public class PatientIdValidator implements ConstraintValidator<PatientIdValid, S
 
     @Override
     public boolean isValid(String val, ConstraintValidatorContext context) {
+
         String message = messageBuilder
                 .code("validation.unmatched.patientId")
                 .build();
@@ -24,6 +25,6 @@ public class PatientIdValidator implements ConstraintValidator<PatientIdValid, S
         context.disableDefaultConstraintViolation();
         context.buildConstraintViolationWithTemplate(message).addConstraintViolation();
 
-        return (val.length() == 11) && (StringUtils.isNumeric(val));
+        return (val != null) && (val.length() == 11) && (StringUtils.isNumeric(val));
     }
 }

@@ -55,7 +55,7 @@ export const useRegisterPatient = () => {
                     setState({
                         successMessage: '',
                         error: err,
-                        errorMessage: JSON.stringify(err.response.data, null, 4),
+                        errorMessage: JSON.stringify(err.response.data, null, 1),
                         isLoading: false
                     });
                 }

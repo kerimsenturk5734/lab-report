@@ -1,5 +1,6 @@
 import React from 'react';
 import './ui/css/App.css'
+import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from "./ui/page/Dashboard";
 import {UserType} from "./ui/components/Constants";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
@@ -8,7 +9,8 @@ import NoPage from "./ui/page/NoPage";
 
 export default function App() {
 
-  const isUserLoggedIn = true // Validate from api
+    //TODO: get credentials from local storage and validate by using api
+  const isUserLoggedIn = false // Validate from api
   /*
     Get userType from local storage.
     Even if change the userType as manual user can not access the forbidden endpoints

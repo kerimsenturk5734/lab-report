@@ -76,7 +76,7 @@ export default function NavBar({userType = UserType.DEFAULT, handleContent = (va
 
     return (
         <div>
-        <nav className="navbar navbar-toggler rounded-3 ms-3 me-3 p-3 bg-white" >
+        <nav className="navbar navbar-toggler rounded-3 mx-3 my-3 p-3 bg-white" >
                 <div className="container-fluid justify-content-between">
                     <NavBrand />
                     <ul className="navbar-nav flex-row d-none d-md-flex">

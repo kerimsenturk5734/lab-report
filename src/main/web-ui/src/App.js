@@ -15,13 +15,11 @@ export default function App() {
     const {state, isTokenValid} = useIsTokenValid()
 
     useEffect(() => {
-        console.log(token)
         if(![null, undefined, ""].includes(token))
             isTokenValid(token)
     }, []);
 
     useEffect(() => {
-        console.log(state.isValid)
         if(state.isValid)
             setUserType(JSON.parse(localStorage.getItem("user")).role)
 

@@ -29,6 +29,6 @@ export const jsonBeautifier = {
     },
 
     getPreOfJson : (json) => {
-        return <pre>{json}</pre>
+        return <pre className={"px-3 py-1"}>{json}</pre>
     }
 }

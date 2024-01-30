@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import CustomModal from "./CustomModal";
 import {MDBInput} from "mdb-react-ui-kit";
 import {UpdateUserRequest} from "../../../domain/payload/request/UpdateUserRequest";
+import {getButtonClass} from "../tables/FieldClasses";
 
 function ChangeUserInfoModal({open, onCancel}) {
 
@@ -55,13 +56,6 @@ function ChangeUserInfoModal({open, onCancel}) {
             setPassword("") //Set current value
         else
             setPassword("-----")
-    }
-
-    const getButtonClass = (inputIsDisabled) => {
-        if(inputIsDisabled)
-            return "fa-pen"
-        else
-            return "fa-window-close"
     }
 
     const isPasswordValid = () => {

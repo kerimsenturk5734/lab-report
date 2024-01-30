@@ -43,7 +43,7 @@ export default function ReportTableDoctor() {
 
     useEffect(() => {
         if(state.successMessage.length > 0)
-            toast.success(state.successMessage, {theme:'colored', position:'top-left'})
+            toast.info(state.successMessage, {theme:'colored', position:'bottom-left'})
 
     }, [state.successMessage]);
 
@@ -295,7 +295,8 @@ function TableData({ data }) {
                                 </button>
                                 <UpdateReportModal open={updateReportModalIsOpen}
                                                    reportType={ReportType.DIAGNOSTIC}
-                                                   onCancel={closeUpdateReportModal}/>
+                                                   onCancel={closeUpdateReportModal}
+                                                   report={data.diagnosticReport}/>
                             </>
                             :
                             <button type="button" className="btn btn-warning btn-sm disabled text-black-50 px-2">

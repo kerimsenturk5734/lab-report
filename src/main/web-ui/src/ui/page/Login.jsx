@@ -4,10 +4,11 @@ import {MDBBtn, MDBContainer, MDBInput} from 'mdb-react-ui-kit';
 import {toast, ToastContainer} from "react-toastify";
 import {PatientCreateRequest} from "../../domain/payload/request/PatientCreateRequest";
 import {useRegisterPatient} from "../../domain/usecase/user/RegisterPatientUseCase";
-import {getPreOfJson} from "../../util/JsonBeautifier";
+import {jsonBeautifier} from "../../util/JsonBeautifier";
 import {useLoginUser} from "../../domain/usecase/user/LoginUserUseCase";
 import {UserLoginRequest} from "../../domain/payload/request/UserLoginRequest";
 import {useNavigate} from "react-router-dom";
+import {LocalStorageManager} from "../../util/localStorageManager";
 
 
 function Login() {
@@ -26,22 +27,27 @@ function Login() {
         <MDBContainer className="gradient-form">
             <div className="row d-flex justify-content-center">
                 <div className="col-md-5 box-shadow bg-gray mt-5">
-                    <div className="text-center">
-                        <img src="https://cdn-icons-png.flaticon.com/512/8204/8204580.png"
-                             style={{width: '150px'}} alt="logo"/>
-                        <h4 className="mt-1 mb-5 pb-1">Lab Report</h4>
+                    <div className={"mt-3"}>
+                        <div className="text-center">
+                            <img src="https://cdn-icons-png.flaticon.com/512/8204/8204580.png"
+                                 style={{width: '150px'}} alt="logo"/>
+                            <h4 className="mt-1 mb-5 pb-1">Lab Report</h4>
+                        </div>
+                        <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-2">
+                            <MDBBtn className='mx-2' color='secondary'
+                                    onClick={() => {
+                                        setContent("login")
+                                    }}>
+                                Login
+                            </MDBBtn>
+                            <MDBBtn className='mx-2' color='secondary'
+                                    onClick={() => {
+                                        setContent("register")
+                                    }}>
+                                Register
+                            </MDBBtn>
+                        </div>
                     </div>
-                    <div className="d-flex flex-row align-items-center justify-content-center pb-4 mb-2">
-                        <MDBBtn className='mx-2' color='secondary'
-                                onClick={() => { setContent("login") }}>
-                            Login
-                        </MDBBtn>
-                        <MDBBtn className='mx-2' color='secondary'
-                                onClick={() => { setContent("register")}}>
-                            Register
-                        </MDBBtn>
-                    </div>
-
                     <CurrentCard/>
                 </div>
                 <ToastContainer/>
@@ -60,18 +66,20 @@ const LoginCard = () => {
     const nav = useNavigate()
 
     useEffect(() => {
-        if(state.successMessage.length > 0){
-            toast.success(state.successMessage, {style:{width:'-webkit-fit-content'}, position:"top-left"})
+        if (state.successMessage.length > 0) {
+            toast.success(state.successMessage, {style: {width: '-webkit-fit-content'}, position: "top-left"})
             state.successMessage = ''
             saveCredentials()
-            setTimeout(()=>{window.location.reload()}, 2000)
+            setTimeout(() => {
+                window.location.reload()
+            }, 2000)
         }
     }, [state.successMessage]);
 
     useEffect(() => {
-        if(state.errorMessage.length > 0){
-            toast(getPreOfJson(state.errorMessage),
-                {type:'error', theme: 'colored', position:"top-left", style:{width:'500px'}})
+        if (state.errorMessage.length > 0) {
+            toast(jsonBeautifier.getPreOfJson(state.errorMessage),
+                {type: 'error', theme: 'colored', position:"top-left", style:{width:'500px'}})
             state.errorMessage = ''
         }
     }, [state.errorMessage]);
@@ -94,14 +102,8 @@ const LoginCard = () => {
     const saveCredentials = () => {
         let credentials = state.credential
 
-        for (const key in credentials) {
-            if (credentials.hasOwnProperty(key)) {
-                localStorage.setItem(key, JSON.stringify(credentials[key], null, 2))
-            }
-        }
-
-        console.log(localStorage.getItem("token"))
-        console.log(localStorage.getItem("user"))
+        LocalStorageManager.setUser(credentials.user)
+        LocalStorageManager.setToken(credentials.token)
     }
 
     return (

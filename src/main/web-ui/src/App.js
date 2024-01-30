@@ -7,10 +7,11 @@ import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Login from "./ui/page/Login";
 import NoPage from "./ui/page/NoPage";
 import {useIsTokenValid} from "./domain/usecase/user/IsTokenValidUseCase";
+import {LocalStorageManager} from "./util/localStorageManager";
 
 export default function App() {
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
-    const [token, setToken] = useState(JSON.parse(localStorage.getItem("token"))?.key)
+    const [token, setToken] = useState(LocalStorageManager.loadToken()?.key)
     const [userType, setUserType] = useState(UserType.DEFAULT)
     const {state, isTokenValid} = useIsTokenValid()
 
@@ -21,7 +22,7 @@ export default function App() {
 
     useEffect(() => {
         if(state.isValid)
-            setUserType(JSON.parse(localStorage.getItem("user")).role)
+            setUserType(LocalStorageManager.loadUser().role)
 
         setIsUserLoggedIn(state.isValid)
     },[state.isValid])

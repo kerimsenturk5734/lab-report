@@ -4,10 +4,11 @@ import {MDBBtn, MDBContainer, MDBInput} from 'mdb-react-ui-kit';
 import {toast, ToastContainer} from "react-toastify";
 import {PatientCreateRequest} from "../../domain/payload/request/PatientCreateRequest";
 import {useRegisterPatient} from "../../domain/usecase/user/RegisterPatientUseCase";
-import {getPreOfJson} from "../../util/JsonBeautifier";
+import {jsonBeautifier} from "../../util/JsonBeautifier";
 import {useLoginUser} from "../../domain/usecase/user/LoginUserUseCase";
 import {UserLoginRequest} from "../../domain/payload/request/UserLoginRequest";
 import {useNavigate} from "react-router-dom";
+import {LocalStorageManager} from "../../util/localStorageManager";
 
 
 function Login() {
@@ -77,7 +78,7 @@ const LoginCard = () => {
 
     useEffect(() => {
         if (state.errorMessage.length > 0) {
-            toast(getPreOfJson(state.errorMessage),
+            toast(jsonBeautifier.getPreOfJson(state.errorMessage),
                 {type: 'error', theme: 'colored', position:"top-left", style:{width:'500px'}})
             state.errorMessage = ''
         }
@@ -101,14 +102,8 @@ const LoginCard = () => {
     const saveCredentials = () => {
         let credentials = state.credential
 
-        for (const key in credentials) {
-            if (credentials.hasOwnProperty(key)) {
-                localStorage.setItem(key, JSON.stringify(credentials[key], null, 2))
-            }
-        }
-
-        console.log(localStorage.getItem("token"))
-        console.log(localStorage.getItem("user"))
+        LocalStorageManager.setUser(credentials.user)
+        LocalStorageManager.setToken(credentials.token)
     }
 
     return (

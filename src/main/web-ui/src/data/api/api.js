@@ -1,8 +1,9 @@
 import axios from 'axios';
+import {LocalStorageManager} from "../../util/localStorageManager";
 
 const ROOT_URL = 'http://localhost:8080';
 const API_VERSION_URL = '/v1/api'
-const TOKEN = JSON.parse(localStorage.getItem('token'))?.key
+const TOKEN = LocalStorageManager.loadToken()?.key
 
 export const api = axios.create({
     baseURL: ROOT_URL.concat(API_VERSION_URL),

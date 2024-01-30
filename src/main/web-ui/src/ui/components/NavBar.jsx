@@ -7,7 +7,7 @@ import NavItemPatient from "./nav_items/NavItemPatient";
 import {ContentType} from "./Content";
 
 export default function NavBar({userType = UserType.DEFAULT, handleContent = (val) => {}}) {
-
+    let user = JSON.parse(localStorage.getItem('user'))
     const UserProfile = () => {
         return (
             <ul className="navbar-nav flex-row gap-2">
@@ -15,7 +15,7 @@ export default function NavBar({userType = UserType.DEFAULT, handleContent = (va
                     {userBannerIcon(userType)}
                 </MDBNavbarItem>
                 <MDBNavbarItem className="me-3 me-lg-1 d-sm-flex align-items-sm-center">
-                    <strong className="d-none d-sm-block ms-1">Alper Kaan Dalarslan</strong>
+                    <strong className="d-none d-sm-block ms-1"></strong>
                 </MDBNavbarItem>
 
                 <MDBNavbarItem className="dropdown">

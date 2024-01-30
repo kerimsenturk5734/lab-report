@@ -8,7 +8,6 @@ import {getPreOfJson} from "../../util/JsonBeautifier";
 import {useLoginUser} from "../../domain/usecase/user/LoginUserUseCase";
 import {UserLoginRequest} from "../../domain/payload/request/UserLoginRequest";
 import {useNavigate} from "react-router-dom";
-import {PagePath} from "../../App";
 
 
 function Login() {
@@ -65,7 +64,7 @@ const LoginCard = () => {
             toast.success(state.successMessage, {style:{width:'-webkit-fit-content'}, position:"top-left"})
             state.successMessage = ''
             saveCredentials()
-            setTimeout(()=>{nav(PagePath.DASHBOARD)}, 2000)
+            setTimeout(()=>{window.location.reload()}, 2000)
         }
     }, [state.successMessage]);
 

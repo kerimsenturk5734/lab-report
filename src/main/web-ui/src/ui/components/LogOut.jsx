@@ -1,10 +1,7 @@
 import React, {useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {PagePath} from "../../App";
 import {MDBCard, MDBContainer} from "mdb-react-ui-kit";
 
 function LogOut() {
-    const nav = useNavigate()
 
     useEffect(() => {
         logout()
@@ -12,10 +9,10 @@ function LogOut() {
 
     const logout = () => {
         //Clear the token from local storage
-        localStorage.removeItem("token")
+        localStorage.clear()
 
         //Navigate to log in screen as delayed
-        setTimeout(()=>{nav(PagePath.LOGIN)},2000)
+        setTimeout(()=>{window.location.reload()},2000)
     }
 
     return (

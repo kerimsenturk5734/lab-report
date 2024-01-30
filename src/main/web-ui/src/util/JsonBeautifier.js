@@ -1,3 +1,4 @@
+import {DiseaseDto} from "../domain/dto/DiseaseDto";
 
 export const jsonBeautifier = {
     beautifyJson : (o : any) : string => {
@@ -30,5 +31,17 @@ export const jsonBeautifier = {
 
     getPreOfJson : (json) => {
         return <pre className={"px-3 py-1"}>{json}</pre>
+    },
+
+    buildDeleteReportQuestion : (disease : DiseaseDto) => {
+        return (
+            <span>
+                Are you sure to delete diagnostic report for patient:
+                <span className={"text-danger"}>{disease.patient.userId} </span>
+
+                <span className={"text-danger"}>{disease.patient.name} {disease.patient.surname}</span>
+                 ?
+            </span>
+        )
     }
 }

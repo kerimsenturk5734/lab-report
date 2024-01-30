@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import TableHead from './TableHead';
 import TooledSearchBar, {DropDown, getDropDownActions} from '../TooledSearchBar';
 import {DataTypes, HEADS} from './TableConstants';
-import {DiseaseState} from "../../../domain/model/Disease";
 import {getBgClassByStatus, getTextClassByStatus} from "./FieldClasses";
 import PdfViewModal from "../modals/PdfViewModal";
 import CreateReportModal from "../modals/CreateReportModal";
@@ -14,6 +13,8 @@ import {LocalStorageManager} from "../../../util/localStorageManager";
 import {jsonBeautifier} from "../../../util/JsonBeautifier";
 import {useDownloadReport} from "../../../domain/usecase/report/DownloadReportUseCase";
 import {toast} from "react-toastify";
+import {useDeleteDiagnosticReportOf} from "../../../domain/usecase/disease/DeleteDiagnosticReportOfUseCase";
+import CustomModal from "../modals/CustomModal";
 
 export default function ReportTableDoctor() {
     const {state, getDiseasesByDoctorId} = useGetDiseasesByDoctorId()
@@ -161,13 +162,11 @@ export default function ReportTableDoctor() {
 function TableData({ data }) {
     const diseaseState = data.diseaseState
 
-    const isPathologicActionDisabled =
-        [DiseaseState.DELETED, DiseaseState.WAITING_RESULTS].includes(diseaseState)
+    const isPathologicActionDisabled = ([null, undefined].includes(data.pathologicReport))
 
-    const isDiagnosticActionDisabled =
-        [DiseaseState.DELETED, DiseaseState.WAITING_RESULTS, DiseaseState.PATHOLOGIC_RESULTED].includes(diseaseState)
+    const isDiagnosticActionDisabled = ([null, undefined].includes(data.diagnosticReport))
 
-    const isDiagnosticCreationDisabled = (diseaseState !== DiseaseState.PATHOLOGIC_RESULTED)
+    const isDiagnosticCreationDisabled = !(!isPathologicActionDisabled && isDiagnosticActionDisabled)
 
     const [pathologicPdfViewModalIsOpen, setPathologicPdfViewModalIsOpen] = useState(false);
     const [diagnosticPdfViewModalIsOpen, setDiagnosticPdfViewModalIsOpen] = useState(false);
@@ -176,6 +175,7 @@ function TableData({ data }) {
     const [deleteDiseaseModalIsOpen, setDeleteDiseaseModalIsOpen] = useState(false)
 
     const {state, downloadReport} = useDownloadReport()
+    const {state: deleteDiagnosticState, deleteDiagnosticReportOf} = useDeleteDiagnosticReportOf()
     const showPathologicPdfViewModal = () => {
         setPathologicPdfViewModalIsOpen(true);
     }
@@ -204,9 +204,34 @@ function TableData({ data }) {
     const closeDeleteDiseaseModal = () => {
         setDeleteDiseaseModalIsOpen(false)
     }
-    const deleteDisease = () => {
 
+    const deleteDiagnosticReport = () => {
+        deleteDiagnosticReportOf(data.id)
     }
+
+    useEffect(() => {
+        if(deleteDiagnosticState.successMessage.length > 0){
+            let toastOptions =
+                {position:'top-left', hideProgressBar: true, theme:'colored'}
+
+            toast.success(jsonBeautifier.getPreOfJson(deleteDiagnosticState.successMessage), toastOptions)
+
+            deleteDiagnosticState.successMessage = ''
+
+            setTimeout(()=>{window.location.reload()}, 2000)
+        }
+    }, [deleteDiagnosticState.successMessage]);
+
+    useEffect(() => {
+        if(deleteDiagnosticState.errorMessage.length > 0){
+            let toastOptions =
+                {position:'top-left', hideProgressBar: true, theme:'colored'}
+
+            toast.error(jsonBeautifier.getPreOfJson(deleteDiagnosticState.errorMessage), toastOptions)
+
+            deleteDiagnosticState.errorMessage = ''
+        }
+    }, [deleteDiagnosticState.errorMessage]);
 
     return (
         <tr>
@@ -303,13 +328,24 @@ function TableData({ data }) {
                                 <i className="fa fa-solid fa-arrow-circle-right"> </i> Update Report
                             </button>
                     }
-                    <button type="button" className="btn btn-danger btn-sm px-2" onClick={showDeleteDiseaseModal}>
+                    <button type="button"
+                            className="btn btn-danger btn-sm px-2"
+                            onClick={showDeleteDiseaseModal} disabled={isDiagnosticActionDisabled}>
                         <i className="fa fa-solid fa-trash"> </i>
                     </button>
                     <AreYouSureModal open={deleteDiseaseModalIsOpen}
-                                     question={`Are you sure to delete disease with id: ${data.id} ?`}
-                                     onConfirm={deleteDisease}
+                                     question={jsonBeautifier.buildDeleteReportQuestion(data)}
+                                     onConfirm={deleteDiagnosticReport}
                                      onCancel={closeDeleteDiseaseModal}/>
+                    {
+                        deleteDiagnosticState.isLoading ?
+                            <CustomModal>
+                                <div style={{width: "3rem", height: "3rem"}} className="spinner-border text-primary"
+                                     role="status">
+                                    <span className="visually-hidden">deleting...</span>
+                                </div>
+                            </CustomModal> : <></>
+                    }
                 </div>
             </td>
         </tr>

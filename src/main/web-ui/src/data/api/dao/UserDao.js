@@ -4,6 +4,10 @@ var api_1 = require("../api");
 var DOMAIN_BASE_URL = "/users";
 var userDao = {
     // Define your API endpoints here
+    isTokenValid: function (token) {
+        if (token === void 0) { token = "defaultToken"; }
+        return api_1.api.get(DOMAIN_BASE_URL.concat("/isTokenValid/".concat(token)));
+    },
     getUserById: function (id) { return api_1.api.get(DOMAIN_BASE_URL.concat("/".concat(id))); },
     getAllUsers: function () { return api_1.api.get(DOMAIN_BASE_URL.concat('/getAllUsers')); },
     loginUser: function (userLoginRequest) {

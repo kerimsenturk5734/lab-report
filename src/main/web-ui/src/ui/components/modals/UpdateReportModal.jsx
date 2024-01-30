@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {ReportType} from "../../../domain/model/Report";
 import CustomModal from "./CustomModal";
+import {MDBInput, MDBTextArea} from "mdb-react-ui-kit";
 
 /**
  * @property {ReportType} reportType - The type of the report.
@@ -55,40 +56,42 @@ function UpdateReportModal({open, reportType, onCancel}) {
                         {modalTitle}
                </span>
                 </div>
-                <input
-                    type="text"
-                    className="form-control"
-                    placeholder={"Report Title"}
-                    value={titleInput}
-                    maxLength={50}
-                    onChange={handleTitleInputChange}
-                />
+                <div className={"d-flex row w-75 mb-4 gap-2"}>
+                    <MDBInput
+                        type="text"
+                        className="form-control"
+                        label={"Report Title"}
+                        value={titleInput}
+                        maxLength={50}
+                        onChange={handleTitleInputChange}
+                    />
 
-                <textarea
-                    style={textAreaStyle}
-                    placeholder="Report Content"
-                    rows={5}
-                    maxLength={textAreaMaxLength}
-                    value={contentInput}
-                    onChange={handleContentInputChange}
-                />
-                <div className={"d-flex justify-content-end"}>
-                    <span>{contentInput.length}/{textAreaMaxLength}</span>
-                </div>
+                    <MDBTextArea
+                        style={textAreaStyle}
+                        label="Report Content"
+                        rows={5}
+                        maxLength={textAreaMaxLength}
+                        value={contentInput}
+                        onChange={handleContentInputChange}
+                    />
+                    <div className={"d-flex justify-content-end"}>
+                        <span>{contentInput.length}/{textAreaMaxLength}</span>
+                    </div>
 
-                <div className={"d-flex justify-content-end gap-2 mt-5"}>
-                    <button type="button"
-                            className={`btn btn-dark btn-sm btn-outline-warning`}
-                            onClick={updateReport}>
+                    <div className={"d-flex justify-content-end gap-2 mt-5"}>
+                        <button type="button"
+                                className={`btn btn-dark btn-sm btn-outline-warning`}
+                                onClick={updateReport}>
 
-                        <i className="fa fa-solid outline fa-pen"> Update Report </i>
-                    </button>
-                    <button type="button"
-                            className="btn btn-dark btn-outline-danger btn-sm"
-                            onClick={onCancel}>
+                            <i className="fa fa-solid outline fa-pen"> Update Report </i>
+                        </button>
+                        <button type="button"
+                                className="btn btn-dark btn-outline-danger btn-sm"
+                                onClick={onCancel}>
 
-                        <i className="fa fa-solid fa-window-close"> Cancel</i>
-                    </button>
+                            <i className="fa fa-solid fa-window-close"> Cancel</i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </CustomModal>

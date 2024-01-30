@@ -17,20 +17,15 @@ function CreateDisease(props) {
                     <div className={"d-flex row justify-content-center gap-2 mx-5"}>
                         <span className={"text-center text-xx-large mb-5"}>Create Disease</span>
 
-                        <div className={"d-flex gap-4"}>
-                            <span>Patient Number : </span>
-                            <MDBInput wrapperClass='mb-4 w-50' label='Patient Number' type='number'/>
-                        </div>
-
-                        <div className={"d-flex gap-5"}>
-                            <span>Request Type : </span>
-                            <div >
+                        <div className={"d-flex justify-content-start w-responsive gap-2 w-75"}>
+                            <div className={"d-flex"}>
                                 <DropDown title={(labRequestType !== null) ? labRequestType : "Select a Request Type"}
                                           actions={getLabRequestTypeActions({onSelect: setLabRequestType})}/>
                             </div>
+                            <MDBInput label='Patient Number' type='text' maxLength={11}/>
                         </div>
 
-                        <div className={"d-flex justify-content-end"}>
+                        <div className={"d-flex justify-content-end mt-5 w-75"}>
                             <button type="button" className="btn btn-dark btn-outline-success btn-sm px-3">
                                 <i className="fa fa-solid fa-plus"> Create Disease</i>
                             </button>

@@ -13,6 +13,7 @@ import {useGetDiseasesByDoctorId} from "../../../domain/usecase/disease/GetDisea
 import {LocalStorageManager} from "../../../util/localStorageManager";
 import {jsonBeautifier} from "../../../util/JsonBeautifier";
 import {useDownloadReport} from "../../../domain/usecase/report/DownloadReportUseCase";
+import {toast} from "react-toastify";
 
 export default function ReportTableDoctor() {
     const {state, getDiseasesByDoctorId} = useGetDiseasesByDoctorId()
@@ -38,8 +39,19 @@ export default function ReportTableDoctor() {
     useEffect(() => {
         const user = LocalStorageManager.loadUser()
         getDiseasesByDoctorId(user.userId)
-            .then(() => {/*TODO toast loading.. during isLoading is true*/})
     }, []);
+
+    useEffect(() => {
+        if(state.successMessage.length > 0)
+            toast.success(state.successMessage, {theme:'colored', position:'top-left'})
+
+    }, [state.successMessage]);
+
+    useEffect(() => {
+        if(state.errorMessage.length > 0)
+            toast.error(state.errorMessage, {theme:'colored', position:'top-left'})
+
+    }, [state.errorMessage]);
 
     useEffect(() => {
         setRealData(state.data)
@@ -164,7 +176,7 @@ function TableData({ data }) {
     const [deleteDiseaseModalIsOpen, setDeleteDiseaseModalIsOpen] = useState(false)
 
     const {state, downloadReport} = useDownloadReport()
-    const showPathologicPdfViewModal = (reportId : string) => {
+    const showPathologicPdfViewModal = () => {
         setPathologicPdfViewModalIsOpen(true);
     }
     const showDiagnosticPdfViewModal = (reportId : string) => {

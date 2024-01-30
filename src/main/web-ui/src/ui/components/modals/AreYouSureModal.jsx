@@ -4,13 +4,13 @@ import CustomModal from "./CustomModal";
 function AreYouSureModal({open, question, onConfirm, onCancel}) {
     return (
         <CustomModal open={open} onClose={onCancel}>
-            <div className={"d-flex row gap-5 p-3 justify-content-center my-2 mx-2"}>
+            <div className={"d-flex row gap-5 p-3 justify-content-center w-75 my-2 mx-2"}>
                 <div className={"d-flex justify-content-center"}>
                     <img src="https://cdn-icons-png.flaticon.com/512/9149/9149364.png"
                          className={"w-responsive w-25"}
                          alt={"create_report"}/>
                 </div>
-                <div className={"d-flex justify-content-center text-xx-large font-monospace"}>
+                <div className={"d-flex justify-content-center text-x-large font-monospace"}>
                     <span>{question}</span>
                 </div>
                 <div className={"d-flex gap-5 my-5 font-monospace"}>

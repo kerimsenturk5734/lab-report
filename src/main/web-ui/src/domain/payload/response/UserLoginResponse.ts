@@ -1,6 +1,6 @@
 import {UserDto} from "../../dto/UserDto";
 
-interface Token {
+export interface Token {
     key: string;
     keyCreationTime: number;
     extendedInformation: string;

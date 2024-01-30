@@ -4,6 +4,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +21,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final JwtTokenManager tokenManager;
     private final UserDetailsServiceCustom userDetailsServiceCustom;
+    Logger logger = LoggerFactory.getLogger(JwtTokenFilter.class);
     public JwtTokenFilter(JwtTokenManager tokenManager, UserDetailsServiceCustom userDetailsServiceCustom) {
         this.tokenManager = tokenManager;
         this.userDetailsServiceCustom = userDetailsServiceCustom;
@@ -52,17 +55,22 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         if(username != null & token != null & SecurityContextHolder.getContext().getAuthentication() == null){
 
             //Get the userDetails of token owner
-            UserDetails userDetails = userDetailsServiceCustom.loadUserByUsername(username);
+           try{
+               UserDetails userDetails = userDetailsServiceCustom.loadUserByUsername(username);
 
-            //Validate the token with related userDetails
-            if(tokenManager.validate(token, userDetails)){
+               //Validate the token with related userDetails
+               if(tokenManager.validate(token)){
 
-                UsernamePasswordAuthenticationToken usPassAuthToken =
-                        new UsernamePasswordAuthenticationToken(username,null, userDetails.getAuthorities());
+                   UsernamePasswordAuthenticationToken usPassAuthToken =
+                           new UsernamePasswordAuthenticationToken(username,null, userDetails.getAuthorities());
 
-                usPassAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(usPassAuthToken);
-            }
+                   usPassAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                   SecurityContextHolder.getContext().setAuthentication(usPassAuthToken);
+               }
+           }
+           catch (Exception e){
+               logger.error(e.getMessage());
+           }
         }
 
         HttpServletResponse res = (HttpServletResponse) response;

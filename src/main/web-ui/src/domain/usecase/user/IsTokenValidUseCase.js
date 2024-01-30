@@ -47,26 +47,29 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useUpdateUserCase = void 0;
+exports.useIsTokenValid = void 0;
 var react_1 = require("react");
 var UserDao_1 = require("../../../data/api/dao/UserDao");
-var useUpdateUserCase = function () {
+//HTTP 200
+var useIsTokenValid = function () {
     var _a = (0, react_1.useState)({
+        isValid: false,
         successMessage: '',
         error: {},
         errorMessage: '',
         isLoading: false,
     }), state = _a[0], setState = _a[1];
-    var updateUser = function (updateUserRequest) { return __awaiter(void 0, void 0, void 0, function () {
+    var isTokenValid = function (token) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     setState(__assign(__assign({}, state), { isLoading: true }));
-                    return [4 /*yield*/, UserDao_1.default.updateUser(updateUserRequest)
+                    return [4 /*yield*/, UserDao_1.default.isTokenValid(token)
                             .then(function (res) {
                             console.log(res);
                             setState({
-                                successMessage: res.data.message,
+                                isValid: res.data,
+                                successMessage: "Token successfully queried",
                                 error: {},
                                 errorMessage: '',
                                 isLoading: false
@@ -76,41 +79,19 @@ var useUpdateUserCase = function () {
                             console.log(err);
                             if (err.code == "ERR_NETWORK") {
                                 setState({
+                                    isValid: false,
                                     successMessage: '',
                                     error: err,
-                                    errorMessage: err.message,
-                                    isLoading: false
-                                });
-                            }
-                            else if (err.response.status == 401) {
-                                setState({
-                                    successMessage: '',
-                                    error: err,
-                                    errorMessage: "Authentication required!!!",
-                                    isLoading: false
-                                });
-                            }
-                            else if (err.response.status == 403) {
-                                setState({
-                                    successMessage: '',
-                                    error: err,
-                                    errorMessage: 'Access Denied',
-                                    isLoading: false
-                                });
-                            }
-                            else if (err.response.status == 400) {
-                                setState({
-                                    successMessage: '',
-                                    error: err,
-                                    errorMessage: JSON.stringify(err.response.data, null, 4),
+                                    errorMessage: "Network Error",
                                     isLoading: false
                                 });
                             }
                             else {
                                 setState({
+                                    isValid: false,
                                     successMessage: '',
                                     error: err,
-                                    errorMessage: err.response.data.message,
+                                    errorMessage: "Corrupted Token",
                                     isLoading: false
                                 });
                             }
@@ -121,6 +102,6 @@ var useUpdateUserCase = function () {
             }
         });
     }); };
-    return { state: state, updateUser: updateUser };
+    return { state: state, isTokenValid: isTokenValid };
 };
-exports.useUpdateUserCase = useUpdateUserCase;
+exports.useIsTokenValid = useIsTokenValid;

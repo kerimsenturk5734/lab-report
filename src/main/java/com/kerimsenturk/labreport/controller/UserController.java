@@ -38,7 +38,11 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
         this.messageBuilder = new MessageBuilder();
+    }
 
+    @GetMapping("/isTokenValid/{token}")
+    public ResponseEntity<Boolean> isTokenValid(@PathVariable String token){
+        return ResponseEntity.ok(userService.isTokenValid(token));
     }
 
     @PostMapping("/login")

@@ -70,5 +70,5 @@ export const useCreatePathologicReportFor = () => {
             })
     };
 
-    return { state, createPathologicReportFor };
+    return { state, createReport: createPathologicReportFor };
 };

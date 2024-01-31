@@ -302,7 +302,8 @@ function TableData({ data }) {
                             </button>
                             <CreateReportModal open={createReportModalIsOpen}
                                                reportType={ReportType.DIAGNOSTIC}
-                                               onCancel={closeCreateReportModal}/>
+                                               onCancel={closeCreateReportModal}
+                                               diseaseId={data.id}/>
                         </>
 
                 }

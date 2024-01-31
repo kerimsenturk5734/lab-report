@@ -50,7 +50,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.useUpdateReport = void 0;
 var react_1 = require("react");
 var ReportDao_1 = require("../../../data/api/dao/ReportDao");
-//HTTP 403, 401, 404, 200
+//HTTP 403, 401, 400, 404, 200
 var useUpdateReport = function () {
     var _a = (0, react_1.useState)({
         successMessage: '',

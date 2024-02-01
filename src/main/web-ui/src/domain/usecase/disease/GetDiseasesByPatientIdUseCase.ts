@@ -15,7 +15,7 @@ export const useGetDiseasesByPatientId = () => {
     const getDiseasesByPatientId = async (patientId : string) => {
         setState({ ...state, isLoading: true });
 
-        await diseaseDao.getDiseaseByPatientId(patientId)
+        await diseaseDao.getDiseasesByPatientId(patientId)
             .then((res) => {
                 console.log(res)
                 setState({

@@ -64,7 +64,7 @@ var useGetDiseasesByPatientId = function () {
             switch (_a.label) {
                 case 0:
                     setState(__assign(__assign({}, state), { isLoading: true }));
-                    return [4 /*yield*/, DiseaseDao_1.default.getDiseaseByPatientId(patientId)
+                    return [4 /*yield*/, DiseaseDao_1.default.getDiseasesByPatientId(patientId)
                             .then(function (res) {
                             console.log(res);
                             setState({

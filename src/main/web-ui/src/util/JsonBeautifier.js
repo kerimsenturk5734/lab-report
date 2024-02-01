@@ -16,7 +16,7 @@ export const jsonBeautifier = {
         return JSON.stringify(item, null, 2);
     },
     beautifyDate: (date:Date) : string => {
-        const inputDate = new Date(date.toString());
+        const inputDate = new Date(date?.toString());
 
         const dayOptions = { day: '2-digit' };
         const monthOptions = { month: 'short' };

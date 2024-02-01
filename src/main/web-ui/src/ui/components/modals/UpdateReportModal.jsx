@@ -2,11 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {ReportType} from "../../../domain/model/Report";
 import CustomModal from "./CustomModal";
 import {MDBInput, MDBTextArea} from "mdb-react-ui-kit";
-import {useUpdateReport} from "../../../domain/usecase/report/UpdateReportUseCase";
+import {useUpdateDiagnosticReport} from "../../../domain/usecase/report/UpdateDiagnosticReportUseCase";
 import {toast} from "react-toastify";
 import {UpdateReportRequest} from "../../../domain/payload/request/UpdateReportRequest";
 import {jsonBeautifier} from "../../../util/JsonBeautifier";
 import {getButtonClass} from "../tables/FieldClasses";
+import {useUpdatePathologicReport} from "../../../domain/usecase/report/UpdatePathologicReportUseCase";
 
 /**
  * @property {ReportType} reportType - The type of the report.
@@ -14,7 +15,7 @@ import {getButtonClass} from "../tables/FieldClasses";
  * @property {function} onCancel - Callback function when the user cancels.
  */
 
-function UpdateReportModal({open, onCancel, reportType, report}) {
+function UpdateReportModal({open, onCancel, report}) {
     const [titleInput, setTitleInput] = useState(report.title);
     const [detailsInput, setDetailsInput] = useState(report.details);
 
@@ -22,9 +23,10 @@ function UpdateReportModal({open, onCancel, reportType, report}) {
     const [detailsChangeIsDisabled, setDetailsChangeIsDisabled] = useState(true)
 
     const modalTitle =
-        (reportType === ReportType.PATHOLOGICAL) ? "Update Pathologic Report" : "Update Diagnostic Report"
+        (report.reportType === ReportType.PATHOLOGICAL) ? "Update Pathologic Report" : "Update Diagnostic Report"
 
-    const {state, updateReport} = useUpdateReport()
+    const {state, updateReport} =
+        (report.reportType  === ReportType.PATHOLOGICAL) ? useUpdatePathologicReport() : useUpdateDiagnosticReport()
     const handleTitleInputChange = (e) => {
         const input = e.target.value;
         setTitleInput(input);
@@ -95,7 +97,7 @@ function UpdateReportModal({open, onCancel, reportType, report}) {
                         <>
                             <div className={"d-flex justify-content-center"}>
                                 {
-                                    (reportType === ReportType.PATHOLOGICAL) ?
+                                    (report.reportType  === ReportType.PATHOLOGICAL) ?
                                         <img src="https://cdn-icons-png.flaticon.com/512/8204/8204579.png"
                                              className={"w-responsive w-25"}
                                              alt={"create_report"}/>

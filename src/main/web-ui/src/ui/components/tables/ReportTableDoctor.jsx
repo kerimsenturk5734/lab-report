@@ -217,7 +217,7 @@ function TableData({ data }) {
             toast.success(jsonBeautifier.getPreOfJson(deleteDiagnosticState.successMessage), toastOptions)
 
             deleteDiagnosticState.successMessage = ''
-
+            closeDeleteDiseaseModal()
             setTimeout(()=>{window.location.reload()}, 2000)
         }
     }, [deleteDiagnosticState.successMessage]);
@@ -320,7 +320,6 @@ function TableData({ data }) {
                                     <i className="fa fa-solid fa-arrow-circle-right"> </i> Update Report
                                 </button>
                                 <UpdateReportModal open={updateReportModalIsOpen}
-                                                   reportType={ReportType.DIAGNOSTIC}
                                                    onCancel={closeUpdateReportModal}
                                                    report={data.diagnosticReport}/>
                             </>
@@ -335,7 +334,7 @@ function TableData({ data }) {
                         <i className="fa fa-solid fa-trash"> </i>
                     </button>
                     <AreYouSureModal open={deleteDiseaseModalIsOpen}
-                                     question={jsonBeautifier.buildDeleteReportQuestion(data)}
+                                     question={jsonBeautifier.buildDeleteReportQuestion(data, ReportType.DIAGNOSTIC)}
                                      onConfirm={deleteDiagnosticReport}
                                      onCancel={closeDeleteDiseaseModal}/>
                     {

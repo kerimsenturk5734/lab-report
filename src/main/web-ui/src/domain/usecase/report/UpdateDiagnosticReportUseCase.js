@@ -47,23 +47,23 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useUpdateReport = void 0;
+exports.useUpdateDiagnosticReport = void 0;
 var react_1 = require("react");
 var ReportDao_1 = require("../../../data/api/dao/ReportDao");
 //HTTP 403, 401, 400, 404, 200
-var useUpdateReport = function () {
+var useUpdateDiagnosticReport = function () {
     var _a = (0, react_1.useState)({
         successMessage: '',
         error: {},
         errorMessage: '',
         isLoading: false,
     }), state = _a[0], setState = _a[1];
-    var updateReport = function (updateReportRequest) { return __awaiter(void 0, void 0, void 0, function () {
+    var updateDiagnosticReport = function (updateReportRequest) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     setState(__assign(__assign({}, state), { isLoading: true }));
-                    return [4 /*yield*/, ReportDao_1.default.updateReport(updateReportRequest)
+                    return [4 /*yield*/, ReportDao_1.default.updateDiagnosticReport(updateReportRequest)
                             .then(function (res) {
                             console.log(res);
                             setState({
@@ -122,6 +122,6 @@ var useUpdateReport = function () {
             }
         });
     }); };
-    return { state: state, updateReport: updateReport };
+    return { state: state, updateReport: updateDiagnosticReport };
 };
-exports.useUpdateReport = useUpdateReport;
+exports.useUpdateDiagnosticReport = useUpdateDiagnosticReport;

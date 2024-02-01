@@ -1,4 +1,5 @@
 import {DiseaseDto} from "../domain/dto/DiseaseDto";
+import {ReportType} from "../domain/model/Report";
 
 export const jsonBeautifier = {
     beautifyJson : (o : any) : string => {
@@ -16,7 +17,7 @@ export const jsonBeautifier = {
         return JSON.stringify(item, null, 2);
     },
     beautifyDate: (date:Date) : string => {
-        const inputDate = new Date(date.toString());
+        const inputDate = new Date(date?.toString());
 
         const dayOptions = { day: '2-digit' };
         const monthOptions = { month: 'short' };
@@ -33,10 +34,10 @@ export const jsonBeautifier = {
         return <pre className={"px-3 py-1"}>{json}</pre>
     },
 
-    buildDeleteReportQuestion : (disease : DiseaseDto) => {
+    buildDeleteReportQuestion : (disease : DiseaseDto, reportType: ReportType) => {
         return (
             <span>
-                Are you sure to delete diagnostic report for patient:
+                Are you sure to delete {reportType?.toLowerCase()} report for patient:
                 <span className={"text-danger"}>{disease.patient.userId} </span>
 
                 <span className={"text-danger"}>{disease.patient.name} {disease.patient.surname}</span>

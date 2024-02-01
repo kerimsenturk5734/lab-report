@@ -14,11 +14,11 @@ const diseaseDao = {
     getDiseasesByDoctorId: (doctorId: string) =>
         api.get(DOMAIN_BASE_URL.concat(`/getDiseasesByDoctorId/${doctorId}`)),
 
-    getDiseaseByPatientId: (patientId : string) =>
-        api.get(DOMAIN_BASE_URL.concat(`/getDiseaseByPatientId/${patientId}`)),
+    getDiseasesByPatientId: (patientId : string) =>
+        api.get(DOMAIN_BASE_URL.concat(`/getDiseasesByPatientId/${patientId}`)),
 
-    getDiseaseByLabTechnicianId: (labTechnicianId  : string) =>
-        api.get(DOMAIN_BASE_URL.concat(`/getDiseaseByLabTechnicianId/${labTechnicianId}`)),
+    getDiseasesByLabTechnicianId: (labTechnicianId  : string) =>
+        api.get(DOMAIN_BASE_URL.concat(`/getDiseasesByLabTechnicianId/${labTechnicianId}`)),
 
     createDisease: (createDiseaseRequest : CreateDiseaseRequest) =>
         api.post(DOMAIN_BASE_URL.concat('/createDisease'), createDiseaseRequest),

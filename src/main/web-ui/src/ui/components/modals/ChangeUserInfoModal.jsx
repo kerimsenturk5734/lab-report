@@ -109,7 +109,7 @@ function ChangeUserInfoModal({open, onCancel}) {
                 {position:'top-left', hideProgressBar: true, theme:'colored'}
             toast.success(jsonBeautifier.getPreOfJson(state.successMessage), toastOptions)
             state.successMessage = ''
-
+            onCancel()
             setTimeout(()=>{window.location.reload()}, 2000)
         }
     }, [state.successMessage]);

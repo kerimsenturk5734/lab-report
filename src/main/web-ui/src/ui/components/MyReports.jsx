@@ -4,10 +4,13 @@ import PdfViewModal from "./modals/PdfViewModal";
 import {LocalStorageManager} from "../../util/localStorageManager";
 import {useGetDiseasesByLabTechnicianId} from "../../domain/usecase/disease/GetDiseasesByLabTechnicianIdUseCase";
 import {toast} from "react-toastify";
-import {Report} from "../../domain/model/Report"
+import {Report, ReportType} from "../../domain/model/Report"
 import {DiseaseDto} from "../../domain/dto/DiseaseDto";
 import {jsonBeautifier} from "../../util/JsonBeautifier";
 import {useGetReportById} from "../../domain/usecase/report/GetReportByIdUseCase";
+import UpdateReportModal from "./modals/UpdateReportModal";
+import AreYouSureModal from "./modals/AreYouSureModal";
+import {useDeletePathologicalReportOf} from "../../domain/usecase/disease/DeletePathologicalReportOfUseCase";
 
 function MyReports() {
     const user = LocalStorageManager.loadUser()
@@ -55,9 +58,13 @@ function MyReports() {
 
 function ReportCard({disease, isReportProcessed}){
     const {state, getReportById} = useGetReportById()
+    const {deleteState, deletePathologicalReportOf} = useDeletePathologicalReportOf()
+
     const [report, setReport] = useState(new Report())
 
     const [pdfViewModalIsOpen, setPdfViewModalIsOpen] = useState(false);
+    const [updateReportModalIsOpen, setUpdateReportModalIsOpen] = useState(false)
+    const [deleteDiseaseModalIsOpen, setDeleteDiseaseModalIsOpen] = useState(false)
 
     useEffect(() => {
         getReportById(disease.pathologicReport.reportId)
@@ -75,6 +82,39 @@ function ReportCard({disease, isReportProcessed}){
             state.errorMessage = ''
         }
     }, [state.errorMessage]);
+
+    useEffect(() => {
+        if(deleteState.successMessage.length > 0){
+            toast.success(deleteState.successMessage, {theme:'colored', position:'top-left'})
+            deleteState.successMessage = ''
+            closeDeleteDiseaseModal()
+            setTimeout(()=>{window.location.reload()}, 1500)
+        }
+    }, [deleteState.successMessage]);
+
+    useEffect(() => {
+        if(deleteState.errorMessage.length > 0){
+            toast.error(deleteState.errorMessage, {theme:'colored', position:'top-left'})
+            deleteState.errorMessage = ''
+        }
+    }, [deleteState.errorMessage]);
+
+    const showUpdateReportModal = () => {
+        setUpdateReportModalIsOpen(true);
+    };
+    const closeUpdateReportModal = () => {
+        setUpdateReportModalIsOpen(false);
+    };
+    const showDeleteDiseaseModal = () => {
+        setDeleteDiseaseModalIsOpen(true)
+    }
+    const closeDeleteDiseaseModal = () => {
+        setDeleteDiseaseModalIsOpen(false)
+    }
+
+    const deletePathologicReport = () => {
+        deletePathologicalReportOf(disease.id)
+    }
 
     const showPdfViewModal = () => {
         setPdfViewModalIsOpen(true);
@@ -118,16 +158,27 @@ function ReportCard({disease, isReportProcessed}){
                  title={isReportProcessed ? "You can't action because this report processed by the doctor" : ""}>
 
                 <button type="button" className="btn btn-dark btn-outline-warning btn-sm px-3"
+                        onClick={showUpdateReportModal}
                         disabled={isReportProcessed}>
+
                     <i className="fa fa-solid fa-arrow-circle-right"> Update</i>
                 </button>
                 <button type="button"
                         className="btn btn-dark btn-outline-danger btn-sm px-3"
-                        onClick={showPdfViewModal} disabled={isReportProcessed}>
+                        onClick={showDeleteDiseaseModal} disabled={isReportProcessed}>
 
                     <i className="fa fa-solid fa-trash"> Delete</i>
                 </button>
             </div>
+            <AreYouSureModal open={deleteDiseaseModalIsOpen}
+                             question={jsonBeautifier.buildDeleteReportQuestion(data, ReportType.PATHOLOGICAL)}
+                             onConfirm={deletePathologicReport}
+                             onCancel={closeDeleteDiseaseModal}/>
+
+            <UpdateReportModal open={updateReportModalIsOpen}
+                               onCancel={closeUpdateReportModal}
+                               report={data.diagnosticReport}/>
+
             <PdfViewModal reportId={disease.pathologicReport.reportId}
                           open={pdfViewModalIsOpen}
                           onCLose={closePdfViewModal}/>

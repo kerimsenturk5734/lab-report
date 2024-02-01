@@ -2,6 +2,11 @@ import React from 'react';
 import CustomModal from "./CustomModal";
 
 function AreYouSureModal({open, question, onConfirm, onCancel}) {
+    const confirm = () => {
+        onConfirm()
+        setTimeout(()=>{open = false}, 2000)
+    }
+
     return (
         <CustomModal open={open} onClose={onCancel}>
             <div className={"d-flex row gap-5 p-3 justify-content-center w-75 my-2 mx-2 flex-wrap"}>
@@ -16,7 +21,7 @@ function AreYouSureModal({open, question, onConfirm, onCancel}) {
                 <div className={"d-flex gap-5 my-5 font-monospace"}>
                     <button type="button"
                             className="btn btn-block btn-danger btn-lg p-1"
-                            onClick={onConfirm}>
+                            onClick={confirm}>
 
                         <i className="fa fa-solid fa-trash"> </i> Confirm
                     </button>

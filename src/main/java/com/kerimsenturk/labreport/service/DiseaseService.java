@@ -98,6 +98,15 @@ public class DiseaseService {
         return convertToDtoList(diseaseList);
     }
 
+    //This method created to present active diseases for lab technicians
+    public List<DiseaseDto> getActiveDiseases(){
+        //Get diseases by status
+        List<Disease> diseaseList = diseaseRepository
+                .getDiseasesByDiseaseStateIn(List.of(DiseaseState.WAITING_RESULTS, DiseaseState.PATHOLOGIC_RESULTED));
+
+        //Convert them to dto object and return
+        return convertToDtoList(diseaseList);
+    }
     public List<DiseaseDto> getDiseasesByPatientId(String patientId){
         return getDiseasesByUserIdAndUserRole(patientId, UserRole.PATIENT);
     }

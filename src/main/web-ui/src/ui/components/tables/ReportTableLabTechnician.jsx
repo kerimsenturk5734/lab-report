@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import DiseaseViewModel from '../../../viewmodel/DiseaseViewModel';
 import TableHead from './TableHead';
 import TooledSearchBar, {DropDown, getDropDownActions} from '../TooledSearchBar';
 import {DataTypes, HEADS} from './TableConstants';
@@ -8,15 +7,41 @@ import {getBgClassByStatus, getTextClassByStatus} from "./FieldClasses";
 import PdfViewModal from "../modals/PdfViewModal";
 import CreateReportModal from "../modals/CreateReportModal";
 import {ReportType} from "../../../domain/model/Report";
+import {toast} from "react-toastify";
+import {useGetActiveDiseases} from "../../../domain/usecase/disease/GetActiveDiseasesUseCase";
+import {jsonBeautifier} from "../../../util/JsonBeautifier";
+import {useDownloadReport} from "../../../domain/usecase/report/DownloadReportUseCase";
 
 export default function ReportTablePatient() {
-    const vm = new DiseaseViewModel();
-    const realData = vm.getDummyLabTechnicianDiseases().data;
+    const {state, getActiveDiseases} = useGetActiveDiseases()
+
+    const [realData, setRealData] = useState(state.data)
     const dataType = DataTypes.LAB_TECHNICIAN;
 
     const [data, setData] = useState(realData);
     const [searchBy, setSearchBy] = useState(dataType.SEARCH_BY.DOCTOR);
     const [orderBy, setOrderBy] = useState(dataType.ORDER_BY.ID_ASC);
+
+    useEffect(() => {
+        getActiveDiseases()
+    }, []);
+
+    useEffect(() => {
+        if(state.successMessage.length > 0)
+            toast.info(state.successMessage, {theme:'colored', position:'bottom-left', autoClose:2000})
+
+    }, [state.successMessage]);
+
+    useEffect(() => {
+        if(state.errorMessage.length > 0)
+            toast.error(state.errorMessage, {theme:'colored', position:'top-left'})
+
+    }, [state.errorMessage]);
+
+    useEffect(() => {
+        setRealData(state.data)
+        setData(state.data)
+    }, [state.data]);
 
     useEffect(() => {
         handleOrderBy();
@@ -61,15 +86,21 @@ export default function ReportTablePatient() {
             case sort.ID_ASC:
                 sortedData = realData.slice().sort((a, b) => a.id - b.id);
                 break;
+
             case sort.ID_DESC:
                 sortedData = realData.slice().sort((a, b) => b.id - a.id);
                 break;
-            case sort.DATE_NEW_TO_OLD:
-                sortedData = realData.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
-                break;
+
             case sort.DATE_OLD_TO_NEW:
-                sortedData = realData.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+                sortedData = realData.slice().sort((a, b) =>
+                    new Date(a.creationDate) - new Date(b.creationDate));
                 break;
+
+            case sort.DATE_NEW_TO_OLD:
+                sortedData = realData.slice().sort((a, b) =>
+                    new Date(b.creationDate) - new Date(a.creationDate));
+                break;
+
             default:
                 console.log('An error occurred');
                 break;
@@ -77,10 +108,6 @@ export default function ReportTablePatient() {
 
         setData(sortedData);
     };
-
-
-
-
 
     return (
         <div className={"container-sm"}>
@@ -106,6 +133,7 @@ export default function ReportTablePatient() {
 
 
 function TableData({data}) {
+    const {downloadReport :downloadReport} = useDownloadReport()
 
     const [pdfViewModalIsOpen, setPdfViewModalIsOpen] = useState(false);
     const [createReportModalIsOpen, setCreateReportModalIsOpen] = useState(false)
@@ -126,7 +154,7 @@ function TableData({data}) {
     return (
         <tr>
             <td className="text-center">{data.id}</td>
-            <td className="text-center font-monospace">27 Feb 2024 13:50</td>
+            <td className="text-center font-monospace">{jsonBeautifier.beautifyDate(data.creationDate)}</td>
             <td className="text-center">{`${data.doctor.name} ${data.doctor.surname}`}</td>
             <td className="text-center font-monospace fst-italic">{data.labRequestType}</td>
             <td className={`text-center ${getTextClassByStatus(data.diseaseState)}`}>
@@ -148,12 +176,13 @@ function TableData({data}) {
 
                                     <i className="fa fa-solid fa-tv"> View</i>
                                 </button>
-                                <button type="button" className={`btn btn-dark btn-sm px-3 btn-outline-primary`}>
+                                <button type="button" className={`btn btn-dark btn-sm px-3 btn-outline-primary`}
+                                        onClick={() => {downloadReport(data.pathologicReport?.reportId)}}>
 
                                     <i className="fa fa-solid outline fa-download"></i>
                                 </button>
 
-                                <PdfViewModal reportId={""}
+                                <PdfViewModal reportId={data.pathologicReport?.reportId}
                                               open={pdfViewModalIsOpen}
                                               onCLose={closePdfViewModal}/>
                             </>
@@ -167,7 +196,8 @@ function TableData({data}) {
                                 </button>
                                 <CreateReportModal open={createReportModalIsOpen}
                                                    reportType={ReportType.PATHOLOGICAL}
-                                                   onCancel={closeCreateReportModal}/>
+                                                   onCancel={closeCreateReportModal}
+                                                   diseaseId={data.id}/>
                             </>
                     }
                 </div>

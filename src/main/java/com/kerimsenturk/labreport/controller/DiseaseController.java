@@ -129,6 +129,23 @@ public class DiseaseController {
 
         return ResponseEntity.ok(new SuccessDataResult<List<DiseaseDto>>(diseaseDtoList,message));
     }
+
+    @GetMapping("/getActiveDiseases")
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.LAB_TECHNICIAN)")
+    public ResponseEntity<?> getActiveDiseases(){
+        //Get related diseases
+        List<DiseaseDto> diseaseDtoList = diseaseService.getActiveDiseases();
+
+        //Create successful message
+        String message =
+                messageBuilder
+                        .code("formatted.diseasesFounded")
+                        .params(diseaseDtoList.size())
+                        .build();
+
+        return ResponseEntity.ok(new SuccessDataResult<List<DiseaseDto>>(diseaseDtoList,message));
+    }
+
     @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.LAB_TECHNICIAN)")
     @DeleteMapping("/deletePathologicalReportOf/{diseaseId}")
     public ResponseEntity<?> deletePathologicalReportOf(@PathVariable int diseaseId) {
@@ -142,4 +159,5 @@ public class DiseaseController {
         diseaseService.deleteReportOf(diseaseId, ReportType.DIAGNOSTIC);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 }

@@ -4,6 +4,7 @@ var api_1 = require("../api");
 var DOMAIN_BASE_URL = "/reports";
 var reportDao = {
     // Define your API endpoints here
+    getReportById: function (reportId) { return api_1.api.get(DOMAIN_BASE_URL.concat("/".concat(reportId))); },
     getReportBlobById: function (reportId) {
         return api_1.api.get(DOMAIN_BASE_URL.concat("/downloadReport/".concat(reportId)), { responseType: 'blob' });
     },

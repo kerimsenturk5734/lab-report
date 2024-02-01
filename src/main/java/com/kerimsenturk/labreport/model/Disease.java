@@ -17,10 +17,10 @@ public class Disease {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")
     User patient;
-    @ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade=CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinColumn(name = "lab_technician_id")
     User labTechnician;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade=CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id")
     User doctor;
     @Enumerated(EnumType.STRING)

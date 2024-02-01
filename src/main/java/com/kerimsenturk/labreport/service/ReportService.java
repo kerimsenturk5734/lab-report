@@ -136,7 +136,10 @@ public class ReportService {
                 diseaseService.getDiseasesByPathologicReportId(reportId);
 
 
-        diseaseDto.setLabTechnician(userService.getUserById(userId));
+        if(report.getReportType() == ReportType.PATHOLOGICAL)
+            diseaseDto.setLabTechnician(userService.getUserById(userId));
+
+
         diseaseDto.setDiseaseState((report.getReportType() == ReportType.DIAGNOSTIC) ?
                 DiseaseState.DIAGNOSTIC_UPDATED : DiseaseState.PATHOLOGIC_UPDATED);
         //Update disease as updated

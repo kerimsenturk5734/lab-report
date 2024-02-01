@@ -320,7 +320,6 @@ function TableData({ data }) {
                                     <i className="fa fa-solid fa-arrow-circle-right"> </i> Update Report
                                 </button>
                                 <UpdateReportModal open={updateReportModalIsOpen}
-                                                   reportType={ReportType.DIAGNOSTIC}
                                                    onCancel={closeUpdateReportModal}
                                                    report={data.diagnosticReport}/>
                             </>

@@ -1,5 +1,6 @@
 package com.kerimsenturk.labreport.service;
 
+import com.kerimsenturk.labreport.auth.JwtTokenManager;
 import com.kerimsenturk.labreport.dto.DiseaseDto;
 import com.kerimsenturk.labreport.dto.ReportDto;
 import com.kerimsenturk.labreport.dto.converter.DiseaseAndDiseaseDtoConverter;
@@ -42,6 +43,7 @@ public class ReportService {
     private final DiseaseAndDiseaseDtoConverter diseaseAndDiseaseDtoConverter;
     private final ReportAndReportDtoConverter reportAndReportDtoConverter;
     private final MessageBuilder messageBuilder;
+    private final JwtTokenManager jwtTokenManager;
 
     public ReportService(
             ReportRepository reportRepository,
@@ -51,7 +53,7 @@ public class ReportService {
             UserAndUserDtoConverter userAndUserDtoConverter,
             DiseaseAndDiseaseDtoConverter diseaseAndDiseaseDtoConverter,
             ReportAndReportDtoConverter reportAndReportDtoConverter,
-            MessageBuilder messageBuilder) {
+            MessageBuilder messageBuilder, JwtTokenManager jwtTokenManager) {
 
         this.reportRepository = reportRepository;
         this.reportFileManager = reportFileManager;
@@ -61,6 +63,7 @@ public class ReportService {
         this.diseaseAndDiseaseDtoConverter = diseaseAndDiseaseDtoConverter;
         this.reportAndReportDtoConverter = reportAndReportDtoConverter;
         this.messageBuilder = messageBuilder;
+        this.jwtTokenManager = jwtTokenManager;
     }
 
 
@@ -107,7 +110,13 @@ public class ReportService {
         }
     }
 
-    public String updateReport(UpdateReportRequest updateReportRequest) {
+    public String updateReport(UpdateReportRequest updateReportRequest, String authHeader) {
+        //Parse token from 'Authorization' header
+        String token = authHeader.substring(7);
+
+        //Extract user by using token
+        String userId = Optional.of(jwtTokenManager.extractUser(token)).orElse("");
+
         //Call getReportById to handle ReportNotFoundException
         //If there is not an error at this line now we can get the real report
         String reportId = updateReportRequest.reportId().orElse("");
@@ -117,6 +126,7 @@ public class ReportService {
 
         //Update the object
         //If fields not present in updateRequest, don't change the fields
+
         report.setTitle(updateReportRequest.title().orElse(report.getTitle()));
         report.setDetails(updateReportRequest.details().orElse(report.getDetails()));
         report.setIssueDate(new Date());
@@ -125,7 +135,10 @@ public class ReportService {
                 diseaseService.getDiseasesByDiagnosticReportId(reportId) :
                 diseaseService.getDiseasesByPathologicReportId(reportId);
 
-        diseaseDto.setDiseaseState(DiseaseState.UPDATED);
+
+        diseaseDto.setLabTechnician(userService.getUserById(userId));
+        diseaseDto.setDiseaseState((report.getReportType() == ReportType.DIAGNOSTIC) ?
+                DiseaseState.DIAGNOSTIC_UPDATED : DiseaseState.PATHOLOGIC_UPDATED);
         //Update disease as updated
         diseaseService.saveDisease(diseaseAndDiseaseDtoConverter.deConvert(diseaseDto));
 

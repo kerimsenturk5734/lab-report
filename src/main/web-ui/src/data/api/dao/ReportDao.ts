@@ -21,8 +21,11 @@ const reportDao = {
     createPathologicReportFor: (createPathologicReportRequest : CreatePathologicReportRequest) =>
         api.post(DOMAIN_BASE_URL.concat('/createPathologicalReportFor'), createPathologicReportRequest),
 
-    updateReport: (updateReportRequest : UpdateReportRequest) =>
-        api.put(DOMAIN_BASE_URL.concat('/updateReport'), updateReportRequest),
+    updatePathologicReport: (updateReportRequest : UpdateReportRequest) =>
+        api.put(DOMAIN_BASE_URL.concat('/updatePathologicReport'), updateReportRequest),
+
+    updateDiagnosticReport: (updateReportRequest : UpdateReportRequest) =>
+        api.put(DOMAIN_BASE_URL.concat('/updateDiagnosticReport'), updateReportRequest),
 
 };
 

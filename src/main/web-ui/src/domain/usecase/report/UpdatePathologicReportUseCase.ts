@@ -3,7 +3,7 @@ import {UpdateReportRequest} from "../../payload/request/UpdateReportRequest";
 import reportDao from "../../../data/api/dao/ReportDao";
 
 //HTTP 403, 401, 400, 404, 200
-export const useUpdateReport = () => {
+export const useUpdatePathologicReport = () => {
     const [state, setState] = useState({
         successMessage:'',
         error: {},
@@ -11,10 +11,10 @@ export const useUpdateReport = () => {
         isLoading: false,
     });
 
-    const updateReport = async (updateReportRequest : UpdateReportRequest) => {
+    const updatePathologicReport = async (updateReportRequest : UpdateReportRequest) => {
         setState({ ...state, isLoading: true });
 
-        await reportDao.updateReport(updateReportRequest)
+        await reportDao.updatePathologicReport(updateReportRequest)
             .then((res) => {
                 console.log(res)
                 setState({
@@ -70,5 +70,5 @@ export const useUpdateReport = () => {
             })
     };
 
-    return { state, updateReport };
+    return { state, updateReport : updatePathologicReport };
 };

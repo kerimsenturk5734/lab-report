@@ -30,4 +30,6 @@
 
   tr>td{
     border-right: 1px solid #e4e9ec;
+    text-overflow: ellipsis;
+    max-width: 200px;
   }

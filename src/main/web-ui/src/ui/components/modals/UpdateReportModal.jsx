@@ -72,7 +72,8 @@ function UpdateReportModal({open, onCancel, report}) {
                 jsonBeautifier.getPreOfJson(state.successMessage),
                 {theme:'colored', position:'top-left', hideProgressBar:true})
             state.successMessage = ''
-            setTimeout(()=>{window.location.reload()}, 2000)
+            onCancel()
+            setTimeout(()=>{window.location.reload()}, 1500)
         }
     }, [state.successMessage]);
 

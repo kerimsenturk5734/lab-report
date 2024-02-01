@@ -9,6 +9,8 @@ const diseaseDao = {
 
     getAllDiseases: () => api.get(DOMAIN_BASE_URL.concat('/getAllDiseases')),
 
+    getActiveDiseases: () => api.get(DOMAIN_BASE_URL.concat('getActiveDiseases')),
+
     getDiseasesByDoctorId: (doctorId: string) =>
         api.get(DOMAIN_BASE_URL.concat(`/getDiseasesByDoctorId/${doctorId}`)),
 

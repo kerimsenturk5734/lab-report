@@ -11,6 +11,7 @@ import {useGetReportById} from "../../domain/usecase/report/GetReportByIdUseCase
 import UpdateReportModal from "./modals/UpdateReportModal";
 import AreYouSureModal from "./modals/AreYouSureModal";
 import {useDeletePathologicalReportOf} from "../../domain/usecase/disease/DeletePathologicalReportOfUseCase";
+import {useDownloadReport} from "../../domain/usecase/report/DownloadReportUseCase";
 
 function MyReports() {
     const user = LocalStorageManager.loadUser()
@@ -46,7 +47,7 @@ function MyReports() {
                             state.data.map((item: DiseaseDto) => {
                                 return (
                                     <ReportCard disease={item}
-                                                isReportProcessed={(item.diagnosticReport === null)}/>
+                                                isReportProcessed={(item.diagnosticReport !== null)}/>
                                 )
                             })
                     }
@@ -58,7 +59,8 @@ function MyReports() {
 
 function ReportCard({disease, isReportProcessed}){
     const {state, getReportById} = useGetReportById()
-    const {deleteState, deletePathologicalReportOf} = useDeletePathologicalReportOf()
+    const {state:deleteState, deletePathologicalReportOf} = useDeletePathologicalReportOf()
+    const {downloadReport} = useDownloadReport()
 
     const [report, setReport] = useState(new Report())
 
@@ -123,6 +125,10 @@ function ReportCard({disease, isReportProcessed}){
         setPdfViewModalIsOpen(false);
     };
 
+    const handleDownloadReport = () => {
+        downloadReport(report?.reportId)
+    }
+
     return (
         <MDBCard className={"col-2 p-3 m-3 gap-2"}>
             <div className={"d-flex justify-content-center"}>
@@ -149,7 +155,9 @@ function ReportCard({disease, isReportProcessed}){
 
                     <i className="fa fa-solid fa-tv"> View</i>
                 </button>
-                <button type="button" className="btn btn-dark btn-outline-primary btn-sm px-3">
+                <button type="button" className="btn btn-dark btn-outline-primary btn-sm px-3"
+                        onClick={handleDownloadReport}>
+
                     <i className="fa fa-solid fa-download"> Download</i>
                 </button>
             </div>
@@ -171,13 +179,13 @@ function ReportCard({disease, isReportProcessed}){
                 </button>
             </div>
             <AreYouSureModal open={deleteDiseaseModalIsOpen}
-                             question={jsonBeautifier.buildDeleteReportQuestion(data, ReportType.PATHOLOGICAL)}
+                             question={jsonBeautifier.buildDeleteReportQuestion(disease, ReportType.PATHOLOGICAL)}
                              onConfirm={deletePathologicReport}
                              onCancel={closeDeleteDiseaseModal}/>
 
             <UpdateReportModal open={updateReportModalIsOpen}
                                onCancel={closeUpdateReportModal}
-                               report={data.diagnosticReport}/>
+                               report={disease.pathologicReport}/>
 
             <PdfViewModal reportId={disease.pathologicReport.reportId}
                           open={pdfViewModalIsOpen}

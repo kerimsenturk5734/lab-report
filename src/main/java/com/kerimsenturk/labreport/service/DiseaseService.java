@@ -205,7 +205,7 @@ public class DiseaseService {
         else{
             //Set null the foreign key inside disease
             disease.setPathologicReport(null);
-
+            disease.setLabTechnician(null);
             //Set the state as previous
             disease.setDiseaseState(DiseaseState.WAITING_RESULTS);
         }

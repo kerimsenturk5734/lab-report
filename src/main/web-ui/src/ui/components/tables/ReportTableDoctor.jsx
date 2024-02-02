@@ -81,7 +81,12 @@ export default function ReportTableDoctor() {
         else if (searchBy === dataType.SEARCH_BY.LAB_TECHNICIAN) {
             field = item.labTechnician
                 ? `${item.labTechnician.name} ${item.labTechnician.surname}`
-                : 'Working on...';
+                : 'Working on...'
+        }
+        else if (searchBy === dataType.SEARCH_BY.PATIENT_FULL_NAME) {
+                field = item.patient
+                    ? `${item.patient.name} ${item.patient.surname}`
+                    : 'Working on...';
         } else field = item.patient.userId;
 
         return field;
@@ -238,20 +243,25 @@ function TableData({ data }) {
             <td className="text-center">{data.id}</td>
             <td className="text-center font-monospace">{jsonBeautifier.beautifyDate(data.creationDate)}</td>
             <td className="text-center">{data.patient.userId}</td>
+            <td className="text-center" title={`${data.patient.name} ${data.patient.surname}`}>
+                {data.patient.name} {data.patient.surname}
+            </td>
             <td className="text-center font-monospace fst-italic">{data.labRequestType}</td>
             <td className={`text-center font-monospace fst-italic rounded-2`}>
                 <div className={`${getBgClassByStatus(diseaseState)} p-1 rounded-2`}>
                     {data.diseaseState}
                 </div>
             </td>
-            <td className={`text-center ${getTextClassByStatus(diseaseState)}`}>
+            <td className={`text-center ${getTextClassByStatus(diseaseState)}`}
+                title={data.labTechnician ?`${data.labTechnician.name} ${data.labTechnician.surname}` : 'Working on...'}>
+
                 {data.labTechnician ? `${data.labTechnician.name} ${data.labTechnician.surname}` : 'Working on...'}
             </td>
             <td>
                 {
                     isPathologicActionDisabled ?
                         <></> :
-                        <div className="d-flex justify-content-lg-between">
+                        <div className="d-flex justify-content-lg-between px-0">
                             <button type="button"
                                     className="btn btn-dark btn-outline-dark btn-sm px-3"
                                     onClick={showPathologicPdfViewModal}>
@@ -259,7 +269,9 @@ function TableData({ data }) {
                                 <i className="fa fa-solid fa-tv"></i>
                             </button>
                             <button type="button" className="btn btn-dark btn-sm px-2 btn-outline-primary"
-                                    onClick={() => {downloadReport(data.pathologicReport?.reportId)}}>
+                                    onClick={() => {
+                                        downloadReport(data.pathologicReport?.reportId)
+                                    }}>
                                 <i className="fa fa-solid outline fa-download"></i>
                             </button>
                             <PdfViewModal reportId={data.pathologicReport?.reportId}
@@ -275,7 +287,7 @@ function TableData({ data }) {
                             {
                                 isDiagnosticActionDisabled ?
                                     <></> :
-                                    <div className="d-flex justify-content-lg-between">
+                                    <div className="d-flex justify-content-between px-0">
                                         <button type="button"
                                                 className="btn btn-dark btn-outline-dark btn-sm px-3"
                                                 onClick={showDiagnosticPdfViewModal}>
@@ -283,7 +295,9 @@ function TableData({ data }) {
                                             <i className="fa fa-solid fa-tv"></i>
                                         </button>
                                         <button type="button" className="btn btn-dark btn-outline-primary btn-sm px-2"
-                                                onClick={() => {downloadReport(data.diagnosticReport?.reportId)}}>
+                                                onClick={() => {
+                                                    downloadReport(data.diagnosticReport?.reportId)
+                                                }}>
                                             <i className="fa fa-solid fa-download"></i>
                                         </button>
                                         <PdfViewModal reportId={data.diagnosticReport?.reportId}
@@ -295,10 +309,10 @@ function TableData({ data }) {
                         :
                         <>
                             <button type="button"
-                                    className={`btn btn-dark btn-sm px-2 btn-outline-success`}
+                                    className={`btn btn-dark btn-sm px-0 btn-outline-success btn-block`}
                                     onClick={showCreateReportModal}>
 
-                                <i className="fa fa-solid outline fa-file"> </i> Create Report
+                                <i className="fa fa-solid outline fa-file"> </i> Create
                             </button>
                             <CreateReportModal open={createReportModalIsOpen}
                                                reportType={ReportType.DIAGNOSTIC}
@@ -315,9 +329,10 @@ function TableData({ data }) {
                             <>
                                 <button type="button"
                                         className="btn btn-warning btn-sm px-2"
+                                        title={"Update Diagnostic Report"}
                                         onClick={showUpdateReportModal}>
 
-                                    <i className="fa fa-solid fa-arrow-circle-right"> </i> Update Report
+                                    <i className="fa fa-solid fa-arrow-circle-right"> </i>
                                 </button>
                                 <UpdateReportModal open={updateReportModalIsOpen}
                                                    onCancel={closeUpdateReportModal}
@@ -325,12 +340,14 @@ function TableData({ data }) {
                             </>
                             :
                             <button type="button" className="btn btn-warning btn-sm disabled text-black-50 px-2">
-                                <i className="fa fa-solid fa-arrow-circle-right"> </i> Update Report
+                                <i className="fa fa-solid fa-arrow-circle-right"> </i>
                             </button>
                     }
                     <button type="button"
                             className="btn btn-danger btn-sm px-2"
-                            onClick={showDeleteDiseaseModal} disabled={isDiagnosticActionDisabled}>
+                            onClick={showDeleteDiseaseModal}
+                            title={"Delete Diagnostic Report"}
+                            disabled={isDiagnosticActionDisabled}>
                         <i className="fa fa-solid fa-trash"> </i>
                     </button>
                     <AreYouSureModal open={deleteDiseaseModalIsOpen}

@@ -1,11 +1,11 @@
 export const HEADS = {
     "DOCTOR" : [
-        "ID", "DATE", "PATIENT ID", "REQUEST", "STATUS",
-        "LAB TECHNICIAN", "PATHOLOGIC", "DIAGNOSTIC", "ACTIONS"],
+        "ID", "DATE", "PATIENT ID", "PATIENT", "REQUEST", "STATUS",
+        "LAB TECH.", "PATHOLOGIC", "DIAGNOSTIC", "REPORT ACT."],
     "PATIENT" : [
         "ID", "DATE", "DOCTOR", "REQUEST", "STATUS", "PATHOLOGIC REPORT", "DIAGNOSTIC REPORT"],
     "LAB_TECHNICIAN" : [
-        "ID", "DATE", "DOCTOR", "REQUEST", "LAB TECHNICIAN", "STATUS", "PATHOLOGIC REPORT"],
+        "ID", "DATE", "PATIENT ID", "PATIENT", "DOCTOR", "REQUEST", "LAB TECHNICIAN", "STATUS", "PATHOLOGIC REPORT"],
 }
 
 export const DataTypes = {
@@ -13,7 +13,8 @@ export const DataTypes = {
         "SEARCH_BY" : {
             "ID" : "ID",
             "PATIENT_ID" : "PATIENT ID",
-            "LAB_TECHNICIAN" : "LAB TECHNICIAN"
+            "LAB_TECHNICIAN" : "LAB TECHNICIAN",
+            "PATIENT_FULL_NAME" : "PATIENT FULL NAME"
         },
         "ORDER_BY" : {
             "ID_ASC" : "ID Ascending",
@@ -40,7 +41,8 @@ export const DataTypes = {
         "SEARCH_BY" : {
             "ID" : "ID",
             "DOCTOR" : "DOCTOR",
-            "LAB_TECHNICIAN" : "LAB TECHNICIAN"
+            "LAB_TECHNICIAN" : "LAB TECHNICIAN",
+            "PATIENT_FULL_NAME" : "PATIENT FULL NAME"
         },
         "ORDER_BY" : {
             "ID_ASC" : "ID Ascending",

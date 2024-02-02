@@ -1,15 +1,19 @@
 import React, {useEffect, useState} from 'react';
-import DiseaseViewModel from '../../../viewmodel/DiseaseViewModel';
 import TableHead from './TableHead';
 import TooledSearchBar, {DropDown, getDropDownActions} from '../TooledSearchBar';
 import {DataTypes, HEADS} from './TableConstants';
 import {getBgClassByStatus} from "./FieldClasses";
-import {DiseaseState} from "../../../domain/model/Disease";
+import {useGetDiseasesByPatientId} from "../../../domain/usecase/disease/GetDiseasesByPatientIdUseCase";
+import {toast} from "react-toastify";
+import {LocalStorageManager} from "../../../util/localStorageManager";
+import {jsonBeautifier} from "../../../util/JsonBeautifier";
 import PdfViewModal from "../modals/PdfViewModal";
+import {useDownloadReport} from "../../../domain/usecase/report/DownloadReportUseCase";
 
 export default function ReportTablePatient() {
-    const vm = new DiseaseViewModel();
-    const realData = vm.getDummyDoctorDiseases().data;
+    const {state, getDiseasesByPatientId} = useGetDiseasesByPatientId()
+
+    const [realData, setRealData] = useState(state.data)
     const dataType = DataTypes.PATIENT;
 
     const [data, setData] = useState(realData);
@@ -25,6 +29,27 @@ export default function ReportTablePatient() {
         actionData: dataType.ORDER_BY,
         onSelect: setOrderBy,
     });
+
+    useEffect(() => {
+        getDiseasesByPatientId(LocalStorageManager.loadUser().userId)
+    }, []);
+
+    useEffect(() => {
+        if(state.successMessage.length > 0)
+            toast.info(state.successMessage, {theme:'colored', position:'bottom-left', autoClose:1000})
+
+    }, [state.successMessage]);
+
+    useEffect(() => {
+        if(state.errorMessage.length > 0)
+            toast.error(state.errorMessage, {theme:'colored', position:'top-left'})
+
+    }, [state.errorMessage]);
+
+    useEffect(() => {
+        setRealData(state.data)
+        setData(state.data)
+    }, [state.data]);
 
     useEffect(() => {
         handleOrderBy();
@@ -53,15 +78,21 @@ export default function ReportTablePatient() {
             case sort.ID_ASC:
                 sortedData = realData.slice().sort((a, b) => a.id - b.id);
                 break;
+
             case sort.ID_DESC:
                 sortedData = realData.slice().sort((a, b) => b.id - a.id);
                 break;
-            case sort.DATE_NEW_TO_OLD:
-                sortedData = realData.slice().sort((a, b) => new Date(a.date) - new Date(b.date));
-                break;
+
             case sort.DATE_OLD_TO_NEW:
-                sortedData = realData.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+                sortedData = realData.slice().sort((a, b) =>
+                    new Date(a.creationDate) - new Date(b.creationDate));
                 break;
+
+            case sort.DATE_NEW_TO_OLD:
+                sortedData = realData.slice().sort((a, b) =>
+                    new Date(b.creationDate) - new Date(a.creationDate));
+                break;
+
             default:
                 console.log('An error occurred');
                 break;
@@ -81,7 +112,7 @@ export default function ReportTablePatient() {
 
             <table className="table table-borderless mb-0">
                 <thead>
-                <TableHead heads={HEADS.PATIENT} />
+                    <TableHead heads={HEADS.PATIENT} />
                 </thead>
                 <tbody>
                 {data.map((val, index) => (
@@ -94,15 +125,12 @@ export default function ReportTablePatient() {
 }
 
 function TableData({ data }) {
-    const diseaseState = data.diseaseState
-
-    const isPathologicActionDisabled =
-        [DiseaseState.DELETED, DiseaseState.WAITING_RESULTS].includes(diseaseState)
-
-    const isDiagnosticActionDisabled =
-        [DiseaseState.DELETED, DiseaseState.WAITING_RESULTS, DiseaseState.PATHOLOGIC_RESULTED].includes(diseaseState)
+    const {downloadReport} = useDownloadReport()
 
     const [pdfViewModalIsOpen, setPdfViewModalIsOpen] = useState(false);
+    const isPathologicActionDisabled = (data.pathologicReport === null)
+    const isDiagnosticActionDisabled = (data.diagnosticReport === null)
+
     const showPdfViewModal = () => {
         setPdfViewModalIsOpen(true);
     };
@@ -110,14 +138,24 @@ function TableData({ data }) {
         setPdfViewModalIsOpen(false);
     };
 
+    const handleDownloadDiagnosticReport = () => {
+        downloadReport(data.diagnosticReport.reportId)
+    }
+
+    const handleDownloadPathologicReport = () => {
+        downloadReport(data.pathologicReport.reportId)
+    }
+
     return (
         <tr>
             <td className="text-center">{data.id}</td>
-            <td className="text-center font-monospace">27 Feb 2024 13:50</td>
-            <td className="text-center">{`${data.doctor.name} ${data.doctor.surname}`}</td>
+            <td className="text-center font-monospace">{jsonBeautifier.beautifyDate(data.creationDate)}</td>
+            <td className="text-center" title={`${data.doctor.name} ${data.doctor.surname}`}>
+                {`${data.doctor.name} ${data.doctor.surname}`}
+            </td>
             <td className="text-center font-monospace fst-italic">{data.labRequestType}</td>
             <td className={`text-center font-monospace fst-italic`}>
-                <div className={`${getBgClassByStatus(diseaseState)} py-1 rounded-2`}>
+                <div className={`${getBgClassByStatus(data.diseaseState)} py-1 rounded-2`}>
                     {data.diseaseState}
                 </div>
             </td>
@@ -132,10 +170,12 @@ function TableData({ data }) {
 
                                 <i className="fa fa-solid fa-tv"> View</i>
                             </button>
-                            <button type="button" className="btn btn-dark btn-sm px-2 btn-outline-primary">
+                            <button type="button" className="btn btn-dark btn-sm px-2 btn-outline-primary"
+                                    onClick={handleDownloadPathologicReport}>
+
                                 <i className="fa fa-solid outline fa-download"></i>
                             </button>
-                            <PdfViewModal reportId={""}
+                            <PdfViewModal reportId={data.pathologicReport?.reportId}
                                           open={pdfViewModalIsOpen}
                                           onCLose={closePdfViewModal}/>
                         </div>
@@ -152,10 +192,12 @@ function TableData({ data }) {
 
                                 <i className="fa fa-solid fa-tv"> View</i>
                             </button>
-                            <button type="button" className="btn btn-dark btn-sm px-2 btn-outline-primary">
+                            <button type="button" className="btn btn-dark btn-sm px-2 btn-outline-primary"
+                                    onClick={handleDownloadDiagnosticReport}>
+
                                 <i className="fa fa-solid outline fa-download"></i>
                             </button>
-                            <PdfViewModal reportId={""}
+                            <PdfViewModal reportId={data.diagnosticReport?.reportId}
                                           open={pdfViewModalIsOpen}
                                           onCLose={closePdfViewModal}/>
                         </div>

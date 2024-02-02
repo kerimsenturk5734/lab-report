@@ -72,6 +72,11 @@ export default function ReportTablePatient() {
         switch (searchBy){
             case dataType.SEARCH_BY.ID : return item.id
             case dataType.SEARCH_BY.DOCTOR : return `${item.doctor.name} ${item.doctor.surname}`
+            case dataType.SEARCH_BY.PATIENT_FULL_NAME : {
+                return item.patient
+                    ? `${item.patient.name} ${item.patient.surname}`
+                    : 'Working on...'
+            }
             case dataType.SEARCH_BY.LAB_TECHNICIAN : return item.labTechnician
                 ? `${item.labTechnician.name} ${item.labTechnician.surname}`
                 : 'Working on...';
@@ -155,9 +160,20 @@ function TableData({data}) {
         <tr>
             <td className="text-center">{data.id}</td>
             <td className="text-center font-monospace">{jsonBeautifier.beautifyDate(data.creationDate)}</td>
-            <td className="text-center">{`${data.doctor.name} ${data.doctor.surname}`}</td>
+            <td className="text-center">{data.patient.userId}</td>
+            <td className="text-center" title={`${data.patient.name} ${data.patient.surname}`}>
+                {data.patient.name} {data.patient.surname}
+            </td>
+            <td className="text-center"
+                title={`${data.doctor.name} ${data.doctor.surname}`}>
+
+                {`${data.doctor.name} ${data.doctor.surname}`}
+            </td>
+
             <td className="text-center font-monospace fst-italic">{data.labRequestType}</td>
-            <td className={`text-center ${getTextClassByStatus(data.diseaseState)}`}>
+            <td className={`text-center ${getTextClassByStatus(data.diseaseState)}`}
+                title={data.labTechnician ? `${data.labTechnician.name} ${data.labTechnician.surname}` : 'Working on...'}>
+
                 {data.labTechnician ? `${data.labTechnician.name} ${data.labTechnician.surname}` : 'Working on...'}
             </td>
             <td className={`text-center font-monospace fst-italic`}>
@@ -177,7 +193,9 @@ function TableData({data}) {
                                     <i className="fa fa-solid fa-tv"> View</i>
                                 </button>
                                 <button type="button" className={`btn btn-dark btn-sm px-3 btn-outline-primary`}
-                                        onClick={() => {downloadReport(data.pathologicReport?.reportId)}}>
+                                        onClick={() => {
+                                            downloadReport(data.pathologicReport?.reportId)
+                                        }}>
 
                                     <i className="fa fa-solid outline fa-download"></i>
                                 </button>

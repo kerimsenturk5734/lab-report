@@ -47,26 +47,27 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useUpdateReport = void 0;
+exports.useGetActiveDiseases = void 0;
 var react_1 = require("react");
-var ReportDao_1 = require("../../../data/api/dao/ReportDao");
-//HTTP 403, 401, 404, 200
-var useUpdateReport = function () {
+var DiseaseDao_1 = require("../../../data/api/dao/DiseaseDao");
+//HTTP 401, 403, 200
+var useGetActiveDiseases = function () {
     var _a = (0, react_1.useState)({
+        data: [],
         successMessage: '',
         error: {},
         errorMessage: '',
         isLoading: false,
     }), state = _a[0], setState = _a[1];
-    var updateReport = function (updateReportRequest) { return __awaiter(void 0, void 0, void 0, function () {
+    var getActiveDiseases = function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     setState(__assign(__assign({}, state), { isLoading: true }));
-                    return [4 /*yield*/, ReportDao_1.default.updateReport(updateReportRequest)
+                    return [4 /*yield*/, DiseaseDao_1.default.getActiveDiseases()
                             .then(function (res) {
-                            console.log(res);
                             setState({
+                                data: res.data.data,
                                 successMessage: res.data.message,
                                 error: {},
                                 errorMessage: '',
@@ -77,6 +78,7 @@ var useUpdateReport = function () {
                             console.log(err);
                             if (err.code == "ERR_NETWORK") {
                                 setState({
+                                    data: [],
                                     successMessage: '',
                                     error: err,
                                     errorMessage: err.message,
@@ -85,14 +87,16 @@ var useUpdateReport = function () {
                             }
                             else if (err.response.status == 401) {
                                 setState({
+                                    data: [],
                                     successMessage: '',
                                     error: err,
-                                    errorMessage: "Authentication required!!!",
+                                    errorMessage: 'Authentication Required',
                                     isLoading: false
                                 });
                             }
                             else if (err.response.status == 403) {
                                 setState({
+                                    data: [],
                                     successMessage: '',
                                     error: err,
                                     errorMessage: 'Access Denied',
@@ -101,6 +105,7 @@ var useUpdateReport = function () {
                             }
                             else if (err.response.status == 400) {
                                 setState({
+                                    data: [],
                                     successMessage: '',
                                     error: err,
                                     errorMessage: JSON.stringify(err.response.data, null, 4),
@@ -109,6 +114,7 @@ var useUpdateReport = function () {
                             }
                             else {
                                 setState({
+                                    data: [],
                                     successMessage: '',
                                     error: err,
                                     errorMessage: err.response.data.message,
@@ -122,6 +128,6 @@ var useUpdateReport = function () {
             }
         });
     }); };
-    return { state: state, updateReport: updateReport };
+    return { state: state, getActiveDiseases: getActiveDiseases };
 };
-exports.useUpdateReport = useUpdateReport;
+exports.useGetActiveDiseases = useGetActiveDiseases;

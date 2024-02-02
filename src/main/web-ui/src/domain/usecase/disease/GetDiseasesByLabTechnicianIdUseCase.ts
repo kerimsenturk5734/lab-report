@@ -15,7 +15,7 @@ export const useGetDiseasesByLabTechnicianId = () => {
     const getDiseasesByLabTechnicianId = async (labTechnicianId : string) => {
         setState({ ...state, isLoading: true });
 
-        await diseaseDao.getDiseaseByLabTechnicianId(labTechnicianId)
+        await diseaseDao.getDiseasesByLabTechnicianId(labTechnicianId)
             .then((res) => {
                 console.log(res)
                 setState({

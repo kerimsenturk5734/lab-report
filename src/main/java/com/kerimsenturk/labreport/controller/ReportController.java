@@ -33,6 +33,21 @@ public class ReportController {
         this.messageBuilder = messageBuilder;
     }
 
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.LAB_TECHNICIAN, @ROLES.LAB_TECHNICIAN)")
+    @GetMapping("/{reportId}")
+    public ResponseEntity<?> getReportById(@PathVariable String reportId){
+
+        //Create successful message
+        String message =
+                messageBuilder
+                        .code("formatted.reportFoundById")
+                        .params(reportId)
+                        .build();
+
+        //Place the report into Result wrapper object
+        return ResponseEntity.ok(new SuccessDataResult<ReportDto>(reportService.getReportById(reportId), message));
+    }
+
     @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.LAB_TECHNICIAN)")
     @PostMapping("/createPathologicalReportFor")
     public ResponseEntity<?> createPathologicalReportFor(@Valid @RequestBody CreatePathologicReportRequestFor createPathologicReportRequestFor){
@@ -80,10 +95,26 @@ public class ReportController {
         return ResponseEntity.ok(new SuccessDataResult<List<ReportDto>>(reportDtoList, message));
     }
 
-    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.DOCTOR, @ROLES.LAB_TECHNICIAN)")
-    @PutMapping("/updateReport")
-    public ResponseEntity<?> updateReport(@Valid @RequestBody UpdateReportRequest updateReportRequest){
-        String updatedReportId = reportService.updateReport(updateReportRequest);
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.LAB_TECHNICIAN)")
+    @PutMapping("/updatePathologicReport")
+    public ResponseEntity<?> updatePathologicReport(@Valid @RequestBody UpdateReportRequest updateReportRequest,
+                                          @RequestHeader("Authorization") String authHeader){
+        String updatedReportId = reportService.updateReport(updateReportRequest, authHeader);
+
+        //Create successful message
+        String message =
+                messageBuilder
+                        .code("formatted.reportUpdated")
+                        .params(updatedReportId)
+                        .build();
+
+        return ResponseEntity.ok(new SuccessResult(message));
+    }
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.DOCTOR)")
+    @PutMapping("/updateDiagnosticReport")
+    public ResponseEntity<?> updateDiagnosticReport(@Valid @RequestBody UpdateReportRequest updateReportRequest,
+                                          @RequestHeader("Authorization") String authHeader){
+        String updatedReportId = reportService.updateReport(updateReportRequest, authHeader);
 
         //Create successful message
         String message =

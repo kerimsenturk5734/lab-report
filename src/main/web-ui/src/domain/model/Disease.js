@@ -12,6 +12,8 @@ var DiseaseState;
     DiseaseState["WAITING_RESULTS"] = "WAITING_RESULTS";
     DiseaseState["PATHOLOGIC_RESULTED"] = "PATHOLOGIC_RESULTED";
     DiseaseState["DIAGNOSTIC_RESULTED"] = "DIAGNOSTIC_RESULTED";
+    DiseaseState["PATHOLOGIC_UPDATED"] = "PATHOLOGIC_UPDATED";
+    DiseaseState["DIAGNOSTIC_UPDATED"] = "DIAGNOSTIC_UPDATED";
     DiseaseState["UPDATED"] = "UPDATED";
     DiseaseState["DELETED"] = "DELETED";
 })(DiseaseState = exports.DiseaseState || (exports.DiseaseState = {}));

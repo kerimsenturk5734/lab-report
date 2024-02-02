@@ -105,8 +105,10 @@ public class UserController {
     }
 
     @PutMapping("/updateUser")
-    public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest){
-        String updatedUserId = userService.updateUser(updateUserRequest);
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest,
+                                        @RequestHeader("Authorization") String authHeader){
+
+        String updatedUserId = userService.updateUser(updateUserRequest, authHeader);
 
         //Create successful message
         String message =

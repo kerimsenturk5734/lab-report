@@ -98,6 +98,18 @@ public class DiseaseService {
         return convertToDtoList(diseaseList);
     }
 
+    //This method created to present active diseases for lab technicians
+    public List<DiseaseDto> getActiveDiseases(){
+        //Get diseases by status
+        List<Disease> diseaseList = diseaseRepository
+                .getDiseasesByDiseaseStateIn(List.of(
+                        DiseaseState.WAITING_RESULTS,
+                        DiseaseState.PATHOLOGIC_RESULTED,
+                        DiseaseState.PATHOLOGIC_UPDATED));
+
+        //Convert them to dto object and return
+        return convertToDtoList(diseaseList);
+    }
     public List<DiseaseDto> getDiseasesByPatientId(String patientId){
         return getDiseasesByUserIdAndUserRole(patientId, UserRole.PATIENT);
     }
@@ -186,10 +198,16 @@ public class DiseaseService {
         if(reportType == ReportType.DIAGNOSTIC){
             //Set null the foreign key inside disease
             disease.setDiagnosticReport(null);
+
+            //Set the state as previous
+            disease.setDiseaseState(DiseaseState.PATHOLOGIC_RESULTED);
         }
         else{
             //Set null the foreign key inside disease
             disease.setPathologicReport(null);
+            disease.setLabTechnician(null);
+            //Set the state as previous
+            disease.setDiseaseState(DiseaseState.WAITING_RESULTS);
         }
 
 

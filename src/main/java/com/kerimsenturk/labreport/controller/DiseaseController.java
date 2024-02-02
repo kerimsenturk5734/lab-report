@@ -129,17 +129,35 @@ public class DiseaseController {
 
         return ResponseEntity.ok(new SuccessDataResult<List<DiseaseDto>>(diseaseDtoList,message));
     }
-    @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
+
+    @GetMapping("/getActiveDiseases")
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.LAB_TECHNICIAN)")
+    public ResponseEntity<?> getActiveDiseases(){
+        //Get related diseases
+        List<DiseaseDto> diseaseDtoList = diseaseService.getActiveDiseases();
+
+        //Create successful message
+        String message =
+                messageBuilder
+                        .code("formatted.diseasesFounded")
+                        .params(diseaseDtoList.size())
+                        .build();
+
+        return ResponseEntity.ok(new SuccessDataResult<List<DiseaseDto>>(diseaseDtoList,message));
+    }
+
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.LAB_TECHNICIAN)")
     @DeleteMapping("/deletePathologicalReportOf/{diseaseId}")
     public ResponseEntity<?> deletePathologicalReportOf(@PathVariable int diseaseId) {
         diseaseService.deleteReportOf(diseaseId, ReportType.PATHOLOGICAL);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PreAuthorize("hasAuthority(@ROLES.ADMIN)")
+    @PreAuthorize("hasAnyAuthority(@ROLES.ADMIN, @ROLES.DOCTOR)")
     @DeleteMapping("/deleteDiagnosticReportOf/{diseaseId}")
     public ResponseEntity<?> deleteDiagnosticReportOf(@PathVariable int diseaseId) {
         diseaseService.deleteReportOf(diseaseId, ReportType.DIAGNOSTIC);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 }

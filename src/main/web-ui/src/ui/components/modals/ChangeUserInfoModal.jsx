@@ -1,19 +1,25 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import CustomModal from "./CustomModal";
 import {MDBInput} from "mdb-react-ui-kit";
 import {UpdateUserRequest} from "../../../domain/payload/request/UpdateUserRequest";
+import {getButtonClass} from "../tables/FieldClasses";
+import {toast} from "react-toastify";
+import {jsonBeautifier} from "../../../util/JsonBeautifier";
+import {useUpdateUserCase} from "../../../domain/usecase/user/UpdateUserUseCase";
+import {LocalStorageManager} from "../../../util/localStorageManager";
 
 function ChangeUserInfoModal({open, onCancel}) {
+    const {state, updateUser} = useUpdateUserCase()
 
-    //Initial values will be current value
-    const [name, setName] = useState("Kerim")
-    const [surname, setSurname] = useState("Senturk")
+    //Initial values will be current user value
+    const user = LocalStorageManager.loadUser()
+    const [name, setName] = useState(user?.name)
+    const [surname, setSurname] = useState(user?.surname)
     const [password, setPassword] = useState("-----")
     const [nameChangeIsDisabled, setNameChangeIsDisabled] = useState(true)
     const [surnameChangeIsDisabled, setSurnameChangeIsDisabled] = useState(true)
     const [passwordChangeIsDisabled, setPasswordChangeIsDisabled] = useState(true)
-    const [errorIsOpen, setErrorIsOpen] = useState(false)
-    const [errorMessage, setErrorMessage]  = useState("An error occurred.")
+    const [errorMessage, setErrorMessage]  = useState([])
     const handleNameInputChange = (e) => {
         const input = e.target.value;
         setName(input);
@@ -27,46 +33,57 @@ function ChangeUserInfoModal({open, onCancel}) {
     const handlePasswordInputChange = (e) => {
         const input = e.target.value;
         setPassword(input);
-
-        if(!isPasswordValid()){
-            setErrorMessage("Password length must be 8 digit minimum!!!")
-            setErrorIsOpen(true)
-        }else{setErrorIsOpen(false)}
     };
 
     const toggleNameChange = () => {
         setNameChangeIsDisabled(!nameChangeIsDisabled)
 
         if(!nameChangeIsDisabled)
-            setName("Kerim") //Set current value
+            setName(user?.name) //Set current value
     }
 
     const toggleSurnameChange = () => {
         setSurnameChangeIsDisabled(!surnameChangeIsDisabled)
 
         if(!surnameChangeIsDisabled)
-            setSurname("Senturk") //Set current value
+            setSurname(user?.surname) //Set current value
     }
 
     const togglePasswordChange = () => {
         setPasswordChangeIsDisabled(!passwordChangeIsDisabled)
+        setErrorMessage([])
 
         if(passwordChangeIsDisabled)
             setPassword("") //Set current value
         else
-            setPassword("-----")
+            setPassword("----------") //Have you really thought that I am going to set real password here :D
     }
 
-    const getButtonClass = (inputIsDisabled) => {
-        if(inputIsDisabled)
-            return "fa-pen"
-        else
-            return "fa-window-close"
-    }
+    const isPasswordValid = () : boolean => {
+        if(!passwordChangeIsDisabled){
+            const isLengthValid = password.length >= 8;
+            const hasUpperCase = /[A-Z]/.test(password);
+            const hasLowerCase = /[a-z]/.test(password);
+            const hasNumber = /\d/.test(password);
 
-    const isPasswordValid = () => {
-        if(!passwordChangeIsDisabled)
-            return password.trim().length >= 8
+            let errorMessages = [];
+            if (!isLengthValid) {
+                errorMessages.push("Password must be at least 8 characters.");
+            }
+            if (!hasUpperCase) {
+                errorMessages.push("Password must contain at least one uppercase letter.");
+            }
+            if (!hasLowerCase) {
+                errorMessages.push("Password must contain at least one lowercase letter.");
+            }
+            if (!hasNumber) {
+                errorMessages.push("Password must contain at least one number.");
+            }
+
+            setErrorMessage(errorMessages);
+
+            return (isLengthValid && hasUpperCase && hasLowerCase && hasNumber)
+        }
 
         return true
     }
@@ -81,17 +98,41 @@ function ChangeUserInfoModal({open, onCancel}) {
         return payload
     }
     const changeUserInfo = () => {
-        let payload = buildPayload()
         //request to api
-        console.log(payload)
+        if(isPasswordValid())
+            updateUser(buildPayload())
     }
+
+    useEffect(() => {
+        if(state.successMessage.length > 0){
+            let toastOptions =
+                {position:'top-left', hideProgressBar: true, theme:'colored'}
+            toast.success(jsonBeautifier.getPreOfJson(state.successMessage), toastOptions)
+            state.successMessage = ''
+            onCancel()
+            setTimeout(()=>{window.location.reload()}, 2000)
+        }
+    }, [state.successMessage]);
+
+    useEffect(() => {
+        if(state.errorMessage.length > 0){
+            let toastOptions =
+                {position:'top-left', hideProgressBar: true, theme:'colored', style:{width:'400px'}}
+            toast.error(jsonBeautifier.getPreOfJson(state.errorMessage), toastOptions)
+            state.errorMessage = ''
+        }
+    }, [state.errorMessage]);
+
+    useEffect(() => {
+        isPasswordValid()
+    }, [password]);
 
     return (
         <CustomModal open={open} onClose={onCancel}>
-            <div className={"d-flex row gap-2 p-3 justify-content-center my-2 mx-5"}>
+            <div className={"d-flex row gap-2 justify-content-center  mx-5"}>
                 <div className={"d-flex justify-content-center"}>
                     <img src="https://cdn-icons-png.flaticon.com/512/11361/11361973.png"
-                         className={"w-responsive w-25"}
+                         className={"w-responsive"} style={{width:'20%'}}
                          alt={"create_report"}/>
                 </div>
                 <div className={"d-flex justify-content-center"}>
@@ -109,7 +150,7 @@ function ChangeUserInfoModal({open, onCancel}) {
                 </div>
 
                 <div className={"d-flex w-75 mb-4 gap-2"}>
-                <MDBInput label='Surname' type='text' value={surname}
+                    <MDBInput label='Surname' type='text' value={surname}
                               onChange={handleSurnameInputChange} disabled={surnameChangeIsDisabled}/>
                     <button className={"btn p-1 col-1"} onClick={toggleSurnameChange}>
                         <i className={`fa fa-solid outline ${getButtonClass(surnameChangeIsDisabled)}`}></i>
@@ -117,23 +158,25 @@ function ChangeUserInfoModal({open, onCancel}) {
                 </div>
 
                 <div className={"d-flex w-75 mb-4 gap-2"}>
-                <MDBInput label='Password' type='password' value={password}
+                    <MDBInput label='Password' type='password' value={password}
                               onChange={handlePasswordInputChange} disabled={passwordChangeIsDisabled}/>
                     <button className={"btn p-1 col-1"} onClick={togglePasswordChange}>
                         <i className={`fa fa-solid outline ${getButtonClass(passwordChangeIsDisabled)}`}></i>
                     </button>
                 </div>
-                {
-                    errorIsOpen ?
-                        <div className={"d-flex justify-content-center w-75"}>
-                            <label className={"text-danger"}>{errorMessage}</label>
-                        </div>
-                        : <></>
-                }
-                <div className={"d-flex justify-content-end gap-2 mt-5"}>
+                <div className={"d-flex row justify-content-center w-75"}>
+                    {
+                        errorMessage.map((err, index) => {
+                            return (
+                                <label key={index} className={"text-danger"}>*{err}<br/></label>
+                            )
+                        })
+                    }
+                </div>
+                <div className={"d-flex w-75 justify-content-end gap-2 my-2"}>
                     <button type="button"
                             className={`btn btn-dark btn-sm btn-outline-warning`}
-                            onClick={changeUserInfo} disabled={!isPasswordValid()}>
+                            onClick={changeUserInfo}>
 
                         <i className="fa fa-solid outline fa-pen"> Update User </i>
                     </button>

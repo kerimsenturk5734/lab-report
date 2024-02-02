@@ -39,19 +39,18 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenManager jwtTokenManager;
-    private final UserDetailsServiceCustom userDetailsServiceCustom;
+
     //-------------------End---------------------
 
     public UserService(UserRepository userRepository, UserAndUserDtoConverter userAndUserDtoConverter,
                        PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager,
-                       JwtTokenManager jwtTokenManager, UserDetailsServiceCustom userDetailsServiceCustom) {
+                       JwtTokenManager jwtTokenManager) {
 
         this.userRepository = userRepository;
         this.userAndUserDtoConverter = userAndUserDtoConverter;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.jwtTokenManager = jwtTokenManager;
-        this.userDetailsServiceCustom = userDetailsServiceCustom;
     }
 
     public String registerPatient(PatientCreateRequest patientCreateRequest){
@@ -66,7 +65,7 @@ public class UserService {
     }
 
     public String register(CreateUserRequest createUserRequest){
-        //Firstly check the userId is exists
+        //Firstly check the userId is existing
         if(userRepository.existsById(createUserRequest.userId())){
             //Get error message
             String message =
@@ -102,10 +101,16 @@ public class UserService {
         throw new UsernameNotFoundException("User Id or password incorrect");
     }
 
-    public String updateUser(UpdateUserRequest updateUserRequest){
+    public String updateUser(UpdateUserRequest updateUserRequest, String authHeader){
+        //Parse token from 'Authorization' header
+        String token = authHeader.substring(7);
+
+        //Extract user by using token
+        String userId = Optional.of(jwtTokenManager.extractUser(token)).orElse("");
+
+        //String userId = updateUserRequest.username().orElse("");
         //Call getUserById to handle UserNotFoundException
         //If there is not an error at this line now we can get the real user
-        String userId = updateUserRequest.username().orElse("");
         getUserById(userId);
 
         //Get the real user object

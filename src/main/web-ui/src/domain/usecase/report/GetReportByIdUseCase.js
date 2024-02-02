@@ -47,26 +47,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useGetDiseasesByPatientId = void 0;
+exports.useGetReportById = void 0;
 var react_1 = require("react");
-var DiseaseDao_1 = require("../../../data/api/dao/DiseaseDao");
-//HTTP 401, 403, 200
-var useGetDiseasesByPatientId = function () {
+var ReportDao_1 = require("../../../data/api/dao/ReportDao");
+//HTTP 401, 403, 404, 200, 400
+var useGetReportById = function () {
     var _a = (0, react_1.useState)({
-        data: [],
+        data: {},
         successMessage: '',
         error: {},
         errorMessage: '',
         isLoading: false,
     }), state = _a[0], setState = _a[1];
-    var getDiseasesByPatientId = function (patientId) { return __awaiter(void 0, void 0, void 0, function () {
+    var getReportById = function (reportId) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     setState(__assign(__assign({}, state), { isLoading: true }));
-                    return [4 /*yield*/, DiseaseDao_1.default.getDiseasesByPatientId(patientId)
+                    return [4 /*yield*/, ReportDao_1.default.getReportById(reportId)
                             .then(function (res) {
-                            console.log(res);
                             setState({
                                 data: res.data.data,
                                 successMessage: res.data.message,
@@ -78,49 +77,19 @@ var useGetDiseasesByPatientId = function () {
                             .catch(function (err) {
                             console.log(err);
                             if (err.code == "ERR_NETWORK") {
-                                setState({
-                                    data: [],
-                                    successMessage: '',
-                                    error: err,
-                                    errorMessage: err.message,
-                                    isLoading: false
-                                });
+                                setState(__assign(__assign({}, state), { error: err, errorMessage: err.message, isLoading: false }));
                             }
                             else if (err.response.status == 401) {
-                                setState({
-                                    data: [],
-                                    successMessage: '',
-                                    error: err,
-                                    errorMessage: 'Authentication Required',
-                                    isLoading: false
-                                });
+                                setState(__assign(__assign({}, state), { error: err, errorMessage: 'Authentication Required', isLoading: false }));
                             }
                             else if (err.response.status == 403) {
-                                setState({
-                                    data: [],
-                                    successMessage: '',
-                                    error: err,
-                                    errorMessage: 'Access Denied',
-                                    isLoading: false
-                                });
+                                setState(__assign(__assign({}, state), { error: err, errorMessage: 'Access Denied', isLoading: false }));
                             }
                             else if (err.response.status == 400) {
-                                setState({
-                                    data: [],
-                                    successMessage: '',
-                                    error: err,
-                                    errorMessage: JSON.stringify(err.response.data, null, 4),
-                                    isLoading: false
-                                });
+                                setState(__assign(__assign({}, state), { error: err, errorMessage: JSON.stringify(err.response.data, null, 4), isLoading: false }));
                             }
                             else {
-                                setState({
-                                    data: [],
-                                    successMessage: '',
-                                    error: err,
-                                    errorMessage: err.response.data.message,
-                                    isLoading: false
-                                });
+                                setState(__assign(__assign({}, state), { error: err, errorMessage: err.response.data.message, isLoading: false }));
                             }
                         })];
                 case 1:
@@ -129,6 +98,6 @@ var useGetDiseasesByPatientId = function () {
             }
         });
     }); };
-    return { state: state, getDiseasesByPatientId: getDiseasesByPatientId };
+    return { state: state, getReportById: getReportById };
 };
-exports.useGetDiseasesByPatientId = useGetDiseasesByPatientId;
+exports.useGetReportById = useGetReportById;

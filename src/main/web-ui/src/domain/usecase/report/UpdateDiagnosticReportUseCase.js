@@ -47,28 +47,26 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useGetDiseasesByPatientId = void 0;
+exports.useUpdateDiagnosticReport = void 0;
 var react_1 = require("react");
-var DiseaseDao_1 = require("../../../data/api/dao/DiseaseDao");
-//HTTP 401, 403, 200
-var useGetDiseasesByPatientId = function () {
+var ReportDao_1 = require("../../../data/api/dao/ReportDao");
+//HTTP 403, 401, 400, 404, 200
+var useUpdateDiagnosticReport = function () {
     var _a = (0, react_1.useState)({
-        data: [],
         successMessage: '',
         error: {},
         errorMessage: '',
         isLoading: false,
     }), state = _a[0], setState = _a[1];
-    var getDiseasesByPatientId = function (patientId) { return __awaiter(void 0, void 0, void 0, function () {
+    var updateDiagnosticReport = function (updateReportRequest) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     setState(__assign(__assign({}, state), { isLoading: true }));
-                    return [4 /*yield*/, DiseaseDao_1.default.getDiseasesByPatientId(patientId)
+                    return [4 /*yield*/, ReportDao_1.default.updateDiagnosticReport(updateReportRequest)
                             .then(function (res) {
                             console.log(res);
                             setState({
-                                data: res.data.data,
                                 successMessage: res.data.message,
                                 error: {},
                                 errorMessage: '',
@@ -79,7 +77,6 @@ var useGetDiseasesByPatientId = function () {
                             console.log(err);
                             if (err.code == "ERR_NETWORK") {
                                 setState({
-                                    data: [],
                                     successMessage: '',
                                     error: err,
                                     errorMessage: err.message,
@@ -88,16 +85,14 @@ var useGetDiseasesByPatientId = function () {
                             }
                             else if (err.response.status == 401) {
                                 setState({
-                                    data: [],
                                     successMessage: '',
                                     error: err,
-                                    errorMessage: 'Authentication Required',
+                                    errorMessage: "Authentication required!!!",
                                     isLoading: false
                                 });
                             }
                             else if (err.response.status == 403) {
                                 setState({
-                                    data: [],
                                     successMessage: '',
                                     error: err,
                                     errorMessage: 'Access Denied',
@@ -106,7 +101,6 @@ var useGetDiseasesByPatientId = function () {
                             }
                             else if (err.response.status == 400) {
                                 setState({
-                                    data: [],
                                     successMessage: '',
                                     error: err,
                                     errorMessage: JSON.stringify(err.response.data, null, 4),
@@ -115,7 +109,6 @@ var useGetDiseasesByPatientId = function () {
                             }
                             else {
                                 setState({
-                                    data: [],
                                     successMessage: '',
                                     error: err,
                                     errorMessage: err.response.data.message,
@@ -129,6 +122,6 @@ var useGetDiseasesByPatientId = function () {
             }
         });
     }); };
-    return { state: state, getDiseasesByPatientId: getDiseasesByPatientId };
+    return { state: state, updateReport: updateDiagnosticReport };
 };
-exports.useGetDiseasesByPatientId = useGetDiseasesByPatientId;
+exports.useUpdateDiagnosticReport = useUpdateDiagnosticReport;

@@ -122,6 +122,6 @@ var useCreateDiagnosticReportFor = function () {
             }
         });
     }); };
-    return { state: state, createDiagnosticReportFor: createDiagnosticReportFor };
+    return { state: state, createReport: createDiagnosticReportFor };
 };
 exports.useCreateDiagnosticReportFor = useCreateDiagnosticReportFor;

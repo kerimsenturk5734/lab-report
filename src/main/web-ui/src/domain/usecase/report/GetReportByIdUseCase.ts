@@ -1,23 +1,21 @@
 import {useState} from "react";
-import diseaseDao from "../../../data/api/dao/DiseaseDao";
-import {DiseaseDto} from "../../dto/DiseaseDto";
+import reportDao from "../../../data/api/dao/ReportDao";
 
-//HTTP 401, 403, 200
-export const useGetDiseasesByPatientId = () => {
+//HTTP 401, 403, 404, 200, 400
+export const useGetReportById = () => {
     const [state, setState] = useState({
-        data : [] as DiseaseDto[],
+        data : {} ,
         successMessage:'',
         error: {},
         errorMessage:'',
         isLoading: false,
     });
 
-    const getDiseasesByPatientId = async (patientId : string) => {
+    const getReportById = async (reportId : string) => {
         setState({ ...state, isLoading: true });
 
-        await diseaseDao.getDiseasesByPatientId(patientId)
+        await reportDao.getReportById(reportId)
             .then((res) => {
-                console.log(res)
                 setState({
                     data: res.data.data,
                     successMessage: res.data.message,
@@ -31,8 +29,7 @@ export const useGetDiseasesByPatientId = () => {
 
                 if(err.code == "ERR_NETWORK"){
                     setState({
-                        data: [] as DiseaseDto[],
-                        successMessage: '',
+                        ...state,
                         error: err,
                         errorMessage: err.message,
                         isLoading: false
@@ -40,8 +37,7 @@ export const useGetDiseasesByPatientId = () => {
                 }
                 else if(err.response.status == 401){
                     setState({
-                        data: [] as DiseaseDto[],
-                        successMessage: '',
+                        ...state,
                         error: err,
                         errorMessage: 'Authentication Required',
                         isLoading: false
@@ -49,8 +45,7 @@ export const useGetDiseasesByPatientId = () => {
                 }
                 else if(err.response.status == 403){
                     setState({
-                        data: [] as DiseaseDto[],
-                        successMessage: '',
+                        ...state,
                         error: err,
                         errorMessage: 'Access Denied',
                         isLoading: false
@@ -58,8 +53,7 @@ export const useGetDiseasesByPatientId = () => {
                 }
                 else if(err.response.status == 400){
                     setState({
-                        data: [] as DiseaseDto[],
-                        successMessage: '',
+                        ...state,
                         error: err,
                         errorMessage: JSON.stringify(err.response.data, null, 4),
                         isLoading: false
@@ -67,8 +61,7 @@ export const useGetDiseasesByPatientId = () => {
                 }
                 else{
                     setState({
-                        data: [] as DiseaseDto[],
-                        successMessage: '',
+                        ...state,
                         error: err,
                         errorMessage: err.response.data.message,
                         isLoading: false
@@ -77,5 +70,5 @@ export const useGetDiseasesByPatientId = () => {
             })
     };
 
-    return { state, getDiseasesByPatientId };
+    return { state, getReportById };
 };

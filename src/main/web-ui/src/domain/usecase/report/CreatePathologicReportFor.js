@@ -122,6 +122,6 @@ var useCreatePathologicReportFor = function () {
             }
         });
     }); };
-    return { state: state, createPathologicReportFor: createPathologicReportFor };
+    return { state: state, createReport: createPathologicReportFor };
 };
 exports.useCreatePathologicReportFor = useCreatePathologicReportFor;

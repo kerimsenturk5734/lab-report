@@ -7,7 +7,7 @@ function PdfViewModal({open, onCLose, reportId}) {
     const {state, getReportBlobById} = useGetReportBlobById()
 
     useEffect(() => {
-        getReportBlobById("65458165400_fd72373c-389d-40a4-a644-62509f6063c2")
+        getReportBlobById(reportId)
     }, []);
 
     return (

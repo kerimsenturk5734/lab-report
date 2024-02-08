@@ -141,7 +141,7 @@ const RegisterCard = () => {
 
     useEffect(() => {
         if(state.errorMessage.length > 0){
-            toast(getPreOfJson(state.errorMessage),
+            toast(jsonBeautifier.getPreOfJson(state.errorMessage),
                 {type:'error', theme: 'colored', position:"top-left", style:{width:'500px'}})
             state.errorMessage = ''
         }

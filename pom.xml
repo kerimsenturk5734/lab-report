@@ -10,11 +10,11 @@
 	</parent>
 	<groupId>com.kerimsenturk</groupId>
 	<artifactId>labreport</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>Lab Report Manager</name>
 	<description>Lab Reports Manager System</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>19</java.version>
 		<jwt.version>0.11.5</jwt.version>
 	</properties>
 	<dependencies>

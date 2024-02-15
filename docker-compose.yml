@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  app-mysql:
+    image: mysql
+    restart: always
+    container_name: lab-report-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./lab_report_dump.sql:/docker-entrypoint-initdb.d/lab_report_dump.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+
+  app-spring-rest-service:
+    build: .
+    container_name: app-service
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://app-mysql:3306/lab_report?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      app-mysql:
+        condition: service_healthy
+
+  app-web-ui:
+    build: ./src/main/web-ui
+    container_name: app-client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - app-spring-rest-service

@@ -20,6 +20,8 @@ import com.kerimsenturk.labreport.model.enums.ReportType;
 
 import com.kerimsenturk.labreport.repository.ReportRepository;
 import com.kerimsenturk.labreport.util.MessageBuilder;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
@@ -27,6 +29,9 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -98,12 +103,18 @@ public class ReportService {
         ReportDto reportDto = getReportById(reportId);
 
         try {
+            //Extract the file path frm /reports subfolder
+            Path originalPath = Paths.get(reportDto.getFilePath());
+
+            Path extractedPath = Paths.get(originalPath.subpath(3, originalPath.getNameCount()).toString());
+
             //Get the report as file by file path
-            File file = ResourceUtils.getFile(reportDto.getFilePath());
+            ClassPathResource classPathResource = new
+                    ClassPathResource(extractedPath.toString());
 
             return new DownloadReportResponse(
-                    new FileInputStream(file),
-                    file.getName(),
+                    classPathResource.getInputStream(),
+                    classPathResource.getFilename(),
                     MediaType.APPLICATION_PDF);
         } catch (IOException e) {
             throw new ReportFileNotFoundException(e.getMessage());

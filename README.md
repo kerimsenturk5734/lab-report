@@ -19,8 +19,10 @@ This project contains a web information management application to store, manage 
 
 ## Getting Started
 ### Prerequisites
+- Java 17
+- Maven 3.8 (probably higher than 3.0 versions will work)
 - Docker Compose or Docker Desktop
-   - (<i> compose 2.24, desktop 4.27 have bug that `changes out of order`. If you encountering with this error update the docker</i>)
+   - (<i> compose 2.24, desktop 4.27 have bug that `changes out of order`. If you are encountering with this error update the docker</i>)
 - 3000, 3307, 8080 ports must be available. If it isn't change the host ports with available one inside `./docker-compose.yml`
 
 ### Installation
@@ -29,19 +31,23 @@ This project contains a web information management application to store, manage 
    ```sh
    git clone https://github.com/kerimsenturk5734/lab-report
    ```
-2. Be sure that Docker Engine is running.
+2. Build the project with maven in root location
+   ```sh 
+   mvn clean install
+   ```
+3. Be sure that Docker Engine is running.
 
-3. Run following code at ```./labreport``` location. It will take a while when installing dependencies, please be patient.
+4. Run following code in root location. It will take a while installing dependencies, please be patient.
    ```sh
    docker-compose up
    ```
 
-4. After installation, you can check the container is running by running below command in new terminal;
+5. After installation, you can check if the container is running by running below command in new terminal;
    ```sh
    docker ps
    ```
 
-5. Open the browser and locate to ```localhost:3000``` (If you changed the port use changed port instead of 3000)
+6. Open the browser and locate to ```localhost:3000``` (If you changed the default port, use updated port instead of 3000)
 
 
 ## Project Details

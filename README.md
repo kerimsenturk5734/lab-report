@@ -17,6 +17,8 @@
 ## Project Overview
 This project contains a web information management application to store, manage and present information about diseases of patients. It has report management system inside to manage diagnostic and pathologic reports. It includes a spring rest service and react web ui client.
 
+![Project Overview](./docs/gif/project-overview.gif)
+
 ## Getting Started
 ### Prerequisites
 - Java 17

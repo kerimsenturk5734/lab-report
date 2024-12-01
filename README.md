@@ -41,7 +41,7 @@ This project contains a web information management application to store, manage 
 
 4. Run following code in root location. It will take a while installing dependencies, please be patient.
    ```sh
-   docker-compose up
+   docker compose up
    ```
 
 5. After installation, you can check if the container is running by running below command in new terminal;
